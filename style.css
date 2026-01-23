@@ -506,4 +506,15 @@ a {
     margin: auto;
 }
 
+
+
+/* MossySwampyTileSheet — preserve native aspect */
+.card img.img-native {
+    width: 100%;
+    height: auto;
+    max-height: none;
+    object-fit: contain;
+}
+
+
 /* style.css END */
