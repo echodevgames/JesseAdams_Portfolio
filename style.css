@@ -516,5 +516,26 @@ a {
     object-fit: contain;
 }
 
+/* ================================
+   Character Sprite Previews
+   ================================ */
+
+.character-preview {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin: 28px 0;
+    flex-wrap: wrap;
+}
+
+    .character-preview img.char-sprite {
+        max-width: 360px; /* controls visual size */
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+        background: #0b0f14;
+        padding: 12px;
+        border-radius: 12px;
+    }
 
 /* style.css END */
