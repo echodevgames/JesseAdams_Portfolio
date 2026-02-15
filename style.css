@@ -574,5 +574,20 @@ a {
         }
 }
 
+/* =========================================
+   Case Study Image Gallery — Containment Fix
+   ========================================= */
+
+.case-wrapper .image-gallery {
+    max-width: 760px; /* prevents full-width chaos */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+    /* Subtle separation from hero / blueprint images */
+    .case-wrapper .image-gallery img {
+        border: 1px solid rgba(255,255,255,0.06);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.35);
+    }
 
 /* style.css END */
