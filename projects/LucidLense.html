@@ -18,6 +18,9 @@
     <main class="section">
         <div class="case-wrapper">
 
+            <!-- =========================================
+         HERO
+    ========================================= -->
             <section class="section-head">
                 <h1>Lucid Lens — State-Driven Gameplay & UI</h1>
                 <p class="lead">
@@ -32,17 +35,229 @@
                  alt="Lucid Lens gameplay environment"
                  class="wide-img">
 
-            <!-- (content unchanged above) -->
             <!-- =========================================
-                 PLAY THE GAME
-            ========================================= -->
+         CONCEPT & DESIGN CHALLENGE
+    ========================================= -->
+            <section>
+                <h2>Concept & Design Challenge</h2>
+
+                <p>
+                    <strong>Lucid Lens</strong> is a narrative-driven game where a child awakens
+                    inside a world that behaves like a lucid dream. The player must navigate
+                    this surreal space by equipping one of three masks, each of which alters
+                    how the environment is perceived and interacted with.
+                </p>
+
+                <p>
+                    These masks are not cosmetic effects. Each represents a distinct gameplay
+                    state that changes:
+                </p>
+
+                <ul>
+                    <li>Visual presentation of the world</li>
+                    <li>Which objects can be interacted with</li>
+                    <li>Player feedback and HUD elements</li>
+                    <li>Overall player expectations and navigation</li>
+                </ul>
+
+                <p>
+                    The core technical challenge was ensuring these transitions felt intentional,
+                    readable, and consistent—without duplicating logic or allowing systems to
+                    drift out of sync.
+                </p>
+
+                <!-- ===== Concept Gallery ===== -->
+                <div class="image-gallery">
+                    <figure>
+                        <img src="../assets/Images/LucidLense_Logo.png"
+                             alt="Lucid Lens logo">
+                    </figure>
+
+                    <figure>
+                        <img src="../assets/Images/LucidLense_MainMenu.png"
+                             alt="Lucid Lens main menu">
+                    </figure>
+
+                    <figure>
+                        <img src="../assets/Images/LucidLense_Level1_001.png"
+                             alt="Lucid Lens gameplay environment">
+                    </figure>
+
+                    <figure>
+                        <img src="../assets/Images/LucidLense_Level2.png"
+                             alt="Lucid Lens alternate level environment">
+                    </figure>
+                </div>
+
+            </section>
+
+            <!-- =========================================
+         GAMEPLAY STATE SYSTEM
+    ========================================= -->
+            <section>
+                <h2>Gameplay State System</h2>
+
+                <p>
+                    My primary responsibility on Lucid Lens was the design and implementation
+                    of a centralized <strong>gameplay state manager</strong>.
+                </p>
+
+                <p>
+                    Rather than distributing conditional logic across the Player Blueprint,
+                    UI widgets, and world actors, I implemented a single authoritative system
+                    responsible for:
+                </p>
+
+                <ul>
+                    <li>Tracking the current gameplay state</li>
+                    <li>Handling transitions between mask modes</li>
+                    <li>Broadcasting state changes to dependent systems</li>
+                </ul>
+
+                <p>
+                    This approach ensured that mask switching, UI behavior, and pause logic
+                    all remained deterministic and easy to reason about.
+                </p>
+            </section>
+
+            <!-- =========================================
+         STATE MANAGER ARCHITECTURE
+    ========================================= -->
+            <section>
+                <h2>State Manager Architecture (Blueprint)</h2>
+
+                <img src="../assets/Images/StateManagerBP3.png"
+                     alt="Blueprint State Manager graph"
+                     class="wide-img">
+
+                <p>
+                    The State Manager is implemented as a dedicated Blueprint actor that owns
+                    the game’s current state and applies all state transitions.
+                </p>
+
+                <p>
+                    Gameplay states are defined using an enum, allowing systems to react based
+                    on intent rather than ad-hoc boolean checks.
+                </p>
+
+                <ul>
+                    <li>Neutral</li>
+                    <li>Reality Mask</li>
+                    <li>Nightmare Mask</li>
+                    <li>Microscopic Mask</li>
+                </ul>
+
+                <p>
+                    When a state transition occurs, the manager applies the appropriate
+                    post-process settings, updates internal state, and dispatches an event
+                    to listening systems such as the Player, HUD, and UI widgets.
+                </p>
+            </section>
+
+            <!-- =========================================
+         PLAYER INTEGRATION
+    ========================================= -->
+            <section>
+                <h2>Player Integration & Mask Switching</h2>
+
+                <img src="../assets/Images/StateManagerBP1.png"
+                     alt="Player Blueprint mask switching logic"
+                     class="wide-img">
+
+                <img src="../assets/Images/StateManagerBP2.png"
+                     alt="Player Blueprint mask switching logic"
+                     class="wide-img">
+
+                <p>
+                    The Player Blueprint does not directly manipulate visuals, UI, or world
+                    behavior. Instead, player input is translated into clear state-change
+                    requests sent to the State Manager.
+                </p>
+
+                <p>
+                    This separation keeps player logic readable and prevents feature creep
+                    as new masks or interactions are introduced.
+                </p>
+            </section>
+
+            <!-- =========================================
+         UI SYSTEMS & UX FLOW
+    ========================================= -->
+            <section>
+                <h2>UI Systems & UX Flow</h2>
+
+                <p>
+                    I also worked extensively on the game’s UI systems, focusing on clarity,
+                    feedback, and consistency across gameplay states.
+                </p>
+
+                <p>
+                    UI widgets do not execute gameplay logic or poll for state. Instead, they
+                    respond to events broadcast by the State Manager, keeping UI presentation-
+                    focused and decoupled from gameplay systems.
+                </p>
+            </section>
+
+            <!-- =========================================
+         MENUS & PAUSE LOGIC
+    ========================================= -->
+            <section>
+                <h2>Menus & Pause Flow</h2>
+
+                <img src="../assets/Images/PauseMenuBP1.png"
+                     alt="Pause menu and game state Blueprint logic"
+                     class="wide-img">
+
+                <p>
+                    The pause menu was designed to cleanly interrupt gameplay without breaking
+                    state consistency.
+                </p>
+
+                <ul>
+                    <li>Input is gated while paused</li>
+                    <li>Cursor and focus modes are explicitly controlled</li>
+                    <li>Gameplay resumes only after state restoration</li>
+                </ul>
+
+                <p>
+                    This prevents edge cases such as unintended input carryover or mismatched
+                    UI and gameplay states.
+                </p>
+            </section>
+
+            <!-- =========================================
+         HUD & VISUAL FEEDBACK
+    ========================================= -->
+            <section>
+                <h2>HUD & Visual Feedback</h2>
+
+                <img src="../assets/Images/HUDDynamicMaterialBP1.png"
+                     alt="HUD dynamic material logic"
+                     class="wide-img">
+
+                <p>
+                    HUD elements respond dynamically to gameplay state using material parameter
+                    changes rather than widget duplication.
+                </p>
+
+                <p>
+                    This allows visual feedback—such as memory indicators and mask effects—to
+                    update smoothly as states toggle on or off, reinforcing gameplay without
+                    overwhelming the player.
+                </p>
+            </section>
+
+
+            <!-- =========================================
+         PLAY THE GAME
+    ========================================= -->
             <section>
                 <h2>Play Lucid Lens</h2>
 
                 <p>
-                    <strong>Lucid Lens</strong> was developed as a collaborative game jam project
-                    and is available to play on itch.io. This build demonstrates the state-driven
-                    gameplay systems, mask mechanics, and UI flows described in this case study.
+                    Lucid Lens is playable on itch.io as a game jam build.
+                    This version demonstrates the mask-based gameplay states,
+                    UI systems, and interaction flow described above.
                 </p>
 
                 <div class="cta">
@@ -52,19 +267,18 @@
                        rel="noopener">
                         ▶ Play on itch.io
                     </a>
-
-                    <a class="btn ghost"
-                       href="https://isekai-studios.itch.io/lucidlense"
-                       target="_blank"
-                       rel="noopener">
-                        View Itch Page
-                    </a>
                 </div>
             </section>
 
+
+
+
+
+
+
             <!-- =========================================
-                 TAKEAWAYS
-            ========================================= -->
+         TAKEAWAYS
+    ========================================= -->
             <section>
                 <h2>What I Learned</h2>
 
@@ -73,10 +287,12 @@
                         <strong>Centralized state ownership prevents bugs</strong><br>
                         A single authority for state changes eliminates desynchronization.
                     </li>
+
                     <li>
                         <strong>UI should react, not decide</strong><br>
                         Separating presentation from gameplay logic keeps systems scalable.
                     </li>
+
                     <li>
                         <strong>Blueprints benefit from architectural thinking</strong><br>
                         Clear data flow and intent-based design outperform ad-hoc visual scripting.
