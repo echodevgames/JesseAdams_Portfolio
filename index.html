@@ -1,5 +1,4 @@
 <!-- index.html START -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,26 +20,22 @@
     <link rel="icon" href="assets/favicon.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 
-
-
     <!-- ================================
-         CSS Stylesheets
+         CSS
          ================================ -->
     <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
+
     <!-- ================================
-         HEADER / NAVIGATION
-         ================================ -->
+         HEADER / NAV
+    ================================ -->
     <header class="site-header">
-        <!-- Brand / Logo -->
         <a class="brand" href="#home">Jesse Adams</a>
 
-        <!-- Mobile nav toggle button -->
         <button class="nav-toggle" aria-label="Open navigation" aria-expanded="false">☰</button>
 
-        <!-- Main navigation -->
         <nav class="site-nav" aria-label="Primary">
             <a href="#projects">Projects</a>
             <a href="#about">About</a>
@@ -50,215 +45,188 @@
     </header>
 
     <!-- ================================
-         HERO SECTION
-         ================================ -->
+         HERO
+    ================================ -->
     <main id="home" class="hero">
         <div class="hero-inner">
-            <!-- Main Heading -->
             <h1>Game Developer & UI Programmer</h1>
 
-            <!-- Hero description / lead text -->
             <p class="lead">
                 I create player-focused game systems and interfaces in Unreal Engine 5 and C++.
-                From modular HUDs and interactive menus to AI behaviors and save/load systems, I design features that are both robust and polished.
-                With hands-on experience building capstone and team projects, I collaborate closely with designers and artists to deliver seamless, intuitive gameplay experiences.
+                From modular HUDs and interactive menus to AI behaviors and save/load systems,
+                I design features that are both robust and polished.
             </p>
 
-            <!-- Call-to-action buttons -->
             <div class="cta">
                 <a class="btn" href="#projects">View Projects</a>
                 <a class="btn ghost" href="#contact">Get in Touch</a>
             </div>
 
-            <!-- Quick skills tags -->
-            <ul class="quick-tags" aria-label="Core skills">
+            <ul class="quick-tags">
                 <li>Unreal Engine 5</li>
                 <li>C++ Gameplay Systems</li>
                 <li>Unity 6</li>
                 <li>C# Scripting</li>
                 <li>UI/UX Design & UMG</li>
                 <li>AI Behavior Trees</li>
-                <li>Data Persistence & Save Systems</li>
-                <li>Team Collaboration & Version Control</li>
+                <li>Save / Load Systems</li>
+                <li>Team Collaboration</li>
             </ul>
         </div>
     </main>
 
     <!-- ================================
-         PROJECTS SECTION
-         ================================ -->
+         PROJECTS
+    ================================ -->
     <section id="projects" class="section">
         <div class="section-head">
             <h2>Selected Projects</h2>
             <p>Case studies with short write-ups. Each card links to details, code, or builds if available.</p>
         </div>
 
-        <!-- Projects Grid -->
         <div class="grid projects">
 
-            <!-- Project 1: Save/Load UI & Persistence -->
+            <!-- ✅ PROJECT 0: LUCID LENS (NEW / FIRST) -->
+            <article class="card">
+                <img src="assets/thumb_lucid_lens.png" alt="Lucid Lens thumbnail">
+                <div class="card-body">
+                    <h3>Lucid Lens — State-Driven Gameplay & UI (UE5)</h3>
+                    <p>
+                        A collaborative Unreal Engine project built around mask-based gameplay modes.
+                        I designed a Blueprint-driven state manager for mode switching and implemented
+                        UI systems and UX flow to ensure clarity across gameplay states.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Unreal Engine 5</li>
+                        <li>Blueprint State Management</li>
+                        <li>UI / UX Design</li>
+                        <li>Gameplay Flow</li>
+                        <li>Team Collaboration</li>
+                    </ul>
+
+                    <div class="card-actions">
+                        <a class="btn small" href="projects/LucidLense.html">Case Study</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- PROJECT 1: SAVE / LOAD -->
             <article class="card">
                 <img src="assets/thumb_save_load_menu2.png" alt="Save/Load UI System thumbnail">
                 <div class="card-body">
                     <h3>Save/Load UI & Persistence (UE5 C++)</h3>
-                    <p>A robust slot-based save system with rename flow, date/time metadata, and cross-level persistence. Rebuilt from Blueprint to pure C++ for stability and debug visibility.</p>
-                    <img class="wide-img" src="assets/Save_Load Menu.png" alt="Save/Load UI with slot rename and date/time metadata">
+                    <p>
+                        A robust slot-based save system with rename flow, date/time metadata,
+                        and cross-level persistence. Rebuilt from Blueprint to pure C++.
+                    </p>
+
                     <ul class="pill-list">
                         <li>C++</li>
                         <li>Unreal UMG</li>
                         <li>Data Persistence</li>
                     </ul>
+
                     <div class="card-actions">
                         <a class="btn small" href="projects/save-load.html">Case Study</a>
-                        <a class="btn small ghost" href="https://rokanhellhound1.itch.io/burn-your-bacon" target="_blank" rel="noopener">Demo</a>
                     </div>
                 </div>
             </article>
 
-            <!-- Project 2: Winter Break Game Jam -->
+            <!-- PROJECT 2: WINTER JAM -->
             <article class="card">
                 <img src="assets/Elf_BreakRoom.png" alt="Winter Break Game Jam thumbnail">
                 <div class="card-body">
                     <h3>Winter Break Game Jam — Gameplay Systems (UE5)</h3>
                     <p>
                         Rapid-development Unreal Engine project focused on stabilizing gameplay,
-                        rebuilding a broken PlayerController in C++, and implementing a
-                        state-driven architecture under game-jam constraints.
+                        rebuilding a broken PlayerController in C++, and enforcing state-driven flow.
                     </p>
+
                     <ul class="pill-list">
                         <li>Unreal Engine 5</li>
                         <li>C++</li>
                         <li>Game State</li>
-                        <li>Gameplay Systems</li>
                     </ul>
+
                     <div class="card-actions">
                         <a class="btn small" href="projects/WinterGameJam.html">Case Study</a>
                     </div>
                 </div>
             </article>
 
-            <!-- Project 3: RogueLike2D -->
+            <!-- PROJECT 3: ROGUELIKE -->
             <article class="card">
                 <img src="assets/thumb_roguelike2d.png" alt="RogueLike2D">
                 <div class="card-body">
                     <h3>RogueLike2D — Turn-Based Systems (Unity)</h3>
                     <p>
-                        A classic 2D roguelike focused on turn-based movement, procedural dungeon generation,
-                        deterministic enemy AI, and resource-driven survival mechanics.
+                        A classic 2D roguelike focused on deterministic turn-based movement,
+                        procedural dungeon generation, and AI behavior.
                     </p>
+
                     <ul class="pill-list">
                         <li>Unity 2D</li>
                         <li>C#</li>
                         <li>Turn-Based AI</li>
-                        <li>Procedural Generation</li>
                     </ul>
+
                     <div class="card-actions">
                         <a class="btn small" href="projects/roguelike2d.html">Case Study</a>
-                        <a class="btn small ghost" href="https://rokanhellhound1.itch.io/burn-your-bacon" target="_blank" rel="noopener">
-                            Demo
-                        </a>
                     </div>
                 </div>
             </article>
 
-            <!-- Project: Wanted – The Verdant Paths -->
+            <!-- PROJECT 4: WANTED -->
             <article class="card">
-                <img src="assets/MossyBackground4.png" alt="The Verdant Paths – Wanted thumbnail">
+                <img src="assets/MossyBackground4.png" alt="The Verdant Paths – Wanted">
                 <div class="card-body">
                     <h3>The Verdant Paths — Wanted</h3>
                     <p>
-                        Seeking 1–3 2D artists to help shape a procedurally generated roguelike.
-                        Wizards, winding paths, mushrooms, crystals, and systems-driven design.
+                        Seeking 2D artists to collaborate on a systems-driven roguelike.
+                        Wizards, fungi, crystals, and procedural exploration.
                     </p>
 
                     <ul class="pill-list">
                         <li>Collaboration</li>
                         <li>2D Art</li>
                         <li>Roguelike</li>
-                        <li>Procedural Systems</li>
                     </ul>
 
                     <div class="card-actions">
                         <a class="btn small" href="projects/wanted.html">View Wanted</a>
-                        <a class="btn small ghost" href="index.html#contact">Get In Touch</a>
                     </div>
                 </div>
             </article>
 
-
         </div>
     </section>
 
     <!-- ================================
-         ABOUT SECTION
-         ================================ -->
+         ABOUT
+    ================================ -->
     <section id="about" class="section alt">
         <div class="section-head">
             <h2>About</h2>
-            <p>Father, builder, and lifelong learner—transitioning from the labor industry to technology through formal education and self-teaching.</p>
-        </div>
-
-        <div class="about-wrap">
-            <!-- About text -->
-            <div class="about-text">
-                <p>
-                    I specialize in turning feature ideas into reliable, testable systems players actually feel—HUDs, menus, persistence, and input/UI flows.
-                    I’m comfortable hopping between C++ gameplay code and UMG/UX polish, collaborating with teams to deliver polished player experiences.
-                </p>
-                <p><strong>Education:</strong> B.S. in Game Development (Oct 2025) — Full Sail University</p>
-                <p><strong>Experience:</strong> Capstone and team projects including modular AI, HUDs, menus, and save/load systems. Skilled in Agile workflows and project collaboration.</p>
-            </div>
-
-            <!-- Skills list -->
-            <div class="skills-wrap">
-                <h3>Skills</h3>
-                <ul class="skills-list">
-                    <li><strong>Programming:</strong> C++, C#</li>
-                    <li><strong>Game Engines:</strong> Unreal Engine 5, Unity3D</li>
-                    <li><strong>UI/UX & Gameplay:</strong> HUDs, Menus, Tooltips, Player Feedback, UMG</li>
-                    <li><strong>AI & Systems:</strong> Behavior Trees, Pathfinding, State Machines, Save/Load Persistence, Modular Gameplay Frameworks</li>
-                    <li><strong>Tools & Software:</strong> Perforce, Git/GitHub, Blender, Photoshop, GIMP, Figma</li>
-                    <li><strong>Collaboration & Productivity:</strong> Trello, Jira, Miro, Word, Excel</li>
-                </ul>
-            </div>
+            <p>Father, builder, and lifelong learner transitioning into professional game development.</p>
         </div>
     </section>
 
     <!-- ================================
-         CONTACT SECTION
-         ================================ -->
+         CONTACT
+    ================================ -->
     <section id="contact" class="section">
         <div class="section-head">
             <h2>Contact</h2>
-            <p>Reach out for collaboration, roles, or to chat about game systems and UI.</p>
-        </div>
-
-        <!-- Contact cards -->
-        <div class="contact-cards">
-            <a class="card link-card" href="mailto:JesseAdams313@gmail.com">
-                <h3>Email</h3><p>JesseAdams313@gmail.com</p>
-            </a>
-            <a class="card link-card" href="https://www.linkedin.com/in/jesse-adams313/" target="_blank" rel="noopener">
-                <h3>LinkedIn</h3><p>LinkedIn</p>
-            </a>
-            <a class="card link-card" href="https://github.com/JesseAdams313" target="_blank" rel="noopener">
-                <h3>GitHub</h3><p>Git Repos</p>
-            </a>
+            <p>Reach out for collaboration, roles, or to talk game systems and UI.</p>
         </div>
     </section>
 
-    <!-- ================================
-         FOOTER
-         ================================ -->
     <footer class="site-footer">
-        <p>&copy; <span id="year"></span> Jesse “Echo” Adams · Built with HTML/CSS/JS · Deployed on GitHub Pages</p>
+        <p>&copy; <span id="year"></span> Jesse “Echo” Adams</p>
     </footer>
 
-    <!-- ================================
-         JAVASCRIPT
-         ================================ -->
     <script src="script.js"></script>
 </body>
 </html>
-
 <!-- index.html END -->
