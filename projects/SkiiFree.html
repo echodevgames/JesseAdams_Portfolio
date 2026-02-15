@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>SkiiFree ’26 — Classic Remake & Gameplay Systems | Jesse Adams</title>
-    <meta name="description" content="Solo remake of the classic 1991 SkiFree. A modern systems-driven recreation featuring custom gameplay logic, enemy AI, scoring, and hand-crafted pixel art.">
+    <meta name="description" content="Solo remake of the classic 1991 SkiFree. A modern systems-driven recreation featuring custom gameplay logic, enemy AI, scoring systems, and hand-crafted pixel art.">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../style.css" />
 </head>
@@ -24,9 +24,10 @@
             <section class="section-head">
                 <h1>SkiiFree ’26 — Classic Remake & Gameplay Systems</h1>
                 <p class="lead">
-                    A solo remake of the classic 1991 SkiFree, rebuilt with modern gameplay
-                    architecture while preserving the original’s fast, readable design.
-                    "            I handled all systems programming, game logic, and pixel art creation.
+                    A solo remake of the 1991 classic <em>SkiFree</em>, rebuilt with modern,
+                    state-driven gameplay architecture while preserving the original’s fast,
+                    readable, and punishing design.
+                    I handled all systems programming, gameplay tuning, and pixel art creation.
                 </p>
             </section>
 
@@ -41,23 +42,24 @@
                 <h2>Project Overview</h2>
 
                 <p>
-                    <strong>SkiiFree ’26</strong> is a faithful reinterpretation of the original SkiFree,
-                    focusing on deterministic movement, escalating challenge, and instantly readable
-                    player feedback.
+                    <strong>SkiiFree ’26</strong> is a systems-focused reinterpretation of the
+                    original SkiFree. Rather than modernizing the game into something unrecognizable,
+                    the goal was to understand <em>why</em> the original worked — then rebuild it
+                    using explicit state ownership, deterministic logic, and clean system boundaries.
                 </p>
 
                 <p>
-                    The goal was not to modernize the game into something unrecognizable, but to
-                    understand what made the original work — and rebuild it using clean,
-                    maintainable systems.
+                    Every mechanic — movement, scoring, obstacle behavior, enemies, and UI —
+                    is driven by shared game state rather than ad-hoc object logic. This keeps
+                    gameplay predictable, debuggable, and easy to tune.
                 </p>
 
                 <ul class="pill-list">
                     <li>Solo Project</li>
                     <li>Classic Game Remake</li>
-                    <li>Gameplay Systems</li>
-                    <li>State-Driven Logic</li>
-                    <li>Pixel Art Pipeline</li>
+                    <li>Gameplay Engineering</li>
+                    <li>State-Driven Systems</li>
+                    <li>Custom Pixel Art</li>
                 </ul>
             </section>
 
@@ -70,42 +72,51 @@
                 <ul>
                     <li>
                         <strong>Faithful core mechanics</strong><br>
-                        Preserve the feel, speed, and readability of the original SkiFree.
+                        Preserve the feel, speed, and readability that defined the original SkiFree.
                     </li>
 
                     <li>
                         <strong>Deterministic gameplay</strong><br>
-                        Movement, collisions, and enemy behavior are predictable and debuggable.
+                        Movement, collisions, scoring, and enemy behavior are predictable and
+                        intentionally designed — not emergent accidents.
                     </li>
 
                     <li>
                         <strong>Modern architecture</strong><br>
-                        Replace legacy assumptions with clear state ownership and system boundaries.
+                        Centralized state replaces legacy assumptions and scattered conditionals.
                     </li>
 
                     <li>
                         <strong>End-to-end solo ownership</strong><br>
-                        Code, art, tuning, and iteration were all handled by a single developer.
+                        All programming, art creation, tuning, and iteration were handled independently.
                     </li>
                 </ul>
             </section>
 
             <!-- =========================================
-                 CORE GAMEPLAY SYSTEMS
+                 CORE GAMEPLAY ARCHITECTURE
             ========================================= -->
             <section>
-                <h2>Core Gameplay Systems</h2>
+                <h2>Core Gameplay Architecture</h2>
 
                 <p>
-                    The game is structured around a central gameplay controller that manages
-                    scrolling speed, player state, obstacle interaction, and game-over flow.
+                    The game is driven by a centralized <strong>GameManager</strong> that owns
+                    all simulation-critical state: world speed, player heading, jump state,
+                    scoring, enemy pressure, and overall game flow.
+                </p>
+
+                <p>
+                    The skier does not “move through the world.” Instead, the world scrolls
+                    past the player, and all objects respond to the same authoritative
+                    movement data. This preserves classic SkiFree behavior while keeping
+                    the system extensible.
                 </p>
 
                 <ul>
-                    <li>World scrolling vs player-relative movement</li>
-                    <li>Heading-based directional control</li>
-                    <li>Obstacle collision & response</li>
-                    <li>Score progression and difficulty ramp</li>
+                    <li>Centralized state ownership</li>
+                    <li>World-relative movement</li>
+                    <li>Shared simulation timing</li>
+                    <li>Explicit game states (Menu / Playing)</li>
                 </ul>
             </section>
 
@@ -120,64 +131,125 @@
                      class="wide-img">
 
                 <p>
-                    Player movement is intentionally constrained to maintain clarity.
-                    Directional changes occur in stepped angles, mirroring the original
-                    game’s readable control scheme.
+                    Player direction is modeled using <strong>discrete heading steps</strong>
+                    rather than continuous rotation. Each directional input advances the skier
+                    through fixed angles (0°, 15°, 45°, 65°, 90°), matching the readability of
+                    the original game.
                 </p>
 
                 <p>
-                    Speed, turning responsiveness, and obstacle reactions were tuned
-                    iteratively to preserve the original game’s sense of momentum.
+                    At shallow angles, the player carves smoothly while trading speed for control.
+                    At 90°, the skier becomes fully sideways, entering a unique movement mode.
+                </p>
+
+                <p>
+                    When fully sideways, holding the same direction produces rhythmic
+                    <strong>“scoot” impulses</strong> rather than continuous sliding. This gives
+                    sideways movement intention and timing instead of uncontrolled drift.
                 </p>
             </section>
 
             <!-- =========================================
-                 ENEMY & HAZARD DESIGN
+                 SPEED, DIFFICULTY & SCORING
             ========================================= -->
             <section>
-                <h2>Enemy & Hazard Design</h2>
+                <h2>Speed, Difficulty & Scoring</h2>
+
+                <p>
+                    World speed ramps continuously over time, with smoothing applied to prevent
+                    sudden spikes. Player heading applies a dynamic speed penalty, encouraging
+                    controlled carving rather than constant straight-line acceleration.
+                </p>
+
+                <p>
+                    Scoring is split into three systems:
+                </p>
+
+                <ul>
+                    <li><strong>Speed Score</strong> — rewards sustained high velocity</li>
+                    <li><strong>Style Score</strong> — earned through spins, slalom gates, and clean play</li>
+                    <li><strong>Time Score</strong> — passive reward for survival</li>
+                </ul>
+
+                <p>
+                    This creates a natural risk/reward loop: pushing speed increases danger,
+                    while style systems reward mastery rather than simple survival.
+                </p>
+            </section>
+
+            <!-- =========================================
+                 JUMP, SPIN & STYLE PLAY
+            ========================================= -->
+            <section>
+                <h2>Jump, Spin & Style Play</h2>
+
+                <p>
+                    Jumping transitions the player into a dedicated airborne state. While in
+                    the air, lateral input is reinterpreted as rotational input, allowing the
+                    skier to spin.
+                </p>
+
+                <p>
+                    Spins accumulate angular rotation over time, awarding style points for
+                    full rotations. Landing quality is evaluated based on final orientation,
+                    rewarding clean landings and penalizing sloppy ones with temporary slowdowns.
+                </p>
+
+                <p>
+                    Jumping is therefore not just avoidance — it is a deliberate
+                    <strong>risk vs reward system</strong>.
+                </p>
+            </section>
+
+            <!-- =========================================
+                 ENEMIES & HAZARDS
+            ========================================= -->
+            <section>
+                <h2>Enemies & Hazards</h2>
 
                 <img src="../assets/Images/SkiiFree26_Yeti.png"
                      alt="Yeti enemy behavior"
                      class="wide-img">
 
                 <p>
-                    The Yeti acts as a pressure mechanic rather than a traditional enemy.
-                    It appears based on elapsed runtime and forces players to maintain
-                    forward momentum.
+                    Obstacles are context-sensitive rather than generic hazards. Trees,
+                    rocks, stumps, moguls, and jump pads each interact differently depending
+                    on player state.
+                </p>
+
+                <p>
+                    The Yeti functions as a <strong>pressure mechanic</strong> rather than
+                    a traditional enemy. Once spawned, it accelerates relentlessly and
+                    never despawns, forcing players to maintain forward momentum.
                 </p>
 
                 <ul>
-                    <li>Timed spawn logic</li>
-                    <li>Relentless forward pursuit</li>
+                    <li>Timed Yeti spawn</li>
+                    <li>Persistent pursuit behavior</li>
                     <li>Clean kill-state resolution</li>
                 </ul>
             </section>
 
             <!-- =========================================
-                 STATE & GAME FLOW
+                 NPCs & WORLD LIFE
             ========================================= -->
             <section>
-                <h2>Game State & Flow</h2>
+                <h2>NPCs & World Life</h2>
 
                 <p>
-                    The game uses a simple, explicit state model to control flow:
+                    NPC skiers use lightweight decision logic rather than scripted paths.
+                    Each NPC periodically retargets lateral intent and applies micro-jitter
+                    driven by Perlin noise to simulate human imperfection.
                 </p>
 
-                <ul>
-                    <li>Playing</li>
-                    <li>Paused</li>
-                    <li>Game Over</li>
-                </ul>
-
                 <p>
-                    Input, UI visibility, and simulation updates are gated by state,
-                    preventing edge cases and unintended transitions.
+                    This keeps the slope feeling alive without sacrificing fairness or
+                    readability.
                 </p>
             </section>
 
             <!-- =========================================
-                 ART PIPELINE (ASEPRITE)
+                 ART PIPELINE
             ========================================= -->
             <section>
                 <h2>Art Pipeline & Visual Design</h2>
@@ -187,40 +259,39 @@
                      class="wide-img">
 
                 <p>
-                    All art assets were created by hand using <strong>Aseprite</strong>.
-                    The visual goal was clarity first — silhouettes, contrast, and
-                    animation readability over decorative detail.
+                    All visual assets were hand-created using <strong>Aseprite</strong>.
+                    The visual focus was clarity over decoration — strong silhouettes,
+                    readable animation, and immediate feedback.
                 </p>
 
                 <ul>
-                    <li>Custom skier animations</li>
-                    <li>Obstacle sprites & tiles</li>
-                    <li>Enemy sprites</li>
-                    <li>UI and HUD elements</li>
+                    <li>Directional skier animations</li>
+                    <li>Spin sprite sequences</li>
+                    <li>Obstacles, NPCs, and enemies</li>
+                    <li>HUD and UI elements</li>
                 </ul>
             </section>
 
             <!-- =========================================
-                 WHAT I LEARNED
+                 TAKEAWAYS
             ========================================= -->
             <section>
                 <h2>What I Learned</h2>
 
                 <ul>
                     <li>
-                        <strong>Classic design holds up</strong><br>
-                        Many older games work because of clarity and restraint, not complexity.
+                        <strong>Classic design still works</strong><br>
+                        Clarity and restraint outlive technical trends.
                     </li>
 
                     <li>
-                        <strong>Feel comes from tuning</strong><br>
-                        Small parameter changes dramatically affect player perception.
+                        <strong>Game feel comes from tuning</strong><br>
+                        Small parameter changes have outsized impact.
                     </li>
 
                     <li>
-                        <strong>Solo projects expose every weakness</strong><br>
-                        Architecture, art workflow, and iteration speed all matter when
-                        there’s no one else to absorb mistakes.
+                        <strong>Solo development exposes everything</strong><br>
+                        Architecture, tools, and iteration speed matter when there’s no safety net.
                     </li>
                 </ul>
             </section>
