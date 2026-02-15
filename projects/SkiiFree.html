@@ -1,0 +1,237 @@
+<!-- SkiiFree.html START -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SkiiFree ’26 — Classic Remake & Gameplay Systems | Jesse Adams</title>
+    <meta name="description" content="Solo remake of the classic 1991 SkiFree. A modern systems-driven recreation featuring custom gameplay logic, enemy AI, scoring, and hand-crafted pixel art.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../style.css" />
+</head>
+
+<body>
+
+    <header class="site-header">
+        <a class="brand" href="../index.html#projects">← Back to Projects</a>
+    </header>
+
+    <main class="section">
+        <div class="case-wrapper">
+
+            <!-- =========================================
+                 HERO
+            ========================================= -->
+            <section class="section-head">
+                <h1>SkiiFree ’26 — Classic Remake & Gameplay Systems</h1>
+                <p class="lead">
+                    A solo remake of the classic 1991 SkiFree, rebuilt with modern gameplay
+                    architecture while preserving the original’s fast, readable design.
+                    "            I handled all systems programming, game logic, and pixel art creation.
+                </p>
+            </section>
+
+            <img src="../assets/Images/SkiiFree26_Hero.png"
+                 alt="SkiiFree ’26 gameplay overview"
+                 class="wide-img">
+
+            <!-- =========================================
+                 PROJECT OVERVIEW
+            ========================================= -->
+            <section>
+                <h2>Project Overview</h2>
+
+                <p>
+                    <strong>SkiiFree ’26</strong> is a faithful reinterpretation of the original SkiFree,
+                    focusing on deterministic movement, escalating challenge, and instantly readable
+                    player feedback.
+                </p>
+
+                <p>
+                    The goal was not to modernize the game into something unrecognizable, but to
+                    understand what made the original work — and rebuild it using clean,
+                    maintainable systems.
+                </p>
+
+                <ul class="pill-list">
+                    <li>Solo Project</li>
+                    <li>Classic Game Remake</li>
+                    <li>Gameplay Systems</li>
+                    <li>State-Driven Logic</li>
+                    <li>Pixel Art Pipeline</li>
+                </ul>
+            </section>
+
+            <!-- =========================================
+                 DESIGN GOALS
+            ========================================= -->
+            <section>
+                <h2>Design Goals</h2>
+
+                <ul>
+                    <li>
+                        <strong>Faithful core mechanics</strong><br>
+                        Preserve the feel, speed, and readability of the original SkiFree.
+                    </li>
+
+                    <li>
+                        <strong>Deterministic gameplay</strong><br>
+                        Movement, collisions, and enemy behavior are predictable and debuggable.
+                    </li>
+
+                    <li>
+                        <strong>Modern architecture</strong><br>
+                        Replace legacy assumptions with clear state ownership and system boundaries.
+                    </li>
+
+                    <li>
+                        <strong>End-to-end solo ownership</strong><br>
+                        Code, art, tuning, and iteration were all handled by a single developer.
+                    </li>
+                </ul>
+            </section>
+
+            <!-- =========================================
+                 CORE GAMEPLAY SYSTEMS
+            ========================================= -->
+            <section>
+                <h2>Core Gameplay Systems</h2>
+
+                <p>
+                    The game is structured around a central gameplay controller that manages
+                    scrolling speed, player state, obstacle interaction, and game-over flow.
+                </p>
+
+                <ul>
+                    <li>World scrolling vs player-relative movement</li>
+                    <li>Heading-based directional control</li>
+                    <li>Obstacle collision & response</li>
+                    <li>Score progression and difficulty ramp</li>
+                </ul>
+            </section>
+
+            <!-- =========================================
+                 PLAYER MOVEMENT & FEEL
+            ========================================= -->
+            <section>
+                <h2>Player Movement & Feel</h2>
+
+                <img src="../assets/Images/SkiiFree26_PlayerMovement.png"
+                     alt="Player movement and heading system"
+                     class="wide-img">
+
+                <p>
+                    Player movement is intentionally constrained to maintain clarity.
+                    Directional changes occur in stepped angles, mirroring the original
+                    game’s readable control scheme.
+                </p>
+
+                <p>
+                    Speed, turning responsiveness, and obstacle reactions were tuned
+                    iteratively to preserve the original game’s sense of momentum.
+                </p>
+            </section>
+
+            <!-- =========================================
+                 ENEMY & HAZARD DESIGN
+            ========================================= -->
+            <section>
+                <h2>Enemy & Hazard Design</h2>
+
+                <img src="../assets/Images/SkiiFree26_Yeti.png"
+                     alt="Yeti enemy behavior"
+                     class="wide-img">
+
+                <p>
+                    The Yeti acts as a pressure mechanic rather than a traditional enemy.
+                    It appears based on elapsed runtime and forces players to maintain
+                    forward momentum.
+                </p>
+
+                <ul>
+                    <li>Timed spawn logic</li>
+                    <li>Relentless forward pursuit</li>
+                    <li>Clean kill-state resolution</li>
+                </ul>
+            </section>
+
+            <!-- =========================================
+                 STATE & GAME FLOW
+            ========================================= -->
+            <section>
+                <h2>Game State & Flow</h2>
+
+                <p>
+                    The game uses a simple, explicit state model to control flow:
+                </p>
+
+                <ul>
+                    <li>Playing</li>
+                    <li>Paused</li>
+                    <li>Game Over</li>
+                </ul>
+
+                <p>
+                    Input, UI visibility, and simulation updates are gated by state,
+                    preventing edge cases and unintended transitions.
+                </p>
+            </section>
+
+            <!-- =========================================
+                 ART PIPELINE (ASEPRITE)
+            ========================================= -->
+            <section>
+                <h2>Art Pipeline & Visual Design</h2>
+
+                <img src="../assets/Images/SkiiFree26_Sprites.png"
+                     alt="Pixel art sprites created in Aseprite"
+                     class="wide-img">
+
+                <p>
+                    All art assets were created by hand using <strong>Aseprite</strong>.
+                    The visual goal was clarity first — silhouettes, contrast, and
+                    animation readability over decorative detail.
+                </p>
+
+                <ul>
+                    <li>Custom skier animations</li>
+                    <li>Obstacle sprites & tiles</li>
+                    <li>Enemy sprites</li>
+                    <li>UI and HUD elements</li>
+                </ul>
+            </section>
+
+            <!-- =========================================
+                 WHAT I LEARNED
+            ========================================= -->
+            <section>
+                <h2>What I Learned</h2>
+
+                <ul>
+                    <li>
+                        <strong>Classic design holds up</strong><br>
+                        Many older games work because of clarity and restraint, not complexity.
+                    </li>
+
+                    <li>
+                        <strong>Feel comes from tuning</strong><br>
+                        Small parameter changes dramatically affect player perception.
+                    </li>
+
+                    <li>
+                        <strong>Solo projects expose every weakness</strong><br>
+                        Architecture, art workflow, and iteration speed all matter when
+                        there’s no one else to absorb mistakes.
+                    </li>
+                </ul>
+            </section>
+
+            <footer class="site-footer">
+                <a class="btn" href="../index.html#projects">Back to Projects</a>
+            </footer>
+
+        </div>
+    </main>
+
+</body>
+</html>
+<!-- SkiiFree.html END -->
