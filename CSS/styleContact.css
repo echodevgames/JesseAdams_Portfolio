@@ -1,0 +1,120 @@
+/* ================================
+   Contact Page
+================================ */
+.contact-hero {
+    min-height: 42vh;
+}
+
+.contact-page-wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(280px, 0.85fr) minmax(320px, 1.15fr);
+    gap: 22px;
+    align-items: start;
+}
+
+.contact-panel {
+    background:
+        radial-gradient(circle at top left, rgba(90,169,255,0.12), transparent 34%),
+        linear-gradient(180deg, rgba(18,24,33,0.96), rgba(15,20,27,0.96));
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+    padding: 24px;
+}
+
+.contact-panel h2 {
+    margin: 0 0 10px;
+}
+
+.contact-panel p {
+    color: var(--muted);
+    margin: 0 0 18px;
+    line-height: 1.7;
+}
+
+.contact-link-grid {
+    display: grid;
+    gap: 12px;
+}
+
+.contact-link-card {
+    display: block;
+    padding: 16px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: var(--ink);
+    transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+}
+
+.contact-link-card:hover {
+    text-decoration: none;
+    transform: translateY(-2px);
+    border-color: rgba(90,169,255,0.45);
+    background: rgba(90,169,255,0.06);
+}
+
+.contact-link-card span {
+    display: block;
+    color: var(--muted);
+    font-size: 0.8rem;
+    margin-bottom: 4px;
+}
+
+.contact-link-card strong {
+    display: block;
+    color: var(--ink);
+}
+
+.contact-form {
+    display: grid;
+    gap: 12px;
+}
+
+.contact-form label {
+    font-weight: 700;
+    color: var(--ink);
+}
+
+.contact-form input,
+.contact-form select,
+.contact-form textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.10);
+    background: #0b0f14;
+    color: var(--ink);
+    font: inherit;
+}
+
+.contact-form input:focus,
+.contact-form select:focus,
+.contact-form textarea:focus {
+    outline: none;
+    border-color: rgba(90,169,255,0.75);
+    box-shadow: 0 0 0 3px rgba(90,169,255,0.15);
+}
+
+.contact-form textarea {
+    resize: vertical;
+}
+
+.contact-form button {
+    width: fit-content;
+    border: none;
+    cursor: pointer;
+    margin-top: 6px;
+}
+
+@media (max-width: 850px) {
+    .contact-page-wrap {
+        grid-template-columns: 1fr;
+    }
+
+    .contact-form button {
+        width: 100%;
+    }
+}
