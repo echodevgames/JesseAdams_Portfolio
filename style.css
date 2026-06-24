@@ -144,6 +144,7 @@ a {
     gap: 12px;
     justify-content: center;
     margin-bottom: 14px;
+    flex-wrap: wrap;
 }
 
 /* ================================
