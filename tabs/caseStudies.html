@@ -1,0 +1,155 @@
+<!-- tabs/caseStudies.html START -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Case Studies | Jesse “Echo” Adams</title>
+    <meta name="description" content="Technical case studies by Jesse “Echo” Adams covering gameplay systems, save/load architecture, tutorials, and implementation breakdowns." />
+
+    <link rel="icon" href="../assets/favicon.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../CSS/style.css" />
+</head>
+
+<body>
+    <header class="site-header">
+        <a class="brand" href="../index.html#home">Jesse Adams - EchoDevGames</a>
+
+        <button class="nav-toggle" aria-label="Open navigation" aria-expanded="false">☰</button>
+
+        <nav class="site-nav" aria-label="Primary">
+            <a href="../index.html#home">Home</a>
+            <a href="comingSoon.html">Systems</a>
+            <a href="caseStudies.html">Case Studies</a>
+            <a href="projects.html">Projects</a>
+            <a href="wanted.html">Wanted</a>
+            <a href="contact.html">Contact</a>
+            <a class="btn small" href="../assets/Resumes/Jesse_Adams_Resume_6-23-26.pdf" target="_blank" rel="noopener">Resume</a>
+        </nav>
+    </header>
+
+    <main class="hero">
+        <div class="hero-inner">
+            <h1>Case Studies</h1>
+
+            <p class="lead">
+                Technical breakdowns of systems, tutorials, and implementation work I’ve built or studied across Unity and Unreal Engine.
+            </p>
+
+            <div class="cta">
+                <a class="btn" href="../index.html#home">Back Home</a>
+                <a class="btn ghost" href="comingSoon.html">Systems</a>
+                <a class="btn ghost" href="case-studies.html">Case Studies</a>
+                <a class="btn ghost" href="projects.html">Projects</a>
+                <a class="btn ghost" href="wanted.html">Wanted</a>
+                <a class="btn ghost" href="contact.html">Contact Me</a>
+            </div>
+        </div>
+    </main>
+
+    <section class="section">
+        <div class="section-head">
+            <h2>Technical Case Studies</h2>
+            <p>
+                Focused write-ups covering goals, implementation choices, problems solved,
+                and lessons learned.
+            </p>
+        </div>
+
+        <div class="grid projects">
+
+           
+            <!-- CASE STUDY 0: ROGUELIKE -->
+            <article class="card">
+                <img src="../assets/thumb_roguelike2d.png" alt="RogueLike2D thumbnail">
+
+                <div class="card-body">
+                    <h3>RogueLike2D — Turn-Based Systems</h3>
+
+                    <p>
+                        A Unity 2D roguelike tutorial project focused on deterministic turn-based movement,
+                        procedural dungeon generation, and AI behavior.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Unity 2D</li>
+                        <li>C#</li>
+                        <li>Turn-Based Logic</li>
+                        <li>Procedural Generation</li>
+                    </ul>
+                </div>
+
+                <div class="card-actions">
+                    <a class="btn small" href="../projects/roguelike2d.html">Read Case Study</a>
+
+                    <a class="btn ghost small"
+                       href="https://play.unity.com/en/games/9fcb9378-256b-433b-8112-f12e2410ee41/roguelike-tutorial-upload"
+                       target="_blank"
+                       rel="noopener">
+                        Play on Unity Play
+                    </a>
+                </div>
+            </article>
+            <!-- CASE STUDY 1: SAVE / LOAD -->
+            <article class="card">
+                <img src="../assets/thumb_save_load_menu2.png" alt="Save/Load UI System thumbnail">
+
+                <div class="card-body">
+                    <h3>Save/Load UI & Persistence</h3>
+
+                    <p>
+                        A slot-based save system with rename flow, date/time metadata,
+                        and cross-level persistence. Rebuilt from Blueprint to pure C++.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Unreal Engine 5</li>
+                        <li>C++</li>
+                        <li>UMG</li>
+                        <li>Save Architecture</li>
+                    </ul>
+                </div>
+
+                <div class="card-actions">
+                    <a class="btn small" href="../projects/save-load.html">Read Case Study</a>
+                </div>
+            </article>
+
+            <!-- CASE STUDY 2: CODEMONKEY MULTIPLAYER TUTORIAL -->
+            <article class="card">
+                <img src="../assets/Images/Icons/EchoDevGamesIcon1.png" alt="CodeMonkey Multiplayer Tutorial placeholder thumbnail">
+
+                <div class="card-body">
+                    <h3>CodeMonkey: Multiplayer Tutorial</h3>
+
+                    <p>
+                        Placeholder for a future write-up documenting multiplayer tutorial work,
+                        networking concepts, implementation notes, and lessons learned.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Unity</li>
+                        <li>C#</li>
+                        <li>Multiplayer</li>
+                        <li>Coming Soon</li>
+                    </ul>
+                </div>
+
+                <div class="card-actions">
+                    <a class="btn small" href="comingSoon.html">Coming Soon</a>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <footer class="site-footer">
+        <p>&copy; <span id="year"></span> Jesse “Echo” Adams</p>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>
+<!-- tabs/caseStudies.html END -->

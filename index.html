@@ -24,6 +24,7 @@
          CSS
          ================================ -->
     <link rel="stylesheet" href="CSS/style.css" />
+    <link rel="stylesheet" href="CSS/styleAmbientTopStrip.css" />
 </head>
 
 
@@ -40,14 +41,26 @@
         <nav class="site-nav" aria-label="Primary">
             <a href="#home">Home</a>
             <a href="tabs/comingSoon.html">Systems</a>
-            <a href="tabs/comingSoon.html">Case Studies</a>
+            <a href="tabs/caseStudies.html">Case Studies</a>
             <a href="tabs/projects.html">Projects</a>
+
+            <a href="tabs/wanted.html">Wanted</a>
             <a href="tabs/contact.html">Contact</a>
             <a class="btn small" href="assets/Resumes/Jesse_Adams_Resume_6-23-26.pdf" target="_blank" rel="noopener">Resume</a>
         </nav>
     </header>
 
+    <!-- ================================
+        AMBIENT TOP STRIP
+    ================================ -->
+    <section class="ambient-strip" aria-hidden="true">
+        <div class="ambient-glow ambient-glow-left"></div>
+        <div class="ambient-glow ambient-glow-right"></div>
 
+        <div class="star-layer star-layer-back"></div>
+        <div class="star-layer star-layer-mid"></div>
+        <div class="star-layer star-layer-front"></div>
+    </section>
 
 
     <!-- ================================
@@ -65,23 +78,27 @@
 
             <div class="cta">
                 <a class="btn" href="tabs/comingSoon.html">Systems</a>
-                <a class="btn ghost" href="tabs/comingSoon.html">Case Studies</a>
+                <a class="btn ghost" href="tabs/caseStudies.html">Case Studies</a>
                 <a class="btn ghost" href="tabs/projects.html">Projects</a>
+                <a class="btn ghost" href="tabs/wanted.html">Wanted</a>
                 <a class="btn ghost" href="tabs/contact.html">Get in Touch</a>
             </div>
-
-            <ul class="quick-tags">
-                <li>Unreal Engine 5</li>
-                <li>C++ Gameplay Systems</li>
-                <li>Unity 6</li>
-                <li>C# Scripting</li>
-                <li>UI/UX Design & UMG</li>
-                <li>AI Behavior Trees</li>
-                <li>Save / Load Systems</li>
-                <li>Team Collaboration</li>
-            </ul>
         </div>
     </main>
+
+
+<!-- ================================
+     PIXEL BANNER
+================================ -->
+<section class="pixel-banner-section" aria-label="EchoDevGames pixel art banner">
+    <div class="pixel-banner-frame">
+        <img 
+            src="assets/Images/Banners/EchoDevGamesBanner4.png" 
+            alt="EchoDevGames pixel art fantasy landscape banner with mountains and moon">
+    </div>
+</section>
+
+
 <!-- ================================
      EXPLORE / TABS
 ================================ -->
@@ -97,6 +114,8 @@
     <div class="tab-card-grid">
 
         <a class="tab-card" href="tabs/comingSoon.html">
+            <img class="tab-thumb" src="assets/Images/Icons/EchoDevGamesIcon1.png" alt="" aria-hidden="true">
+
             <span class="tab-label">Systems</span>
             <h3>Systems</h3>
             <p>
@@ -106,7 +125,9 @@
             <span class="tab-status">Coming Soon</span>
         </a>
 
-        <a class="tab-card" href="tabs/comingSoon.html">
+        <a class="tab-card" href="tabs/caseStudies.html">
+            <img class="tab-thumb" src="assets/Images/Icons/EchoDevGamesIcon1.png" alt="" aria-hidden="true">
+
             <span class="tab-label">Case Studies</span>
             <h3>Case Studies</h3>
             <p>
@@ -117,6 +138,8 @@
         </a>
 
         <a class="tab-card" href="tabs/projects.html">
+            <img class="tab-thumb" src="assets/Images/Icons/EchoDevGamesIcon1.png" alt="" aria-hidden="true">
+
             <span class="tab-label">Projects</span>
             <h3>Projects</h3>
             <p>
@@ -127,6 +150,8 @@
         </a>
 
         <a class="tab-card" href="tabs/contact.html">
+            <img class="tab-thumb" src="assets/Images/Icons/EchoDevGamesIcon1.png" alt="" aria-hidden="true">
+
             <span class="tab-label">Contact</span>
             <h3>Get in Touch</h3>
             <p>
@@ -201,6 +226,65 @@
                     <li>C# and C++ gameplay programming</li>
                     <li>Technical case studies and portfolio systems</li>
                     <li>Professional game developer opportunities</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="about-toolkit">
+        <div class="section-head mini">
+            <h3>Technical Toolkit</h3>
+            <p>
+                A snapshot of the tools, systems, and development areas I work with most often.
+            </p>
+        </div>
+
+        <div class="toolkit-grid">
+            <div class="toolkit-card">
+                <h4>Engines & Languages</h4>
+                <ul class="skill-cloud">
+                    <li>Unity 6</li>
+                    <li>C# Gameplay Scripting</li>
+                    <li>Unreal Engine 5</li>
+                    <li>C++ Gameplay Programming</li>
+                    <li>Blueprints</li>
+                    <li>UMG</li>
+                </ul>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>Gameplay Systems</h4>
+                <ul class="skill-cloud">
+                    <li>State Machines</li>
+                    <li>Save / Load Architecture</li>
+                    <li>Combat Logic</li>
+                    <li>AI Behavior Trees</li>
+                    <li>Encounter Flow</li>
+                    <li>Player Progression</li>
+                </ul>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>Player Experience</h4>
+                <ul class="skill-cloud">
+                    <li>UI Flow</li>
+                    <li>HUD Systems</li>
+                    <li>Player Feedback</li>
+                    <li>Camera Control</li>
+                    <li>Game Feel</li>
+                    <li>UX Polish</li>
+                </ul>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>Team & Production</h4>
+                <ul class="skill-cloud">
+                    <li>Feature Planning</li>
+                    <li>Task Breakdown</li>
+                    <li>Team Collaboration</li>
+                    <li>Git / GitHub</li>
+                    <li>Agile Workflow</li>
+                    <li>Technical Problem Solving</li>
                 </ul>
             </div>
         </div>
