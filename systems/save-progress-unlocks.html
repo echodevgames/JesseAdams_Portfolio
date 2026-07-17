@@ -1,0 +1,917 @@
+<!-- systems/save-progress-unlocks.html START -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- ================================
+         Metadata & SEO
+    ================================ -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- systems/save-progress-unlocks.html -->
+    <title>Save, Progression & Unlocks | Unity Systems Portfolio | Jesse Adams</title>
+    <meta name="description" content="A Unity C# save and progression system breakdown for Echo Systems Lab covering completed missions, weapon unlocks, active weapon persistence, weapon XP, save data, load game flow, and trial progression." />
+
+    <!-- ================================
+         Favicon & Font
+    ================================ -->
+    <link rel="icon" href="../assets/favicon.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+    <!-- ================================
+         CSS
+    ================================ -->
+    <link rel="stylesheet" href="../CSS/style.css" />
+    <link rel="stylesheet" href="../CSS/styleSystems.css" />
+</head>
+
+<body>
+
+    <!-- ================================
+         HEADER / NAV
+    ================================ -->
+    <header class="site-header">
+        <a class="brand" href="../index.html#home">Jesse Adams - EchoDevGames</a>
+
+        <button class="nav-toggle" aria-label="Open navigation" aria-expanded="false">☰</button>
+
+        <nav class="site-nav" aria-label="Primary">
+            <a href="../index.html#home">Home</a>
+            <a href="../tabs/systems.html">Systems</a>
+            <a href="../tabs/caseStudies.html">Case Studies</a>
+            <a href="../tabs/projects.html">Projects</a>
+            <a href="../tabs/contact.html">Contact</a>
+            <a class="btn small" href="../assets/Resumes/Jesse_Adams_Resume_6-23-26.pdf" target="_blank" rel="noopener">Resume</a>
+        </nav>
+    </header>
+
+    <!-- ================================
+         HERO
+    ================================ -->
+    <main class="hero">
+        <div class="hero-inner">
+            <h1>Save, Progression & Unlocks</h1>
+
+            <p class="lead">
+                A persistent Unity progression system that tracks completed missions, owned weapons,
+                active weapon selection, weapon type XP, last scene state, and unlock flow across the hub and trials.
+            </p>
+
+            <ul class="pill-list">
+                <li>Unity 6</li>
+                <li>C#</li>
+                <li>Save Data</li>
+                <li>Progression</li>
+                <li>Unlock Flow</li>
+                <li>Weapon XP</li>
+            </ul>
+
+            <div class="cta">
+                <a class="btn" href="../tabs/systems.html">Back to Systems</a>
+                <a class="btn ghost" href="echo-systems-lab-overview.html">Lab Overview</a>
+                <a class="btn ghost" href="mission-terminal.html">Mission Terminal</a>
+                <a class="btn ghost" href="weapon-data-and-loadout.html">Weapon Data</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- ================================
+         OVERVIEW
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>System Overview</h2>
+            <p>
+                Save progression gives Echo Systems Lab memory. Without it, the hub forgets every victory as soon as the scene changes.
+            </p>
+        </div>
+
+        <div class="about-wrap">
+            <div class="about-text">
+                <h3>What It Does</h3>
+
+                <p>
+                    The Save, Progression & Unlocks system stores the player’s meaningful progress across Echo Systems Lab.
+                    It tracks which missions have been completed, which weapons have been collected, which weapon is active,
+                    how much XP each weapon type has earned, and whether a valid save file exists.
+                </p>
+
+                <p>
+                    This system allows the hub, mission terminal, weapon bandolier, target range trials, and main menu to all speak the same progression language.
+                    When the player completes a drill, the mission is marked complete, rewards are preserved, and future missions can unlock.
+                </p>
+
+                <p>
+                    The goal is not just to save numbers. The goal is to make the whole project feel connected:
+                    actions inside a trial change what the player sees when they return to the hub.
+                </p>
+            </div>
+
+            <div class="about-highlights">
+                <div class="about-card">
+                    <h3>Primary Role</h3>
+                    <p>
+                        Preserve player progress across scenes and sessions so mission completion, unlocks, weapons, and XP persist.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3>Core Loop</h3>
+                    <p>
+                        Complete mission → Mark progress → Save data → Return to hub → Unlock new options.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3>Portfolio Value</h3>
+                    <p>
+                        Demonstrates persistent data architecture, unlock logic, save/load flow, and cross-system state management.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================
+         SCREENSHOTS
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>Progression Snapshots</h2>
+            <p>
+                Screenshot references for saved progress, mission unlocks, weapon ownership, and player-facing progression feedback.
+            </p>
+        </div>
+
+        <div class="grid projects systems-grid">
+
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/Boostrap.jpg"
+                     alt="Unity Inspector screenshot of the SystemBootstrap object showing SaveManager, AudioSettingsManager, and GameAudioManager as persistent runtime services">
+
+                <div class="card-body">
+                    <h3>Persistent System Bootstrap</h3>
+                    <p>
+                        The SaveManager lives with other persistent services so save/load behavior survives scene changes.
+                    </p>
+                    <ul class="pill-list">
+                        <li>SaveManager</li>
+                        <li>Persistence</li>
+                        <li>Bootstrap</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/SaveDataCS.jpg"
+                     alt="Code screenshot showing SaveData fields for completed mission IDs, owned weapon IDs, active weapon ID, weapon XP, and last scene name">
+
+                <div class="card-body">
+                    <h3>Progress Data Definition</h3>
+                    <p>
+                        SaveData defines the durable facts that rebuild mission progress, weapon ownership, XP, and session state.
+                    </p>
+                    <ul class="pill-list">
+                        <li>SaveData</li>
+                        <li>Mission IDs</li>
+                        <li>Weapon XP</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/TargetRangeMissionTerminal.jpg"
+                     alt="Mission terminal screenshot showing locked, available, and completed mission states based on saved progression">
+
+                <div class="card-body">
+                    <h3>Mission Unlock State</h3>
+                    <p>
+                        Completed mission IDs determine what the terminal shows as locked, available, or completed.
+                    </p>
+                    <ul class="pill-list">
+                        <li>Unlock Logic</li>
+                        <li>Mission Terminal</li>
+                        <li>Completed State</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/Bandolier1.jpg"
+                     alt="Weapon bandolier HUD screenshot showing owned weapons available in the player's collection">
+
+                <div class="card-body">
+                    <h3>Owned Weapon Collection</h3>
+                    <p>
+                        Unlocked weapons stay in the player collection, even when specific missions restrict active weapon selection.
+                    </p>
+                    <ul class="pill-list">
+                        <li>Owned Weapons</li>
+                        <li>Bandolier</li>
+                        <li>Collection</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/MissonComplete.jpg"
+                     alt="Target Range Trial completion screenshot showing mission completion text and return-to-hub prompt">
+
+                <div class="card-body">
+                    <h3>Trial Completion</h3>
+                    <p>
+                        Completing required range drills marks the full Target Range Trial complete and unlocks the next major trial.
+                    </p>
+                    <ul class="pill-list">
+                        <li>Completion</li>
+                        <li>Unlocks</li>
+                        <li>Return Flow</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/EchoSystemsLabMainMenu.jpg"
+                     alt="Main menu screenshot showing Load Game enabled after a save file has been created">
+
+                <div class="card-body">
+                    <h3>Load Game Availability</h3>
+                    <p>
+                        The main menu can check for an existing save file and enable the Load Game button when progress exists.
+                    </p>
+                    <ul class="pill-list">
+                        <li>Main Menu</li>
+                        <li>Load Game</li>
+                        <li>Save Check</li>
+                    </ul>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         PLAYER FLOW
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>Player Flow</h2>
+            <p>
+                The system turns mission completion into visible, persistent progress.
+            </p>
+        </div>
+
+        <div class="toolkit-grid">
+
+            <div class="toolkit-card">
+                <h4>1. Start Game</h4>
+                <p>
+                    A new game clears or initializes progress data, then sends the player into the hub.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>2. Select Mission</h4>
+                <p>
+                    The mission terminal checks completed mission IDs to decide which missions are currently available.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>3. Complete Objective</h4>
+                <p>
+                    A mission controller marks the mission complete after the player meets the required objective.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>4. Award Progress</h4>
+                <p>
+                    The player may gain mission completion, weapon ownership, active weapon updates, or weapon type XP.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>5. Save Data</h4>
+                <p>
+                    Progress is written into SaveData so completed missions and weapon unlocks survive scene changes and reloads.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>6. Unlock New Content</h4>
+                <p>
+                    Returning to the terminal reflects the updated progress and reveals the next available mission.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         KEY COMPONENTS
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>Key Components</h2>
+            <p>
+                The progression system is spread across clear responsibilities instead of one giant save cauldron.
+            </p>
+        </div>
+
+        <div class="grid projects systems-grid">
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>SaveManager</h3>
+
+                    <p>
+                        Owns high-level save operations, including new game setup, loading existing data,
+                        saving current progress, checking whether a save exists, and exposing the weapon database.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Save</li>
+                        <li>Load</li>
+                        <li>New Game</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>SaveData</h3>
+
+                    <p>
+                        Stores serialized progress such as completed mission IDs, owned weapon IDs,
+                        active weapon ID, weapon type XP entries, last scene name, and game-started state.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Serialized Data</li>
+                        <li>Progress State</li>
+                        <li>Persistence</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>PlayerProgress</h3>
+
+                    <p>
+                        Provides runtime access to progress values, including completed mission checks,
+                        weapon ownership, active weapon ID, and weapon type XP totals.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Runtime Progress</li>
+                        <li>Weapon XP</li>
+                        <li>Unlock Checks</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>MissionProgress</h3>
+
+                    <p>
+                        Tracks completed mission IDs and provides simple availability checks for mission terminal UI.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Mission IDs</li>
+                        <li>Completed State</li>
+                        <li>Availability</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>WeaponDatabase</h3>
+
+                    <p>
+                        Converts saved weapon IDs into usable WeaponData objects and returns owned weapons in database order.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Weapon Lookup</li>
+                        <li>Collection</li>
+                        <li>Loadout</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>MainMenuController</h3>
+
+                    <p>
+                        Uses save file availability to enable or disable Load Game and route the player into a new or continued session.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Main Menu</li>
+                        <li>Load Game</li>
+                        <li>Scene Flow</li>
+                    </ul>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         DATA MODEL
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>Saved Data Model</h2>
+            <p>
+                The save file stores the long-term facts the rest of the game needs to remember.
+            </p>
+        </div>
+
+        <div class="about-wrap">
+            <div class="about-text">
+                <h3>What Gets Saved</h3>
+
+                <p>
+                    The save data focuses on meaningful progression state. It does not need to save every temporary runtime detail.
+                    Instead, it saves the pieces that define where the player stands in the larger Systems Lab structure.
+                </p>
+
+                <p>
+                    Completed mission IDs let the terminal unlock new trials. Owned weapon IDs let the bandolier rebuild the player’s collection.
+                    The active weapon ID restores the last selected weapon. Weapon type XP allows each weapon family to grow independently.
+                </p>
+
+                <p>
+                    This keeps the save file compact and readable while still supporting a connected progression loop.
+                </p>
+            </div>
+
+            <div class="about-highlights">
+                <div class="about-card">
+                    <h3>Mission Progress</h3>
+                    <ul>
+                        <li>Completed mission IDs</li>
+                        <li>Target Range Trial completion</li>
+                        <li>Combat Trial unlocks</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3>Weapon Progress</h3>
+                    <ul>
+                        <li>Owned weapon IDs</li>
+                        <li>Active weapon ID</li>
+                        <li>Weapon type XP entries</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3>Session Progress</h3>
+                    <ul>
+                        <li>Has started game</li>
+                        <li>Last scene name</li>
+                        <li>Load game availability</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================
+         SOURCE CODE DROPDOWNS
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>Source Code Snapshot</h2>
+            <p>
+                These dropdowns show the core save scripts behind the progression system.
+                SaveManager handles file operations and runtime handoff, while SaveData defines the persistent state.
+            </p>
+        </div>
+
+        <div class="source-details-wrap">
+
+            <details class="source-details">
+                <summary>
+                    <span>SaveManager.cs</span>
+                    <small>Save, load, new game, delete save, and save-file checks</small>
+                </summary>
+
+                <pre class="code-card"><code>//-----SaveManager.cs START-----
+using System;
+using System.IO;
+using UnityEngine;
+
+public class SaveManager : MonoBehaviour
+{
+    public event Action OnGameSaved;
+    public event Action OnGameLoaded;
+
+    public static SaveManager Instance { get; private set; }
+
+    private const string SaveFileName = "echo_systems_lab_save.json";
+
+    [Header("Databases")]
+    [SerializeField] private WeaponDatabase weaponDatabase;
+
+    private SaveData currentSaveData = new SaveData();
+
+    public SaveData CurrentSaveData =&gt; currentSaveData;
+    public WeaponDatabase WeaponDatabase =&gt; weaponDatabase;
+
+    private string SavePath =&gt; Path.Combine(Application.persistentDataPath, SaveFileName);
+
+    private void Awake()
+    {
+        if (Instance != null &amp;&amp; Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+
+        LoadGame();
+    }
+
+    public void NewGame()
+    {
+        currentSaveData = new SaveData();
+        currentSaveData.hasStartedGame = true;
+        currentSaveData.lastSceneName = "Hub";
+
+        MissionProgress.LoadFromSaveData(currentSaveData);
+        PlayerProgress.LoadFromSaveData(currentSaveData);
+
+        SaveGame();
+
+        Debug.Log("New game created.");
+    }
+
+    public void SaveGame()
+    {
+        MissionProgress.WriteToSaveData(currentSaveData);
+        PlayerProgress.WriteToSaveData(currentSaveData);
+
+        string json = JsonUtility.ToJson(currentSaveData, true);
+        File.WriteAllText(SavePath, json);
+
+        Debug.Log($"Game saved to: {SavePath}");
+
+        OnGameSaved?.Invoke();
+    }
+
+    public bool LoadGame()
+    {
+        if (!File.Exists(SavePath))
+        {
+            currentSaveData = new SaveData();
+
+            MissionProgress.LoadFromSaveData(currentSaveData);
+            PlayerProgress.LoadFromSaveData(currentSaveData);
+
+            Debug.Log("No save file found. Created fresh save data in memory.");
+
+            OnGameLoaded?.Invoke();
+            return false;
+        }
+
+        string json = File.ReadAllText(SavePath);
+        currentSaveData = JsonUtility.FromJson&lt;SaveData&gt;(json);
+
+        if (currentSaveData == null)
+            currentSaveData = new SaveData();
+
+        MissionProgress.LoadFromSaveData(currentSaveData);
+        PlayerProgress.LoadFromSaveData(currentSaveData);
+
+        Debug.Log($"Game loaded from: {SavePath}");
+        OnGameLoaded?.Invoke();
+        return true;
+    }
+
+    public void DeleteSave()
+    {
+        if (File.Exists(SavePath))
+            File.Delete(SavePath);
+
+        currentSaveData = new SaveData();
+
+        MissionProgress.LoadFromSaveData(currentSaveData);
+        PlayerProgress.LoadFromSaveData(currentSaveData);
+
+        Debug.Log("Save file deleted.");
+    }
+
+    public bool HasSaveFile()
+    {
+        return File.Exists(SavePath);
+    }
+}
+//-----SaveManager.cs END-----</code></pre>
+            </details>
+
+            <details class="source-details">
+                <summary>
+                    <span>SaveData.cs</span>
+                    <small>Serialized mission, weapon, XP, and session state</small>
+                </summary>
+
+                <pre class="code-card"><code>//-----SaveData.cs START-----
+using System;
+using System.Collections.Generic;
+
+[Serializable]
+public class SaveData
+{
+    public string saveVersion = "0.2.0";
+
+    public List&lt;string&gt; completedMissionIds = new List&lt;string&gt;();
+
+    public List&lt;WeaponTypeXpEntry&gt; weaponTypeXpEntries = new List&lt;WeaponTypeXpEntry&gt;();
+
+    public List&lt;string&gt; ownedWeaponIds = new List&lt;string&gt;();
+
+    public string activeWeaponId;
+
+    public string lastSceneName = "Hub";
+
+    public bool hasStartedGame;
+}
+
+[Serializable]
+public class WeaponTypeXpEntry
+{
+    public string weaponType;
+    public int xp;
+
+    public WeaponTypeXpEntry(string weaponType, int xp)
+    {
+        this.weaponType = weaponType;
+        this.xp = xp;
+    }
+}
+//-----SaveData.cs END-----</code></pre>
+            </details>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         UNLOCK LOGIC
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>Unlock Logic</h2>
+            <p>
+                Unlocks are driven by saved IDs, which keeps mission chains readable and expandable.
+            </p>
+        </div>
+
+        <div class="toolkit-grid">
+
+            <div class="toolkit-card">
+                <h4>Mission Completion</h4>
+                <p>
+                    When a drill completes, its mission ID is added to completed progress and saved.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>Mission Requirements</h4>
+                <p>
+                    A mission can require one or more completed mission IDs before the terminal allows it to start.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>Weapon Ownership</h4>
+                <p>
+                    Weapon rewards add owned weapon IDs to the player collection without forcing every mission to allow every weapon.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>Temporary Mission Weapons</h4>
+                <p>
+                    Drills can equip a temporary weapon while still preserving the player’s broader unlocked collection.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>Weapon XP</h4>
+                <p>
+                    Hits, target destruction, and weapon use can award weapon type XP that persists through the save file.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>Main Menu State</h4>
+                <p>
+                    The Load Game button reflects whether a valid save file exists, making persistence visible before gameplay starts.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         PROBLEMS SOLVED
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>Problems Solved</h2>
+            <p>
+                Persistence became necessary as soon as the project stopped being a test scene and started becoming a connected game framework.
+            </p>
+        </div>
+
+        <div class="about-wrap">
+            <div class="about-text">
+                <h3>Key Iteration Wins</h3>
+
+                <p>
+                    The first version of the target range could run as a contained scene, but the project needed progress to survive after returning to the hub.
+                    Completing a mission had to mean something outside the current moment.
+                </p>
+
+                <p>
+                    The weapon collection also needed a subtle distinction. Unlocking a weapon should add it to the player’s collection,
+                    but target range drills should still be able to restrict the active weapon so each challenge remains fair.
+                </p>
+
+                <p>
+                    By separating saved ownership from mission permission, the system supports both player progression and carefully designed challenge rules.
+                </p>
+            </div>
+
+            <div class="about-highlights">
+                <div class="about-card">
+                    <h3>Scene Memory</h3>
+                    <p>
+                        Progress survives scene changes instead of resetting every time the player returns to the hub.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3>Unlock Chains</h3>
+                    <p>
+                        Missions unlock through completed mission IDs, keeping requirements clear and data-driven.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3>Collection vs Restrictions</h3>
+                    <p>
+                        Owned weapons persist, while specific drills can still control which weapon is allowed.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================
+         PORTFOLIO VALUE
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>Portfolio Value</h2>
+            <p>
+                This system shows how gameplay features become stronger when backed by persistent architecture.
+            </p>
+        </div>
+
+        <div class="about-wrap">
+            <div class="about-text">
+                <h3>What This Demonstrates</h3>
+
+                <p>
+                    The Save, Progression & Unlocks system demonstrates Unity C# architecture that connects player action to long-term state.
+                    It supports mission unlocks, weapon rewards, active loadouts, XP tracking, and menu state.
+                </p>
+
+                <p>
+                    This is important because many gameplay systems become fragile when progression is added later.
+                    Building save and unlock flow early keeps the project scalable.
+                </p>
+
+                <p>
+                    For portfolio purposes, this shows that I am not only building isolated mechanics.
+                    I am building the connective tissue that turns mechanics into a playable framework.
+                </p>
+            </div>
+
+            <div class="about-highlights">
+                <div class="about-card">
+                    <h3>Demonstrates</h3>
+                    <ul>
+                        <li>Save/load architecture</li>
+                        <li>Persistent mission progression</li>
+                        <li>Weapon unlock management</li>
+                        <li>Runtime-to-save data flow</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3>Good For</h3>
+                    <ul>
+                        <li>Gameplay programmer roles</li>
+                        <li>Systems programmer roles</li>
+                        <li>Technical design discussions</li>
+                        <li>Portfolio walkthroughs</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3>Next Improvements</h3>
+                    <ul>
+                        <li>Visible results summary</li>
+                        <li>More detailed XP display</li>
+                        <li>Save slot support</li>
+                        <li>Cloud-save-ready abstraction</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================
+         RELATED SYSTEMS
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>Related Systems</h2>
+            <p>
+                Save progression connects directly to mission selection, weapon ownership, target range completion, and HUD feedback.
+            </p>
+        </div>
+
+        <div class="grid projects systems-grid">
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>Mission Terminal & Unlock Flow</h3>
+                    <p>
+                        Covers mission selection, unlock requirements, dynamic UI generation, and hub-to-trial routing.
+                    </p>
+                </div>
+
+                <div class="card-actions">
+                    <a class="btn small" href="mission-terminal.html">Open Page</a>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>Weapon Data, Loadout & Drill Restrictions</h3>
+                    <p>
+                        Covers owned weapon collections, active weapon selection, temporary mission weapons, ammo data, and loadout rules.
+                    </p>
+                </div>
+
+                <div class="card-actions">
+                    <a class="btn small" href="weapon-data-and-loadout.html">Open Page</a>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>Target Range Mission Framework</h3>
+                    <p>
+                        Covers mission completion, trial completion, scoring, accuracy, and return-to-hub flow.
+                    </p>
+                </div>
+
+                <div class="card-actions">
+                    <a class="btn small" href="target-range-mission-framework.html">Open Page</a>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         FOOTER
+    ================================ -->
+    <footer class="site-footer">
+        <p>&copy; <span id="year"></span> Jesse “Echo” Adams</p>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>
+<!-- systems/save-progress-unlocks.html END -->

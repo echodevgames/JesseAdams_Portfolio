@@ -1,0 +1,151 @@
+/* styleSystems.css START */
+
+/* ================================
+   Systems Page Image Overrides
+   ================================ */
+
+/*
+   style.css gives regular card images:
+   width: 100%;
+   height: 160px;
+   object-fit: cover;
+
+   That works for normal project thumbnails, but systems screenshots
+   need to preserve their actual screenshot ratio.
+*/
+
+.card img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+    background: #0b0f14;
+}
+
+/* Keeps featured card from becoming absurdly wide on desktop */
+.systems-featured-card {
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Optional: gives system images a cleaner display frame */
+.systems-card-image {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Featured image can be a little more cinematic */
+.systems-featured-image {
+    width: 100%;
+    height: auto;
+    max-height: none;
+    object-fit: contain;
+}
+
+/* Slightly tighter grid on systems page */
+.systems-grid {
+    align-items: start;
+}
+
+/* Mobile stays natural and readable */
+@media (max-width: 768px) {
+    .systems-featured-card {
+        max-width: 100%;
+    }
+}
+/* ================================
+   Systems Source Code Dropdowns
+================================ */
+
+.source-details-wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    gap: 18px;
+}
+
+.source-details {
+    border-radius: 18px;
+    border: 1px solid rgba(90, 169, 255, 0.22);
+    background:
+        radial-gradient(circle at top left, rgba(90, 169, 255, 0.10), transparent 32%),
+        linear-gradient(180deg, rgba(18, 24, 33, 0.96), rgba(10, 14, 22, 0.98));
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.source-details summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 18px 22px;
+    display: grid;
+    gap: 4px;
+    color: var(--ink);
+    font-weight: 800;
+    position: relative;
+}
+
+.source-details summary::-webkit-details-marker {
+    display: none;
+}
+
+.source-details summary::after {
+    content: "+";
+    position: absolute;
+    top: 18px;
+    right: 22px;
+    color: #5aa9ff;
+    font-size: 1.35rem;
+    line-height: 1;
+}
+
+.source-details[open] summary::after {
+    content: "–";
+}
+
+.source-details summary span {
+    font-size: 1.1rem;
+}
+
+.source-details summary small {
+    color: var(--muted);
+    font-size: 0.86rem;
+    font-weight: 600;
+    line-height: 1.45;
+    max-width: 820px;
+}
+
+.code-card {
+    margin: 0;
+    padding: 20px 22px;
+    overflow-x: auto;
+    border-top: 1px solid rgba(90, 169, 255, 0.16);
+    background:
+        linear-gradient(180deg, rgba(5, 9, 16, 0.98), rgba(3, 6, 12, 0.98));
+    color: #cfe3ff;
+    font-size: 0.9rem;
+    line-height: 1.55;
+    text-align: left;
+}
+
+.code-card code {
+    font-family: Consolas, Monaco, "Courier New", monospace;
+    white-space: pre;
+}
+
+@media (max-width: 700px) {
+    .source-details summary {
+        padding: 16px 18px;
+        padding-right: 46px;
+    }
+
+    .source-details summary::after {
+        right: 18px;
+    }
+
+    .code-card {
+        padding: 16px 18px;
+        font-size: 0.78rem;
+    }
+}
+/* styleSystems.css END */

@@ -1,0 +1,1023 @@
+<!-- systems/weapon-data-and-loadout.html START -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- ================================
+         Metadata & SEO
+    ================================ -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- systems/weapon-data-and-loadout.html -->
+    <title>Weapon Data, Loadout & Drill Restrictions | Unity Systems Portfolio | Jesse Adams</title>
+    <meta name="description" content="A Unity C# weapon data and loadout system breakdown for Echo Systems Lab covering ScriptableObject weapon definitions, owned weapons, active weapon state, temporary mission weapons, ammo data, reload modes, and drill restrictions." />
+
+    <!-- ================================
+         Favicon & Font
+    ================================ -->
+    <link rel="icon" href="../assets/favicon.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+    <!-- ================================
+         CSS
+    ================================ -->
+    <link rel="stylesheet" href="../CSS/style.css" />
+    <link rel="stylesheet" href="../CSS/styleSystems.css" />
+</head>
+
+<body>
+
+    <!-- ================================
+         HEADER / NAV
+    ================================ -->
+    <header class="site-header">
+        <a class="brand" href="../index.html#home">Jesse Adams - EchoDevGames</a>
+
+        <button class="nav-toggle" aria-label="Open navigation" aria-expanded="false">☰</button>
+
+        <nav class="site-nav" aria-label="Primary">
+            <a href="../index.html#home">Home</a>
+            <a href="../tabs/systems.html">Systems</a>
+            <a href="../tabs/caseStudies.html">Case Studies</a>
+            <a href="../tabs/projects.html">Projects</a>
+            <a href="../tabs/contact.html">Contact</a>
+            <a class="btn small" href="../assets/Resumes/Jesse_Adams_Resume_6-23-26.pdf" target="_blank" rel="noopener">Resume</a>
+        </nav>
+    </header>
+
+    <!-- ================================
+         HERO
+    ================================ -->
+    <main class="hero">
+        <div class="hero-inner">
+            <h1>Weapon Data, Loadout & Drill Restrictions</h1>
+
+            <p class="lead">
+                A data-driven Unity weapon architecture for defining weapon behavior, preserving owned weapons,
+                cycling loadouts, supporting mission-specific restrictions, and separating long-term player collection
+                from temporary trial equipment.
+            </p>
+
+            <ul class="pill-list">
+                <li>Unity 6</li>
+                <li>C#</li>
+                <li>ScriptableObjects</li>
+                <li>Weapon Data</li>
+                <li>Loadouts</li>
+                <li>Mission Restrictions</li>
+            </ul>
+
+            <div class="cta">
+                <a class="btn" href="../tabs/systems.html">Back to Systems</a>
+                <a class="btn ghost" href="save-progress-unlocks.html">Save Progress</a>
+                <a class="btn ghost" href="target-range-mission-framework.html">Target Range</a>
+                <a class="btn ghost" href="weapon-handling-feedback.html">Weapon Handling</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- ================================
+         OVERVIEW
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>System Overview</h2>
+            <p>
+                This system turns weapons into reusable data objects instead of one-off scene objects.
+            </p>
+        </div>
+
+        <div class="about-wrap">
+            <div class="about-text">
+                <h3>What It Does</h3>
+
+                <p>
+                    The weapon data and loadout system lets each weapon define its identity, HUD display,
+                    view model prefab, fire mode, ammo type, reload behavior, projectile pattern, XP value,
+                    handling data, and audio data through ScriptableObjects.
+                </p>
+
+                <p>
+                    The player can own a growing weapon collection, cycle through available weapons, and keep an active weapon saved across sessions.
+                    At the same time, individual mission drills can temporarily equip or restrict weapons so a pistol drill stays a pistol drill,
+                    even if the player owns a shotgun, revolver, or rifle.
+                </p>
+
+                <p>
+                    The important design split is collection versus permission. The save system can remember what the player owns,
+                    while the current mission can decide what the player is allowed to use right now.
+                </p>
+            </div>
+
+            <div class="about-highlights">
+                <div class="about-card">
+                    <h3>Primary Role</h3>
+                    <p>
+                        Define weapons as reusable data and connect them to player loadout, mission restrictions, ammo behavior, and progression.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3>Core Loop</h3>
+                    <p>
+                        Own weapon → Equip weapon → Fire/reload/use weapon → Gain XP → Save active weapon and owned collection.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3>Portfolio Value</h3>
+                    <p>
+                        Demonstrates data-driven gameplay design, reusable ScriptableObject architecture, and scalable loadout rules.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================
+         SCREENSHOTS
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>Weapon System Snapshots</h2>
+            <p>
+                Screenshot references for weapon data, player-facing loadout UI, mission restrictions, ammo definitions, and pickup flow.
+            </p>
+        </div>
+
+        <div class="grid projects systems-grid">
+
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/WeaponDataInspector.jpg"
+                     alt="Unity Inspector screenshot of a WeaponData ScriptableObject showing weapon identity, HUD fields, view model prefab, handling data, audio data, firing values, magazine values, reload behavior, and projectile pattern">
+
+                <div class="card-body">
+                    <h3>WeaponData ScriptableObject</h3>
+                    <p>
+                        Each weapon is tuned as data, making new weapons easier to create without rewriting controller logic.
+                    </p>
+                    <ul class="pill-list">
+                        <li>WeaponData</li>
+                        <li>Inspector Tuning</li>
+                        <li>ScriptableObjects</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/WeaponDatabaseInspector.jpg"
+                     alt="Unity Inspector screenshot of a WeaponDatabase ScriptableObject listing all available weapon data assets in database order">
+
+                <div class="card-body">
+                    <h3>Weapon Database</h3>
+                    <p>
+                        The database turns saved weapon IDs into usable WeaponData references and keeps owned weapons in a consistent order.
+                    </p>
+                    <ul class="pill-list">
+                        <li>Weapon Lookup</li>
+                        <li>Saved IDs</li>
+                        <li>Database Order</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/Bandolier1.jpg"
+                     alt="Gameplay screenshot of the weapon bandolier HUD showing owned weapons available for selection">
+
+                <div class="card-body">
+                    <h3>Owned Weapon Loadout</h3>
+                    <p>
+                        The bandolier reflects the player’s owned collection and gives the player readable weapon switching feedback.
+                    </p>
+                    <ul class="pill-list">
+                        <li>Bandolier</li>
+                        <li>Owned Weapons</li>
+                        <li>HUD Feedback</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/WeaponPedestalShotgun.jpg"
+                     alt="Gameplay screenshot of a weapon pedestal offering a temporary mission weapon with an interaction prompt">
+
+                <div class="card-body">
+                    <h3>Mission Weapon Pedestals</h3>
+                    <p>
+                        Pedestals can offer weapons inside trials while preserving the larger saved player collection.
+                    </p>
+                    <ul class="pill-list">
+                        <li>Interactable</li>
+                        <li>Temporary Weapon</li>
+                        <li>Trial Setup</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/AmmoDataInspector.jpg"
+                     alt="Unity Inspector screenshot of an AmmoData ScriptableObject showing projectile prefab, damage, speed, lifetime, and ammo identity values">
+
+                <div class="card-body">
+                    <h3>Ammo Data</h3>
+                    <p>
+                        Ammo data separates projectile damage, projectile prefab, speed, and lifetime from the weapon controller.
+                    </p>
+                    <ul class="pill-list">
+                        <li>AmmoData</li>
+                        <li>Projectiles</li>
+                        <li>Damage Values</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/WeaponPickupGameplay.jpg"
+                     alt="Gameplay screenshot of a dropped weapon pickup that can be collected and added to the player loadout">
+
+                <div class="card-body">
+                    <h3>Weapon Pickups</h3>
+                    <p>
+                        Weapons can exist as pickups in the world, supporting collection, drop flow, and inventory expansion.
+                    </p>
+                    <ul class="pill-list">
+                        <li>Pickup</li>
+                        <li>Inventory</li>
+                        <li>Collection</li>
+                    </ul>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         PLAYER FLOW
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>Player Flow</h2>
+            <p>
+                The system supports both long-term weapon collection and short-term mission control.
+            </p>
+        </div>
+
+        <div class="toolkit-grid">
+
+            <div class="toolkit-card">
+                <h4>1. Weapon Exists as Data</h4>
+                <p>
+                    Each weapon is defined through WeaponData, including identity, visuals, firing, reload behavior, ammo, handling, and audio.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>2. Player Owns Weapons</h4>
+                <p>
+                    Owned weapon IDs are saved in player progress and rebuilt through the weapon database.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>3. Player Equips Active Weapon</h4>
+                <p>
+                    The active weapon ID is saved, restored, and used by the weapon controller to spawn the correct view model.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>4. Mission Can Restrict Selection</h4>
+                <p>
+                    A drill can lock weapon switching or equip a specific reward weapon to preserve challenge structure.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>5. Weapon Use Awards Progress</h4>
+                <p>
+                    Weapon usage can award XP by weapon type, letting weapon families progress independently.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>6. Save System Preserves Loadout</h4>
+                <p>
+                    The player’s collection, active weapon, and weapon XP persist after scene changes and reloads.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         KEY COMPONENTS
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>Key Components</h2>
+            <p>
+                The weapon architecture separates weapon definitions, saved ownership, active selection, ammo behavior, and player input.
+            </p>
+        </div>
+
+        <div class="grid projects systems-grid">
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>WeaponData</h3>
+
+                    <p>
+                        Defines each weapon’s identity, HUD display, view model, handling data, audio data, fire mode,
+                        ammo, magazine size, reload mode, dry fire behavior, projectile pattern, and XP values.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>ScriptableObject</li>
+                        <li>Weapon Definition</li>
+                        <li>Inspector Tuning</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>WeaponDatabase</h3>
+
+                    <p>
+                        Provides a central weapon lookup table so saved weapon IDs can be converted back into usable WeaponData assets.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Lookup</li>
+                        <li>Saved IDs</li>
+                        <li>Database</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>PlayerWeaponController</h3>
+
+                    <p>
+                        Handles active weapon state, firing, reload routines, projectile spawning, ammo state,
+                        feedback events, and view model spawning.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Active Weapon</li>
+                        <li>Fire Logic</li>
+                        <li>Reload Logic</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>PlayerWeaponLoadoutController</h3>
+
+                    <p>
+                        Handles weapon cycling by asking the database for the player’s owned weapons,
+                        respecting mission selection locks, and equipping the next or previous weapon.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Weapon Cycling</li>
+                        <li>Owned Weapons</li>
+                        <li>Selection Lock</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>AmmoData</h3>
+
+                    <p>
+                        Defines projectile prefab, damage, speed, lifetime, ammo identity, and future ammo variations such as armor-piercing or elemental rounds.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Ammo</li>
+                        <li>Projectiles</li>
+                        <li>Damage</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>Mission Restrictions</h3>
+
+                    <p>
+                        Lets target range missions temporarily control weapon selection so drills can enforce specific weapon challenges.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Trial Rules</li>
+                        <li>Temporary Equip</li>
+                        <li>Challenge Design</li>
+                    </ul>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         DATA MODEL
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>Weapon Data Model</h2>
+            <p>
+                Each weapon is a data package, not a hardcoded branch hiding inside the player controller.
+            </p>
+        </div>
+
+        <div class="about-wrap">
+            <div class="about-text">
+                <h3>What WeaponData Stores</h3>
+
+                <p>
+                    WeaponData stores the values that make one weapon different from another.
+                    This includes presentation fields such as display name and icon, gameplay fields such as fire rate and magazine size,
+                    and system references such as handling data, audio data, ammo data, and view model prefab.
+                </p>
+
+                <p>
+                    This makes the player controller more reusable. Instead of asking “is this a pistol, shotgun, or rifle,”
+                    the controller reads the current WeaponData and acts on that data.
+                </p>
+
+                <p>
+                    That structure makes weapon creation faster and makes the system more scalable as the project adds more categories,
+                    including automatics, crossbows, revolvers, shotguns, snipers, and special weapons.
+                </p>
+            </div>
+
+            <div class="about-highlights">
+                <div class="about-card">
+                    <h3>Visual Data</h3>
+                    <ul>
+                        <li>View model prefab</li>
+                        <li>Local position</li>
+                        <li>Local rotation</li>
+                        <li>Local scale</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3>Gameplay Data</h3>
+                    <ul>
+                        <li>Fire rate</li>
+                        <li>Fire mode</li>
+                        <li>Magazine size</li>
+                        <li>Reload behavior</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3>System Data</h3>
+                    <ul>
+                        <li>AmmoData</li>
+                        <li>WeaponHandlingData</li>
+                        <li>WeaponAudioData</li>
+                        <li>XP per use</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================
+         SOURCE CODE DROPDOWNS
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>Source Code Snapshot</h2>
+            <p>
+                These dropdowns show the core data and loadout scripts behind the weapon collection flow.
+            </p>
+        </div>
+
+        <div class="source-details-wrap">
+
+            <details class="source-details">
+                <summary>
+                    <span>WeaponData.cs</span>
+                    <small>Data definition for identity, visuals, audio, firing, magazine, reload, dry fire, projectile pattern, and progression</small>
+                </summary>
+
+                <pre class="code-card"><code>//-----WeaponData.cs START-----
+using UnityEngine;
+
+public enum WeaponFireMode
+{
+    Projectile,
+    Hitscan
+}
+
+public enum WeaponReloadMode
+{
+    FullClip,
+    OneRoundAtATime
+}
+
+public enum EmptyFireBehavior
+{
+    DryFireOnly,
+    ReloadOnly,
+    DryFireThenReload
+}
+
+[CreateAssetMenu(
+    fileName = "WeaponData_NewWeapon",
+    menuName = "Echo Systems Lab/Weapons/Weapon Data")]
+public class WeaponData : ScriptableObject
+{
+    [Header("Identity")]
+    public string weaponId;
+
+    [Header("HUD")]
+    public string displayName;
+    public string hudDisplayName;
+    public Sprite weaponIcon;
+
+    [TextArea(2, 4)]
+    public string description;
+
+    public string weaponType = "Pistol";
+
+    [Header("Visuals")]
+    public GameObject viewModelPrefab;
+    public Vector3 viewLocalPosition;
+    public Vector3 viewLocalEulerAngles;
+    public Vector3 viewLocalScale = Vector3.one;
+
+    [Header("Handling")]
+    public WeaponHandlingData handlingData;
+
+    [Header("Audio")]
+    public WeaponAudioData audioData;
+
+    [Header("Firing")]
+    public WeaponFireMode fireMode = WeaponFireMode.Projectile;
+    public AmmoData defaultAmmo;
+    public float fireRate = 0.35f;
+    public bool isAutomatic;
+
+    [Header("Magazine")]
+    public int clipSize = 6;
+    public float reloadTime = 1.25f;
+    public bool infiniteReserveAmmo = true;
+
+    [Header("Reload Behavior")]
+    public WeaponReloadMode reloadMode = WeaponReloadMode.FullClip;
+
+    [Tooltip("If true, the player can fire before a reload has fully completed.")]
+    public bool canFireDuringReload = false;
+
+    [Tooltip("If true, firing during reload stops the reload process.")]
+    public bool cancelReloadOnFire = true;
+
+    [Tooltip("Only used for one-round-at-a-time reload weapons.")]
+    public float reloadStartTime = 0.25f;
+
+    [Tooltip("Only used for one-round-at-a-time reload weapons.")]
+    public float reloadRoundInsertTime = 0.45f;
+
+    [Tooltip("Only used for one-round-at-a-time reload weapons.")]
+    public float reloadEndTime = 0.25f;
+
+    [Header("Reload Feedback Stages")]
+    [Tooltip("Plays reload start audio/trigger when reload begins.")]
+    public bool playReloadStartFeedback = true;
+
+    [Tooltip("Plays reload insert audio/trigger. For FullClip reloads, this plays once at Full Reload Insert Feedback Time. For OneRoundAtATime reloads, this plays once per inserted round.")]
+    public bool playReloadInsertFeedback = false;
+
+    [Tooltip("Plays reload end audio/trigger near the end of reload.")]
+    public bool playReloadEndFeedback = false;
+
+    [Tooltip("Only used for FullClip reloads. Time after reload starts before insert feedback plays.")]
+    public float fullReloadInsertFeedbackTime = 0.5f;
+
+    [Tooltip("Only used for FullClip reloads. How early before reload completion the end feedback should play.")]
+    public float fullReloadEndFeedbackLeadTime = 0.05f;
+
+    [Header("Dry Fire")]
+    public bool canDryFire = true;
+    public float dryFireCooldown = 0.2f;
+
+    [Header("Empty Fire Behavior")]
+    [Tooltip("What happens when the player presses fire while the weapon is empty.")]
+    public EmptyFireBehavior emptyFireBehavior = EmptyFireBehavior.DryFireOnly;
+
+    [Tooltip("Only used by DryFireThenReload. Adds a small delay after the dry fire click before reload starts.")]
+    public float emptyFireReloadDelay = 0.12f;
+
+    [Header("Projectile Pattern")]
+    public int projectilesPerShot = 1;
+    public float spreadAngle = 0f;
+
+    [Header("Progression")]
+    public int xpPerUse = 10;
+}
+//-----WeaponData.cs END-----</code></pre>
+            </details>
+
+            <details class="source-details">
+                <summary>
+                    <span>PlayerWeaponLoadoutController.cs</span>
+                    <small>Cycles owned weapons, respects mission weapon locks, and equips the next or previous weapon</small>
+                </summary>
+
+                <pre class="code-card"><code>//-----PlayerWeaponLoadoutController.cs START-----
+using System.Collections.Generic;
+using UnityEngine;
+
+public class PlayerWeaponLoadoutController : MonoBehaviour
+{
+    [Header("References")]
+    [SerializeField] private PlayerWeaponController weaponController;
+    [SerializeField] private PlayerInputReader inputReader;
+
+    private bool inputEnabled = true;
+
+    private void Awake()
+    {
+        if (weaponController == null)
+            weaponController = GetComponent&lt;PlayerWeaponController&gt;();
+
+        if (inputReader == null)
+            inputReader = GetComponent&lt;PlayerInputReader&gt;();
+    }
+
+    private void Update()
+    {
+        if (!inputEnabled)
+            return;
+
+        if (inputReader == null)
+            return;
+
+        if (!CanCycleWeapons())
+            return;
+
+        if (inputReader.CycleNextWeaponPressed)
+            CycleWeapon(1);
+
+        if (inputReader.CyclePreviousWeaponPressed)
+            CycleWeapon(-1);
+    }
+
+    public void SetInputEnabled(bool enabled)
+    {
+        inputEnabled = enabled;
+    }
+
+    public bool CanCycleWeapons()
+    {
+        if (!inputEnabled)
+            return false;
+
+        return !IsWeaponSelectionLocked();
+    }
+
+    public void CycleNextWeapon()
+    {
+        CycleWeapon(1);
+    }
+
+    public void CyclePreviousWeapon()
+    {
+        CycleWeapon(-1);
+    }
+
+    private void CycleWeapon(int direction)
+    {
+        if (!CanCycleWeapons())
+            return;
+
+        if (SaveManager.Instance == null)
+            return;
+
+        WeaponDatabase database = SaveManager.Instance.WeaponDatabase;
+
+        if (database == null)
+        {
+            Debug.LogWarning("No WeaponDatabase assigned to SaveManager.");
+            return;
+        }
+
+        List&lt;WeaponData&gt; ownedWeapons = database.GetOwnedWeaponsInDatabaseOrder();
+
+        if (ownedWeapons.Count &lt;= 0)
+        {
+            Debug.Log("No owned weapons to cycle.");
+            return;
+        }
+
+        int currentIndex = GetCurrentWeaponIndex(ownedWeapons);
+
+        if (currentIndex &lt; 0)
+            currentIndex = 0;
+
+        int nextIndex = currentIndex + direction;
+
+        if (nextIndex &gt;= ownedWeapons.Count)
+            nextIndex = 0;
+
+        if (nextIndex &lt; 0)
+            nextIndex = ownedWeapons.Count - 1;
+
+        WeaponData nextWeapon = ownedWeapons[nextIndex];
+
+        if (weaponController != null)
+            weaponController.EquipWeapon(nextWeapon);
+    }
+
+    private int GetCurrentWeaponIndex(List&lt;WeaponData&gt; ownedWeapons)
+    {
+        string activeWeaponId = PlayerProgress.ActiveWeaponId;
+
+        for (int i = 0; i &lt; ownedWeapons.Count; i++)
+        {
+            if (ownedWeapons[i] == null)
+                continue;
+
+            if (ownedWeapons[i].weaponId == activeWeaponId)
+                return i;
+        }
+
+        return -1;
+    }
+
+    private bool IsWeaponSelectionLocked()
+    {
+        TargetRangeMissionController missionController = TargetRangeMissionController.Instance;
+
+        return missionController != null &amp;&amp;
+               missionController.IsWeaponSelectionLocked;
+    }
+}
+//-----PlayerWeaponLoadoutController.cs END-----</code></pre>
+            </details>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         DESIGN NOTES
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>Design Notes</h2>
+            <p>
+                The strongest part of this system is the separation between permanent player progress and temporary mission rules.
+            </p>
+        </div>
+
+        <div class="toolkit-grid">
+
+            <div class="toolkit-card">
+                <h4>Collection Is Persistent</h4>
+                <p>
+                    Owned weapons are saved as IDs, allowing the player collection to rebuild cleanly after loading.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>Active Weapon Is Separate</h4>
+                <p>
+                    The active weapon ID can be saved independently from the full owned collection.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>Mission Weapons Can Be Temporary</h4>
+                <p>
+                    A mission can equip a weapon for that drill without pretending the player permanently selected it.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>Reload Modes Are Data</h4>
+                <p>
+                    Full clip reloads and one-round-at-a-time reloads are handled through weapon data settings.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>Ammo Can Expand</h4>
+                <p>
+                    AmmoData leaves room for alternate projectile types, damage values, speeds, and effects.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>Feedback Hooks Stay Modular</h4>
+                <p>
+                    Handling data and audio data let visuals and sound grow without bloating WeaponData into a swamp-beast.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         PROBLEMS SOLVED
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>Problems Solved</h2>
+            <p>
+                This system grew out of a simple pistol pedestal and became a flexible weapon framework.
+            </p>
+        </div>
+
+        <div class="about-wrap">
+            <div class="about-text">
+                <h3>Key Iteration Wins</h3>
+
+                <p>
+                    The first weapon implementation only needed to equip one pistol and fire one projectile.
+                    As soon as the project added more weapon types, the controller needed to stop owning every weapon-specific detail.
+                </p>
+
+                <p>
+                    Moving weapon values into WeaponData made the controller more generic.
+                    Adding a shotgun, revolver, rifle, or crossbow becomes a data setup problem instead of a new branch inside the player controller.
+                </p>
+
+                <p>
+                    The system also solved the mission design problem of letting players own weapons without letting every weapon break every drill.
+                    Mission-specific restrictions keep challenge rules intact while long-term progression still feels rewarding.
+                </p>
+            </div>
+
+            <div class="about-highlights">
+                <div class="about-card">
+                    <h3>Before</h3>
+                    <p>
+                        Weapon behavior was closely tied to player controller logic and one-off test scene setup.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3>After</h3>
+                    <p>
+                        Weapons are reusable data assets with separate handling, audio, ammo, reload, and progression settings.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3>Result</h3>
+                    <p>
+                        The project can add new weapons and mission rules without rewriting the whole firing system.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================
+         PORTFOLIO VALUE
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>Portfolio Value</h2>
+            <p>
+                This system shows scalable Unity gameplay architecture built around clean data ownership.
+            </p>
+        </div>
+
+        <div class="about-wrap">
+            <div class="about-text">
+                <h3>What This Demonstrates</h3>
+
+                <p>
+                    The Weapon Data, Loadout & Drill Restrictions system demonstrates practical gameplay architecture:
+                    ScriptableObject tuning, runtime equipment changes, saved weapon ownership, active weapon state,
+                    reload mode variation, ammo separation, and mission-specific weapon restrictions.
+                </p>
+
+                <p>
+                    It also shows an important production habit: separating systems before they become difficult to maintain.
+                    Weapon behavior, handling feedback, audio feedback, ammo definitions, and progression data are related,
+                    but they do not all need to live in one giant controller.
+                </p>
+
+                <p>
+                    For portfolio purposes, this is a strong example of turning a single mechanic into an expandable framework.
+                </p>
+            </div>
+
+            <div class="about-highlights">
+                <div class="about-card">
+                    <h3>Demonstrates</h3>
+                    <ul>
+                        <li>ScriptableObject architecture</li>
+                        <li>Weapon collection persistence</li>
+                        <li>Runtime loadout switching</li>
+                        <li>Mission rule enforcement</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3>Good For</h3>
+                    <ul>
+                        <li>Gameplay programmer roles</li>
+                        <li>Systems programmer roles</li>
+                        <li>Technical design discussion</li>
+                        <li>Unity portfolio walkthroughs</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3>Next Improvements</h3>
+                    <ul>
+                        <li>Weapon comparison UI</li>
+                        <li>Weapon stat display</li>
+                        <li>Unlock reward summary</li>
+                        <li>Attachment-ready weapon data</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================
+         RELATED SYSTEMS
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>Related Systems</h2>
+            <p>
+                Weapon data connects directly to save progress, target range drills, view model feedback, and the audio subsystem.
+            </p>
+        </div>
+
+        <div class="grid projects systems-grid">
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>Save, Progression & Unlocks</h3>
+                    <p>
+                        Covers owned weapon IDs, active weapon ID, weapon XP, completed missions, and saved progression state.
+                    </p>
+                </div>
+
+                <div class="card-actions">
+                    <a class="btn small" href="save-progress-unlocks.html">Open Page</a>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>Target Range Mission Framework</h3>
+                    <p>
+                        Covers target range drills, mission objectives, scoring, accuracy, trial completion, and mission weapon rules.
+                    </p>
+                </div>
+
+                <div class="card-actions">
+                    <a class="btn small" href="target-range-mission-framework.html">Open Page</a>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>Weapon Handling & Feedback</h3>
+                    <p>
+                        Covers kickback, recoil, reticle motion, muzzle flash, dry fire feedback, reload hooks, sway, and bob.
+                    </p>
+                </div>
+
+                <div class="card-actions">
+                    <a class="btn small" href="weapon-handling-feedback.html">Open Page</a>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         FOOTER
+    ================================ -->
+    <footer class="site-footer">
+        <p>&copy; <span id="year"></span> Jesse “Echo” Adams</p>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>
+<!-- systems/weapon-data-and-loadout.html END -->

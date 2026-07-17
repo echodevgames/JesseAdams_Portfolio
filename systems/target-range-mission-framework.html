@@ -1,0 +1,915 @@
+<!-- systems/target-range-mission-framework.html START -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- ================================
+         Metadata & SEO
+    ================================ -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- systems/target-range-mission-framework.html -->
+    <title>Target Range Mission Framework | Unity Systems Portfolio | Jesse Adams</title>
+    <meta name="description" content="A Unity C# mission framework breakdown for Echo Systems Lab covering target range drills, mission state, target objectives, HUD feedback, scoring, accuracy, weapon restrictions, and trial completion." />
+
+    <!-- ================================
+         Favicon & Font
+    ================================ -->
+    <link rel="icon" href="../assets/favicon.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+    <!-- ================================
+         CSS
+    ================================ -->
+    <link rel="stylesheet" href="../CSS/style.css" />
+    <link rel="stylesheet" href="../CSS/styleSystems.css" />
+</head>
+
+<body>
+
+    <!-- ================================
+         HEADER / NAV
+    ================================ -->
+    <header class="site-header">
+        <a class="brand" href="../index.html#home">Jesse Adams - EchoDevGames</a>
+
+        <button class="nav-toggle" aria-label="Open navigation" aria-expanded="false">☰</button>
+
+        <nav class="site-nav" aria-label="Primary">
+            <a href="../index.html#home">Home</a>
+            <a href="../tabs/systems.html">Systems</a>
+            <a href="../tabs/caseStudies.html">Case Studies</a>
+            <a href="../tabs/projects.html">Projects</a>
+            <a href="../tabs/wanted.html">Wanted</a>
+            <a href="../tabs/contact.html">Contact</a>
+            <a class="btn small" href="../assets/Resumes/Jesse_Adams_Resume_6-23-26.pdf" target="_blank" rel="noopener">Resume</a>
+        </nav>
+    </header>
+
+    <!-- ================================
+         HERO
+    ================================ -->
+    <main class="hero">
+        <div class="hero-inner">
+            <h1>Target Range Mission Framework</h1>
+
+            <p class="lead">
+                A reusable Unity mission framework for weapon drills, timed objectives, target groups,
+                score tracking, hit accuracy, completion state, trial progression, and return-to-hub flow.
+            </p>
+
+            <ul class="pill-list">
+                <li>Unity 6</li>
+                <li>C#</li>
+                <li>Mission State</li>
+                <li>Runtime Objectives</li>
+                <li>HUD Feedback</li>
+                <li>Progression</li>
+            </ul>
+
+            <div class="cta">
+                <a class="btn" href="../tabs/systems.html">Back to Systems</a>
+                <a class="btn ghost" href="echo-systems-lab-overview.html">Lab Overview</a>
+                <a class="btn ghost" href="target-spawning-and-objectives.html">Target Objectives</a>
+                <a class="btn ghost" href="weapon-data-and-loadout.html">Weapon Data</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- ================================
+         OVERVIEW
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>System Overview</h2>
+            <p>
+                The Target Range Mission Framework turns a simple shooting range into a reusable mission structure.
+            </p>
+        </div>
+
+        <div class="about-wrap">
+            <div class="about-text">
+                <h3>What It Does</h3>
+
+                <p>
+                    This system controls weapon-specific drills inside Echo Systems Lab. Each drill can define
+                    its own weapon reward, target group, time limit, target objective, active target count,
+                    respawn behavior, completion requirements, and trial progression rules.
+                </p>
+
+                <p>
+                    The framework separates mission data from mission runtime behavior. The drill rules live in
+                    ScriptableObjects, while the mission controller manages active state, timer updates,
+                    objective progress, target destruction events, scoring, hits, shots, accuracy, and completion.
+                </p>
+
+                <p>
+                    The result is a system where a pistol drill, shotgun drill, AR drill, sniper drill,
+                    revolver drill, or crossbow drill can all use the same mission pipeline while feeling distinct
+                    through their data.
+                </p>
+            </div>
+
+            <div class="about-highlights">
+                <div class="about-card">
+                    <h3>Primary Role</h3>
+                    <p>
+                        Run target range drills using reusable mission data, runtime state, target groups,
+                        weapon restrictions, and HUD feedback.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3>Core Loop</h3>
+                    <p>
+                        Select drill → Pick up mission weapon → Destroy targets → Track score and accuracy → Complete drill.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3>Portfolio Value</h3>
+                    <p>
+                        Demonstrates state management, data-driven design, event-based UI updates,
+                        objective logic, and gameplay progression.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================
+         PLAYER FLOW
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>Player Flow</h2>
+            <p>
+                The system is built around a clear player-facing loop with a hidden runtime framework underneath.
+            </p>
+        </div>
+
+        <div class="toolkit-grid">
+
+            <div class="toolkit-card">
+                <h4>1. Mission Selection</h4>
+                <p>
+                    The player opens the Target Range Mission Terminal and selects an available drill.
+                    Locked missions remain gated by completed mission IDs.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>2. Mission Armed</h4>
+                <p>
+                    The selected drill arms the correct weapon pedestal and activates the correct target group.
+                    The player is prompted to pick up the mission weapon.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>3. Mission Running</h4>
+                <p>
+                    Once the player equips the required weapon, the mission starts. The timer, targets destroyed,
+                    shots, hits, score, and accuracy update during play.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>4. Mission Complete</h4>
+                <p>
+                    When the required target count is reached, the mission completes, progress is saved,
+                    weapon unlocks are preserved, and the next eligible mission can unlock.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>5. Full Trial Complete</h4>
+                <p>
+                    Once all required target range missions are complete, the full Target Range Trial is marked complete
+                    and the Combat Trial unlocks.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>6. Return to Hub</h4>
+                <p>
+                    After full trial completion, the HUD displays a return prompt and the player can press R
+                    to return to the hub.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- ================================
+         MISSION FRAMEWORK SNAPSHOTS
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>Mission Framework Snapshots</h2>
+            <p>
+                Screenshots showing the mission loop, Unity inspector setup,
+                target range environment, HUD feedback, target group configuration, and completion flow.
+            </p>
+        </div>
+
+        <div class="grid projects systems-grid">
+
+            <!-- IMAGE REF: Replace with Target Range Mission Terminal or mission completion gameplay screenshot -->
+            <article class="card">
+                <img class="systems-card-image" src="../assets/Images/ScreenShots/EchoSystemsLab/MissonComplete.jpg"
+                     alt="Unity screenshot of the Target Range mission terminal showing available drills and unlock state">
+
+                <div class="card-body">
+                    <h3>Mission Terminal Flow</h3>
+                    <p>
+                        Shows the player-facing entry point for selecting weapon drills and starting target range missions.
+                    </p>
+                    <ul class="pill-list">
+                        <li>Mission Selection</li>
+                        <li>Unlock Flow</li>
+                        <li>Terminal UI</li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- IMAGE REF: Replace with TargetRangeMissionData ScriptableObject inspector screenshot -->
+            <article class="card">
+                <img class="systems-card-image" src="../assets/Images/ScreenShots/EchoSystemsLab/MissionSO.jpg"
+                     alt="Unity inspector screenshot of TargetRangeMissionData showing weapon reward, target group, timer, and objective settings">
+
+                <div class="card-body">
+                    <h3>Mission Data Inspector</h3>
+                    <p>
+                        Shows the ScriptableObject setup used to configure each drill without rewriting mission code.
+                    </p>
+                    <ul class="pill-list">
+                        <li>ScriptableObject</li>
+                        <li>Data-Driven Rules</li>
+                        <li>Mission Setup</li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- IMAGE REF: Replace with armed weapon pedestal screenshot -->
+            <article class="card">
+                <img class="systems-card-image" src="../assets/Images/ScreenShots/EchoSystemsLab/PedestalInteraction.jpg"
+                     alt="Unity gameplay screenshot of an armed weapon pedestal with interaction prompt visible">
+
+                <div class="card-body">
+                    <h3>Armed Weapon Pedestal</h3>
+                    <p>
+                        Shows the selected mission weapon being presented to the player before the drill begins.
+                    </p>
+                    <ul class="pill-list">
+                        <li>Interactable</li>
+                        <li>Mission Weapon</li>
+                        <li>Start Flow</li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- IMAGE REF: Replace with active Target Range HUD gameplay screenshot -->
+            <article class="card">
+                <img class="systems-card-image" src="../assets/Images/ScreenShots/EchoSystemsLab/TargetRangeHUD.jpg"
+                     alt="Unity gameplay screenshot of the Target Range HUD showing goal text, timer, score, shots, hits, and accuracy">
+
+                <div class="card-body">
+                    <h3>Runtime HUD Feedback</h3>
+                    <p>
+                        Shows mission state, target progress, time remaining, score, shots, hits, and accuracy during play.
+                    </p>
+                    <ul class="pill-list">
+                        <li>HUD</li>
+                        <li>Accuracy</li>
+                        <li>Mission State</li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- IMAGE REF: Replace with TargetRangeTargetGroup inspector screenshot -->
+            <article class="card">
+                <img class="systems-card-image" src="../assets/Images/ScreenShots/EchoSystemsLab/TargetRangeTargetGroup.jpg"
+                     alt="Unity inspector screenshot of TargetRangeTargetGroup showing target slots and inactive preview settings">
+
+                <div class="card-body">
+                    <h3>Target Group Setup</h3>
+                    <p>
+                        Shows how target slots are grouped so each mission can activate the correct range area.
+                    </p>
+                    <ul class="pill-list">
+                        <li>Target Slots</li>
+                        <li>Group ID</li>
+                        <li>Respawn Logic</li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- IMAGE REF: Replace with Target Range Trial completion screenshot when the completion-state bug is fixed -->
+            <article class="card">
+                <img class="systems-card-image" src="../assets/Images/Icons/EchoDevGamesIcon1.png"
+                     alt="Unity gameplay screenshot showing Target Range Trial complete text and Press R to return to hub - Currently Bugged and can't get a screenshot">
+
+                <div class="card-body">
+                    <h3>Trial Completion</h3>
+                    <p>
+                        Shows the final completion state where the player can return to the hub and the next trial unlocks.
+                    </p>
+                    <ul class="pill-list">
+                        <li>Completion</li>
+                        <li>Unlocks</li>
+                        <li>Return Flow</li>
+                    </ul>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         KEY COMPONENTS
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>Key Components</h2>
+            <p>
+                Each piece has a focused job so the system stays expandable instead of becoming one giant wire monster.
+            </p>
+        </div>
+
+        <div class="grid projects systems-grid">
+
+            <!-- COMPONENT: MISSION DATA -->
+            <article class="card">
+                <div class="card-body">
+                    <h3>TargetRangeMissionData</h3>
+
+                    <p>
+                        Defines the drill rules: weapon reward, target group ID, timer, required destroyed targets,
+                        active target count, respawn delay, trial completion contribution, and mission execution mode.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>ScriptableObject</li>
+                        <li>Rules Data</li>
+                        <li>Drill Setup</li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- COMPONENT: MISSION CONTROLLER -->
+            <article class="card">
+                <div class="card-body">
+                    <h3>TargetRangeMissionController</h3>
+
+                    <p>
+                        Owns runtime state. It arms missions, starts missions, updates timers, handles mission completion,
+                        registers shots and hits, tracks destroyed targets, and fires state-change events.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Runtime State</li>
+                        <li>Mission Logic</li>
+                        <li>Events</li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- COMPONENT: TARGET GROUP -->
+            <article class="card">
+                <div class="card-body">
+                    <h3>TargetRangeTargetGroup</h3>
+
+                    <p>
+                        Manages target slots for a drill. It activates target groups, chooses active targets,
+                        handles respawn logic, and supports destroy-all objective behavior.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Target Pool</li>
+                        <li>Respawn Logic</li>
+                        <li>Objective Modes</li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- COMPONENT: MISSION TARGET -->
+            <article class="card">
+                <div class="card-body">
+                    <h3>TargetRangeMissionTarget</h3>
+
+                    <p>
+                        Bridges individual target objects to the owning target group.
+                        It activates, hides, resets, preserves destroyed state, and notifies the group when destroyed.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Target Bridge</li>
+                        <li>Reset Logic</li>
+                        <li>Notifications</li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- COMPONENT: TARGET HEALTH -->
+            <article class="card">
+                <div class="card-body">
+                    <h3>TargetHealth</h3>
+
+                    <p>
+                        Receives damage, tracks current health, awards weapon type XP,
+                        spawns destruction effects, and routes destroyed notifications into the mission target system.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>IDamageable</li>
+                        <li>Weapon XP</li>
+                        <li>Destroy Effects</li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- COMPONENT: HUD -->
+            <article class="card">
+                <div class="card-body">
+                    <h3>TargetRangeHUD</h3>
+
+                    <p>
+                        Displays mission title, goal progress, timer, mission state, score, shots,
+                        hits, accuracy, completion text, and return-to-hub instructions.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>UI Feedback</li>
+                        <li>Stats Display</li>
+                        <li>Completion Text</li>
+                    </ul>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         STATE MACHINE
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>Runtime State</h2>
+            <p>
+                The mission controller uses explicit states so the HUD, weapon restrictions, target behavior, and completion logic know what phase the drill is in.
+            </p>
+        </div>
+
+        <div class="about-wrap">
+            <div class="about-text">
+                <h3>Mission States</h3>
+
+                <p>
+                    The target range flow is organized around simple, readable runtime states.
+                    This makes it easier to know when the player is choosing a drill, preparing to start,
+                    actively playing, completing a mission, failing a mission, or finishing the full trial.
+                </p>
+
+                <p>
+                    The HUD listens to mission state changes instead of polling every separate system manually.
+                    When the mission controller changes state, the UI updates the title, objective, timer,
+                    status text, and completion prompt.
+                </p>
+
+                <p>
+                    This is especially useful because the system supports both individual drill completion
+                    and full Target Range Trial completion. A single mission can finish without leaving the scene,
+                    while the full trial can unlock the next major trial and offer the return-to-hub prompt.
+                </p>
+            </div>
+
+            <div class="about-highlights">
+                <div class="about-card">
+                    <h3>Idle</h3>
+                    <p>
+                        No active drill is running. The player can use the mission terminal or explore the space.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3>Armed</h3>
+                    <p>
+                        A mission has been selected and the correct weapon pedestal is ready.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3>Running</h3>
+                    <p>
+                        Timer, target objectives, shot count, hit count, score, and accuracy are actively updating.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3>Completed</h3>
+                    <p>
+                        The drill objective has been met. Progress is saved and unlocks can update.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3>Failed</h3>
+                    <p>
+                        The drill timer expired before the objective was completed.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3>Trial Complete</h3>
+                    <p>
+                        All required range drills are complete, unlocking the next major trial.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================
+         DATA-DRIVEN DRILLS
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>Data-Driven Drill Setup</h2>
+            <p>
+                Each drill uses the same code path but different data, which keeps the system reusable.
+            </p>
+        </div>
+
+        <div class="about-wrap">
+            <div class="about-text">
+                <h3>Why ScriptableObjects Matter Here</h3>
+
+                <p>
+                    The mission framework does not need a separate controller for every weapon challenge.
+                    Instead, each drill is configured through a TargetRangeMissionData asset.
+                </p>
+
+                <p>
+                    That data determines which target group activates, which weapon is equipped for the mission,
+                    how many targets must be destroyed, how long the player has, whether targets respawn,
+                    and whether that drill counts toward full trial completion.
+                </p>
+
+                <p>
+                    This makes balancing faster. A pistol drill can emphasize precision, a shotgun drill can emphasize
+                    close-range spread, an AR drill can emphasize sustained fire, and a sniper drill can emphasize deliberate aim
+                    without rewriting the mission framework.
+                </p>
+            </div>
+
+            <div class="about-highlights">
+                <div class="about-card">
+                    <h3>Example Drill Data</h3>
+                    <ul>
+                        <li>Display name</li>
+                        <li>Weapon reward</li>
+                        <li>Target group ID</li>
+                        <li>Time limit</li>
+                        <li>Required destroyed targets</li>
+                        <li>Max active targets</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3>Objective Options</h3>
+                    <ul>
+                        <li>Respawning targets</li>
+                        <li>Destroy-all mode</li>
+                        <li>Hide destroyed targets</li>
+                        <li>Disable destroyed colliders</li>
+                        <li>Preserve broken-state visuals</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3>Progression Options</h3>
+                    <ul>
+                        <li>Counts toward full trial</li>
+                        <li>Unlocks weapon collection item</li>
+                        <li>Unlocks next mission</li>
+                        <li>Contributes to weapon XP</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================
+         HUD AND FEEDBACK
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>HUD & Player Feedback</h2>
+            <p>
+                The system keeps the player informed without making the mission controller responsible for drawing UI.
+            </p>
+        </div>
+
+        <div class="toolkit-grid">
+
+            <div class="toolkit-card">
+                <h4>Mission Title</h4>
+                <p>
+                    Shows the active drill name or full trial completion message.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>Goal Text</h4>
+                <p>
+                    Displays destroyed target count against the current objective requirement.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>Timer</h4>
+                <p>
+                    Shows remaining time while running and full time limit while armed.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>Status Text</h4>
+                <p>
+                    Communicates states like pick up weapon, mission active, mission complete, mission failed,
+                    or press R to return to hub.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>Accuracy Stats</h4>
+                <p>
+                    Tracks shots fired, hits landed, and calculated accuracy percentage.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>Completion Text</h4>
+                <p>
+                    Gives clear end-state feedback for completed drills and full target range trial completion.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         PROBLEMS SOLVED
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>Problems Solved</h2>
+            <p>
+                This framework grew through real debugging and iteration, which is where the architecture started sharpening its teeth.
+            </p>
+        </div>
+
+        <div class="about-wrap">
+            <div class="about-text">
+                <h3>Key Iteration Wins</h3>
+
+                <p>
+                    Early versions of the range could complete individual drills, but the full Target Range Trial needed a cleaner way
+                    to know when every required drill had been completed. The solution was to separate individual mission completion
+                    from full trial completion.
+                </p>
+
+                <p>
+                    Weapon unlocks also needed a distinction between collection ownership and mission permission.
+                    Once a player unlocked a weapon, it should remain in their collection, but that should not allow them
+                    to use the wrong weapon during another focused drill.
+                </p>
+
+                <p>
+                    The target system also needed multiple behaviors. Some drills use respawning targets,
+                    while others use destroy-all setups where broken targets should remain broken instead of resetting
+                    and clipping with spawned effects.
+                </p>
+            </div>
+
+            <div class="about-highlights">
+                <div class="about-card">
+                    <h3>Individual vs Full Completion</h3>
+                    <p>
+                        Individual drills can complete independently, while full trial completion unlocks the next major mission.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3>Collection vs Permission</h3>
+                    <p>
+                        Owned weapons remain in the player collection, but mission drills can lock active weapon selection.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3>Respawn vs Destroy-All</h3>
+                    <p>
+                        Target groups can either keep the drill alive with respawns or preserve destroyed objects for one-pass objectives.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================
+         CODE STRUCTURE
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>Code Structure</h2>
+            <p>
+                The system uses focused scripts instead of one monolithic range controller.
+            </p>
+        </div>
+
+        <div class="about-wrap">
+            <div class="about-text">
+                <h3>Main Script Responsibilities</h3>
+
+                <p>
+                    The mission controller owns mission runtime state and scoring. Mission data owns drill rules.
+                    Target groups own target activation and respawn behavior. Target health owns damage and destruction.
+                    The HUD owns display. Weapon controllers own firing and loadout restrictions.
+                </p>
+
+                <p>
+                    This makes the framework easier to expand. Adding another target range drill is mostly a data task,
+                    while adding a new objective mode can happen inside the target group or mission data layer
+                    without rewriting the whole player weapon system.
+                </p>
+            </div>
+
+            <div class="about-highlights">
+                <div class="about-card">
+                    <h3>Runtime</h3>
+                    <ul>
+                        <li>TargetRangeMissionController</li>
+                        <li>TargetRangeTargetGroup</li>
+                        <li>TargetRangeMissionTarget</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3>Data</h3>
+                    <ul>
+                        <li>MissionData</li>
+                        <li>TargetRangeMissionData</li>
+                        <li>WeaponData</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3>Feedback</h3>
+                    <ul>
+                        <li>TargetRangeHUD</li>
+                        <li>WeaponAmmoHUD</li>
+                        <li>InteractionPromptUI</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================
+         PORTFOLIO VALUE
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>Portfolio Value</h2>
+            <p>
+                This system demonstrates practical gameplay engineering rather than a single isolated feature.
+            </p>
+        </div>
+
+        <div class="about-wrap">
+            <div class="about-text">
+                <h3>What This Shows</h3>
+
+                <p>
+                    The Target Range Mission Framework shows my ability to build gameplay systems that connect data,
+                    runtime state, UI, progression, input, weapons, and scene flow.
+                </p>
+
+                <p>
+                    It also shows iteration discipline. Each feature was added as the project needed it:
+                    mission terminal flow, weapon-specific drills, full trial completion, target objective modes,
+                    return-to-hub behavior, target destruction effects, weapon XP, and drill restrictions.
+                </p>
+
+                <p>
+                    This is the kind of system work I enjoy most: building the skeleton, wiring the nerves,
+                    then tuning the little sparks until the whole thing feels alive.
+                </p>
+            </div>
+
+            <div class="about-highlights">
+                <div class="about-card">
+                    <h3>Demonstrates</h3>
+                    <ul>
+                        <li>State-driven gameplay</li>
+                        <li>ScriptableObject architecture</li>
+                        <li>Runtime objective tracking</li>
+                        <li>HUD event integration</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3>Good For</h3>
+                    <ul>
+                        <li>Gameplay programmer roles</li>
+                        <li>Unity systems roles</li>
+                        <li>Technical design discussions</li>
+                        <li>Portfolio walkthroughs</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3>Next Improvements</h3>
+                    <ul>
+                        <li>Per-drill difficulty tuning</li>
+                        <li>More polished target visuals</li>
+                        <li>End-of-mission results screen</li>
+                        <li>More gameplay capture media</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================
+         RELATED SYSTEMS
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>Related Systems</h2>
+            <p>
+                The target range framework connects directly to weapon data, target objectives, save progression, and HUD feedback.
+            </p>
+        </div>
+
+        <div class="grid projects systems-grid">
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>Target Spawning & Objective Modes</h3>
+                    <p>
+                        Details target groups, respawn behavior, destroy-all objectives, hidden destroyed visuals,
+                        and preserved broken target states.
+                    </p>
+                </div>
+
+                <div class="card-actions">
+                    <a class="btn small" href="target-spawning-and-objectives.html">Open Page</a>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>Weapon Data, Loadout & Drill Restrictions</h3>
+                    <p>
+                        Covers owned weapon collections, mission weapon locking, temporary weapon equips,
+                        ammo data, reload behavior, and weapon cycling.
+                    </p>
+                </div>
+
+                <div class="card-actions">
+                    <a class="btn small" href="weapon-data-and-loadout.html">Open Page</a>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>Save, Progression & Unlocks</h3>
+                    <p>
+                        Covers completed mission IDs, weapon unlocks, active weapon data,
+                        weapon type XP, and save persistence.
+                    </p>
+                </div>
+
+                <div class="card-actions">
+                    <a class="btn small" href="save-progress-unlocks.html">Open Page</a>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         FOOTER
+    ================================ -->
+    <footer class="site-footer">
+        <p>&copy; <span id="year"></span> Jesse “Echo” Adams</p>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>
+<!-- systems/target-range-mission-framework.html END -->

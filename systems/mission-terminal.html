@@ -1,0 +1,781 @@
+<!-- systems/mission-terminal.html START -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- ================================
+         Metadata & SEO
+    ================================ -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- systems/mission-terminal.html -->
+    <title>Mission Terminal & Unlock Flow | Unity Systems Portfolio | Jesse Adams</title>
+    <meta name="description" content="A Unity C# mission terminal system breakdown for Echo Systems Lab covering mission selection, ScriptableObject mission data, unlock requirements, dynamic UI generation, completed mission state, and hub-to-trial progression." />
+
+    <!-- ================================
+         Favicon & Font
+    ================================ -->
+    <link rel="icon" href="../assets/favicon.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+    <!-- ================================
+         CSS
+    ================================ -->
+    <link rel="stylesheet" href="../CSS/style.css" />
+    <link rel="stylesheet" href="../CSS/styleSystems.css" />
+</head>
+
+<body>
+
+    <!-- ================================
+         HEADER / NAV
+    ================================ -->
+    <header class="site-header">
+        <a class="brand" href="../index.html#home">Jesse Adams - EchoDevGames</a>
+
+        <button class="nav-toggle" aria-label="Open navigation" aria-expanded="false">☰</button>
+
+        <nav class="site-nav" aria-label="Primary">
+            <a href="../index.html#home">Home</a>
+            <a href="../tabs/systems.html">Systems</a>
+            <a href="../tabs/caseStudies.html">Case Studies</a>
+            <a href="../tabs/projects.html">Projects</a>
+            <a href="../tabs/contact.html">Contact</a>
+            <a class="btn small" href="../assets/Resumes/Jesse_Adams_Resume_6-23-26.pdf" target="_blank" rel="noopener">Resume</a>
+        </nav>
+    </header>
+
+    <!-- ================================
+         HERO
+    ================================ -->
+    <main class="hero">
+        <div class="hero-inner">
+            <h1>Mission Terminal & Unlock Flow</h1>
+
+            <p class="lead">
+                A reusable Unity mission selection system that connects hub interaction, ScriptableObject mission data,
+                dynamic UI generation, unlock requirements, completed mission tracking, scene loading, and trial progression.
+            </p>
+
+            <ul class="pill-list">
+                <li>Unity 6</li>
+                <li>C#</li>
+                <li>ScriptableObjects</li>
+                <li>Mission Flow</li>
+                <li>Progression</li>
+                <li>Dynamic UI</li>
+            </ul>
+
+            <div class="cta">
+                <a class="btn" href="../tabs/systems.html">Back to Systems</a>
+                <a class="btn ghost" href="echo-systems-lab-overview.html">Lab Overview</a>
+                <a class="btn ghost" href="save-progress-unlocks.html">Save & Progression</a>
+                <a class="btn ghost" href="target-range-mission-framework.html">Target Range Framework</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- ================================
+         OVERVIEW
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>System Overview</h2>
+            <p>
+                The mission terminal is the hub’s control panel: it lets the player choose trials, checks unlock rules, and routes them into gameplay.
+            </p>
+        </div>
+
+        <div class="about-wrap">
+            <div class="about-text">
+                <h3>What It Does</h3>
+
+                <p>
+                    The Mission Terminal system gives Echo Systems Lab a central structure for launching gameplay trials.
+                    Instead of hardcoding mission buttons directly into the scene, missions are defined as data and displayed through a generated UI.
+                </p>
+
+                <p>
+                    Each mission can define its display name, description, scene name, unlock requirements, and related trial behavior.
+                    The terminal reads that data, builds the mission list, marks missions as available, locked, or completed, and sends the player into the correct scene or current-scene mission setup.
+                </p>
+
+                <p>
+                    This makes the hub expandable. New trials can be added by creating mission data assets instead of rewriting the terminal UI every time another drill, combat challenge, or movement test is introduced.
+                </p>
+            </div>
+
+            <div class="about-highlights">
+                <div class="about-card">
+                    <h3>Primary Role</h3>
+                    <p>
+                        Turn mission data into a readable player-facing selection menu with unlock states and launch behavior.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3>Core Loop</h3>
+                    <p>
+                        Interact with terminal → View missions → Choose available mission → Load scene or arm current-scene drill.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3>Portfolio Value</h3>
+                    <p>
+                        Demonstrates data-driven UI, persistent progression checks, scene routing, and reusable hub architecture.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================
+         SCREENSHOTS
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>Mission Terminal Snapshots</h2>
+            <p>
+                Screenshots showing the terminal UI, mission data, unlock state, and how the player moves from hub selection into a trial.
+            </p>
+        </div>
+
+        <div class="grid projects systems-grid">
+
+            <!-- IMAGE REF: Mission terminal UI with available, locked, and completed missions visible. -->
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/TargetRangeMissionTerminal.jpg"
+                     alt="Unity gameplay screenshot of the mission terminal UI showing available, locked, and completed target range missions">
+
+                <div class="card-body">
+                    <h3>Terminal UI</h3>
+                    <p>
+                        The player-facing mission menu shows available drills, locked missions, completed states, and mission descriptions.
+                    </p>
+                    <ul class="pill-list">
+                        <li>Mission List</li>
+                        <li>Unlock State</li>
+                        <li>Player UI</li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- IMAGE REF: Inspector screenshot of MissionData or TargetRangeMissionData asset. -->
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/MissionSO.jpg"
+                     alt="Unity Inspector screenshot of mission ScriptableObject data showing mission ID, display name, description, scene settings, and unlock rules">
+
+                <div class="card-body">
+                    <h3>Mission Data</h3>
+                    <p>
+                        Mission rules live in ScriptableObjects so new trials can be authored through data instead of one-off UI scripts.
+                    </p>
+                    <ul class="pill-list">
+                        <li>ScriptableObjects</li>
+                        <li>Mission Rules</li>
+                        <li>Data-Driven</li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- IMAGE REF: Gameplay shot showing weapon/pedestal or a selected mission being armed. -->
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/PedestalInteraction.jpg"
+                     alt="Unity gameplay screenshot showing a mission weapon pedestal interaction after a mission has been selected">
+
+                <div class="card-body">
+                    <h3>Mission Launch Flow</h3>
+                    <p>
+                        Once a mission is selected, the correct trial setup can be armed, including mission weapons and objective groups.
+                    </p>
+                    <ul class="pill-list">
+                        <li>Interaction</li>
+                        <li>Mission Setup</li>
+                        <li>Trial Start</li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- IMAGE REF: Screenshot showing locked or unlocked weapon/progression state. -->
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/WeaponLockState.jpg"
+                     alt="Unity gameplay screenshot showing progression state after mission completion, including unlocked weapon or completed mission status">
+
+                <div class="card-body">
+                    <h3>Progression Feedback</h3>
+                    <p>
+                        Completed missions update persistent state, which changes what the terminal shows the next time the player opens it.
+                    </p>
+                    <ul class="pill-list">
+                        <li>Completion</li>
+                        <li>Unlocks</li>
+                        <li>Persistence</li>
+                    </ul>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         PLAYER FLOW
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>Player Flow</h2>
+            <p>
+                The system is built around a clean hub-to-trial pipeline.
+            </p>
+        </div>
+
+        <div class="toolkit-grid">
+
+            <div class="toolkit-card">
+                <h4>1. Find Terminal</h4>
+                <p>
+                    The player looks at the terminal object and receives an interaction prompt through the reusable interaction system.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>2. Open Mission UI</h4>
+                <p>
+                    Pressing interact opens the mission terminal UI and temporarily shifts player attention from movement to menu selection.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>3. Review Mission States</h4>
+                <p>
+                    The terminal displays which missions are available, locked, or completed based on saved progression data.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>4. Select Mission</h4>
+                <p>
+                    Selecting an available mission either loads the target scene or arms a mission that can start inside the current scene.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>5. Complete Objective</h4>
+                <p>
+                    The active trial tracks its own completion rules, then marks progress when the player meets the objective.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>6. Unlock Next Step</h4>
+                <p>
+                    Completed mission IDs unlock later missions, weapons, or trial groups when the player returns to the terminal.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         KEY COMPONENTS
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>Key Components</h2>
+            <p>
+                The terminal is built from focused pieces so mission content, UI, progress, and scene flow do not all live in one swollen script-beast.
+            </p>
+        </div>
+
+        <div class="grid projects systems-grid">
+
+            <!-- COMPONENT: MISSION DATA -->
+            <article class="card">
+                <div class="card-body">
+                    <h3>MissionData</h3>
+
+                    <p>
+                        Defines shared mission identity and unlock requirements: mission ID, display name,
+                        scene name, description, and required completed mission IDs.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>ScriptableObject</li>
+                        <li>Mission Identity</li>
+                        <li>Unlock Rules</li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- COMPONENT: TARGET RANGE MISSION DATA -->
+            <article class="card">
+                <div class="card-body">
+                    <h3>TargetRangeMissionData</h3>
+
+                    <p>
+                        Extends mission configuration for range drills, including target group, weapon reward,
+                        timer, required destroyed targets, active target limits, and objective settings.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Drill Rules</li>
+                        <li>Weapon Reward</li>
+                        <li>Target Group</li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- COMPONENT: TERMINAL UI -->
+            <article class="card">
+                <div class="card-body">
+                    <h3>MissionTerminalUI</h3>
+
+                    <p>
+                        Opens and closes the terminal, generates mission buttons, displays mission details,
+                        and routes player selections into the correct mission launch behavior.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Dynamic UI</li>
+                        <li>Mission Buttons</li>
+                        <li>Menu Flow</li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- COMPONENT: MISSION BUTTON -->
+            <article class="card">
+                <div class="card-body">
+                    <h3>MissionButtonUI</h3>
+
+                    <p>
+                        Represents one mission entry in the terminal list, including label, interactability,
+                        available state, locked state, and completed state.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Button State</li>
+                        <li>UI Feedback</li>
+                        <li>Selection</li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- COMPONENT: PROGRESSION -->
+            <article class="card">
+                <div class="card-body">
+                    <h3>MissionProgress</h3>
+
+                    <p>
+                        Tracks completed mission IDs and answers the important question:
+                        is this mission available to the player right now?
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Completed IDs</li>
+                        <li>Availability</li>
+                        <li>Progress State</li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- COMPONENT: SCENE LOADER -->
+            <article class="card">
+                <div class="card-body">
+                    <h3>GameSceneLoader</h3>
+
+                    <p>
+                        Handles scene transitions for missions, hub returns, main menu flow,
+                        and shared scene loading utility.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Scene Flow</li>
+                        <li>Hub Return</li>
+                        <li>Utility</li>
+                    </ul>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         DATA FLOW
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>Data Flow</h2>
+            <p>
+                Mission availability comes from saved progress, while mission behavior comes from data assets.
+            </p>
+        </div>
+
+        <div class="about-wrap">
+            <div class="about-text">
+                <h3>How the Pieces Connect</h3>
+
+                <p>
+                    The terminal does not need to know every detail of how each mission works.
+                    Its job is to list missions, ask whether they are unlocked, and trigger the correct launch behavior.
+                </p>
+
+                <p>
+                    Mission data defines what the mission is. Progress data defines whether it is available or completed.
+                    The terminal UI combines those two layers into something readable for the player.
+                </p>
+
+                <p>
+                    This separation matters because Echo Systems Lab is intended to grow. A future combat trial, movement trial,
+                    audio test room, or AI sandbox can plug into the same terminal pattern without replacing the hub architecture.
+                </p>
+            </div>
+
+            <div class="about-highlights">
+                <div class="about-card">
+                    <h3>Mission Data Provides</h3>
+                    <ul>
+                        <li>Mission ID</li>
+                        <li>Display name</li>
+                        <li>Description</li>
+                        <li>Scene name</li>
+                        <li>Unlock requirements</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3>Progress Data Provides</h3>
+                    <ul>
+                        <li>Completed mission IDs</li>
+                        <li>Owned weapon IDs</li>
+                        <li>Active weapon ID</li>
+                        <li>Weapon type XP</li>
+                        <li>Last scene state</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3>Terminal UI Provides</h3>
+                    <ul>
+                        <li>Mission list generation</li>
+                        <li>Available state</li>
+                        <li>Locked state</li>
+                        <li>Completed state</li>
+                        <li>Mission launch button</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================
+         UNLOCK STATES
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>Mission States in the Terminal</h2>
+            <p>
+                The terminal gives the player a clear read on what they can do now and what they are working toward.
+            </p>
+        </div>
+
+        <div class="toolkit-grid">
+
+            <div class="toolkit-card">
+                <h4>Available</h4>
+                <p>
+                    The mission has no unmet requirements. The player can select it and start the related trial.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>Locked</h4>
+                <p>
+                    The mission requires another completed mission ID before it becomes selectable.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>Completed</h4>
+                <p>
+                    The mission has been completed and saved. It can remain visible as proof of progression.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>Current-Scene Mission</h4>
+                <p>
+                    Some drills can start in the current scene instead of requiring a separate scene load.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>Scene Mission</h4>
+                <p>
+                    A mission can route the player to another scene when the selected trial has its own environment.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>Trial Chain</h4>
+                <p>
+                    Completing several smaller missions can contribute to unlocking a larger trial completion state.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         PROBLEMS SOLVED
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>Problems Solved</h2>
+            <p>
+                This system came from needing the hub to feel like a real connected game space instead of a pile of loose test scenes.
+            </p>
+        </div>
+
+        <div class="about-wrap">
+            <div class="about-text">
+                <h3>Why This Was Needed</h3>
+
+                <p>
+                    Early trial flow could work with hardcoded buttons, but that approach would have become brittle as soon as more missions were added.
+                    The terminal needed to scale with new drills, new unlock chains, and future trial categories.
+                </p>
+
+                <p>
+                    It also needed to support persistent progress. When the player completes a mission, the hub should remember that result,
+                    unlock the next available mission, and display the new state without needing a special-case script for every mission.
+                </p>
+
+                <p>
+                    By moving mission definitions into data and letting the UI generate itself from that data,
+                    the system became easier to extend, easier to debug, and easier to present as a portfolio architecture piece.
+                </p>
+            </div>
+
+            <div class="about-highlights">
+                <div class="about-card">
+                    <h3>Hardcoded Buttons</h3>
+                    <p>
+                        Replaced one-off mission buttons with generated UI based on mission data arrays.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3>Unlock Clarity</h3>
+                    <p>
+                        Mission requirements are expressed through completed mission IDs instead of hidden scene-specific logic.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3>Hub Continuity</h3>
+                    <p>
+                        The hub can act as the persistent home base for multiple trials and future systems.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================
+         CODE STRUCTURE
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>Code Structure</h2>
+            <p>
+                The terminal sits between data, save state, interaction, UI, and scene flow.
+            </p>
+        </div>
+
+        <div class="about-wrap">
+            <div class="about-text">
+                <h3>Main Script Responsibilities</h3>
+
+                <p>
+                    MissionData and TargetRangeMissionData define content. MissionProgress and SaveManager preserve completion state.
+                    MissionTerminalUI displays that state. GameSceneLoader moves the player between hub and trials.
+                    PlayerInteractor opens the terminal through the same interface used by weapon pedestals and other interactables.
+                </p>
+
+                <p>
+                    This keeps the terminal from becoming responsible for everything. It does not own weapon firing,
+                    target destruction, scoring, or audio feedback. It simply starts the correct system and lets that system do its job.
+                </p>
+            </div>
+
+            <div class="about-highlights">
+                <div class="about-card">
+                    <h3>Data Layer</h3>
+                    <ul>
+                        <li>MissionData</li>
+                        <li>TargetRangeMissionData</li>
+                        <li>MissionTerminalData</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3>Runtime Layer</h3>
+                    <ul>
+                        <li>MissionProgress</li>
+                        <li>SaveManager</li>
+                        <li>GameSceneLoader</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3>Presentation Layer</h3>
+                    <ul>
+                        <li>MissionTerminalUI</li>
+                        <li>MissionButtonUI</li>
+                        <li>InteractionPromptUI</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================
+         PORTFOLIO VALUE
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>Portfolio Value</h2>
+            <p>
+                The mission terminal shows how small systems become meaningful when they connect.
+            </p>
+        </div>
+
+        <div class="about-wrap">
+            <div class="about-text">
+                <h3>What This Demonstrates</h3>
+
+                <p>
+                    This page demonstrates practical Unity systems architecture: data-driven mission setup,
+                    dynamic UI generation, persistent unlock checks, scene routing, and reusable interaction.
+                </p>
+
+                <p>
+                    It also shows production thinking. A portfolio project should not just contain gameplay features,
+                    it should show how those features are selected, organized, unlocked, replayed, and expanded.
+                    The terminal gives Echo Systems Lab that structure.
+                </p>
+
+                <p>
+                    For a gameplay systems role, this is valuable because it shows I can build the framework around the feature,
+                    not just the feature itself.
+                </p>
+            </div>
+
+            <div class="about-highlights">
+                <div class="about-card">
+                    <h3>Demonstrates</h3>
+                    <ul>
+                        <li>Mission selection architecture</li>
+                        <li>ScriptableObject-driven content</li>
+                        <li>Dynamic UI generation</li>
+                        <li>Progression-aware unlock logic</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3>Good For</h3>
+                    <ul>
+                        <li>Unity gameplay programmer roles</li>
+                        <li>Systems programming discussions</li>
+                        <li>Technical design review</li>
+                        <li>Portfolio walkthroughs</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3>Next Improvements</h3>
+                    <ul>
+                        <li>Mission category filters</li>
+                        <li>Better locked-state descriptions</li>
+                        <li>Mission preview panels</li>
+                        <li>Completion rewards summary</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================
+         RELATED SYSTEMS
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>Related Systems</h2>
+            <p>
+                The terminal connects directly to save progression, interaction, target range missions, and weapon unlocks.
+            </p>
+        </div>
+
+        <div class="grid projects systems-grid">
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>Save, Progression & Unlocks</h3>
+                    <p>
+                        Covers completed mission IDs, owned weapons, weapon XP, active weapon selection,
+                        and persistent progression data.
+                    </p>
+                </div>
+
+                <div class="card-actions">
+                    <a class="btn small" href="save-progress-unlocks.html">Open Page</a>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>Interaction & Prompt System</h3>
+                    <p>
+                        Covers raycast-based interaction, interactable interfaces, prompt display,
+                        terminals, weapon pedestals, and world object activation.
+                    </p>
+                </div>
+
+                <div class="card-actions">
+                    <a class="btn small" href="interaction-system.html">Open Page</a>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>Target Range Mission Framework</h3>
+                    <p>
+                        Covers timed drills, mission state, target objectives, score, accuracy,
+                        HUD updates, and full trial completion.
+                    </p>
+                </div>
+
+                <div class="card-actions">
+                    <a class="btn small" href="target-range-mission-framework.html">Open Page</a>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         FOOTER
+    ================================ -->
+    <footer class="site-footer">
+        <p>&copy; <span id="year"></span> Jesse “Echo” Adams</p>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>
+<!-- systems/mission-terminal.html END -->

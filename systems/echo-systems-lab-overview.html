@@ -1,0 +1,670 @@
+<!-- systems/echo-systems-lab-overview.html START -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- ================================
+         Metadata & SEO
+    ================================ -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- systems/echo-systems-lab-overview.html -->
+    <title>Echo Systems Lab | Unity Systems Overview | Jesse Adams</title>
+    <meta name="description" content="A Unity systems architecture overview for Echo Systems Lab, covering mission flow, target range trials, weapon handling, audio systems, save progression, interaction, UI, and reusable C# gameplay systems." />
+
+    <!-- ================================
+         Favicon & Font
+    ================================ -->
+    <link rel="icon" href="../assets/favicon.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+    <!-- ================================
+         CSS
+    ================================ -->
+    <link rel="stylesheet" href="../CSS/style.css" />
+    <link rel="stylesheet" href="../CSS/styleSystems.css" />
+</head>
+
+<body>
+
+    <!-- ================================
+         HEADER / NAV
+    ================================ -->
+    <header class="site-header">
+        <a class="brand" href="../index.html#home">Jesse Adams - EchoDevGames</a>
+
+        <button class="nav-toggle" aria-label="Open navigation" aria-expanded="false">☰</button>
+
+        <nav class="site-nav" aria-label="Primary">
+            <a href="../index.html#home">Home</a>
+            <a href="../tabs/systems.html">Systems</a>
+            <a href="../tabs/caseStudies.html">Case Studies</a>
+            <a href="../tabs/projects.html">Projects</a>
+            <a href="../tabs/wanted.html">Wanted</a>
+            <a href="../tabs/contact.html">Contact</a>
+            <a class="btn small" href="../assets/Resumes/Jesse_Adams_Resume_6-23-26.pdf" target="_blank" rel="noopener">Resume</a>
+        </nav>
+    </header>
+
+    <!-- ================================
+         HERO
+    ================================ -->
+    <main class="hero">
+        <div class="hero-inner">
+            <h1>Echo Systems Lab</h1>
+
+            <p class="lead">
+                A modular Unity systems project built to demonstrate professional gameplay architecture:
+                mission flow, weapon trials, save progression, audio routing, input, interaction, UI, player feedback,
+                and reusable C# systems working together inside one connected experience.
+            </p>
+
+            <ul class="pill-list">
+                <li>Unity 6</li>
+                <li>C#</li>
+                <li>Systems Architecture</li>
+                <li>ScriptableObjects</li>
+                <li>Gameplay Frameworks</li>
+            </ul>
+
+            <div class="cta">
+                <a class="btn" href="../tabs/systems.html">Back to Systems</a>
+                <a class="btn ghost" href="target-range-mission-framework.html">Target Range Framework</a>
+                <a class="btn ghost" href="weapon-handling-feedback.html">Weapon Handling</a>
+                <a class="btn ghost" href="audio-subsystem.html">Audio Subsystem</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- ================================
+         OVERVIEW
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>Project Overview</h2>
+            <p>
+                Echo Systems Lab is designed as a portfolio-grade systems sandbox rather than a single isolated prototype.
+            </p>
+        </div>
+
+        <div class="about-wrap">
+            <div class="about-text">
+                <h3>What It Is</h3>
+
+                <p>
+                    Echo Systems Lab is a first-person Unity project built around a hub-and-trial structure.
+                    The player starts in a hub space, interacts with a mission terminal, launches focused gameplay trials,
+                    completes objectives, earns progression, and returns to the hub with persistent unlocks.
+                </p>
+
+                <p>
+                    The goal is to show how individual systems can connect into a larger playable framework.
+                    Instead of building one-off scripts for one scene, the project uses reusable data, managers, controllers,
+                    UI layers, and feedback systems that can grow across multiple missions and gameplay modes.
+                </p>
+
+                <p>
+                    The current focus is the Target Range Trial, a weapon-testing environment where each drill can define its own
+                    weapon reward, objective rules, timer, target group, completion requirements, and progression behavior.
+                </p>
+            </div>
+
+            <div class="about-highlights">
+                <div class="about-card">
+                    <h3>Primary Goal</h3>
+                    <p>
+                        Build reusable gameplay systems that demonstrate architecture, iteration, player feedback,
+                        and feature ownership in Unity.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3>Current Loop</h3>
+                    <p>
+                        Hub → Mission Terminal → Target Range Drill → Complete Objective → Save Progress → Unlock Next Trial.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3>Professional Focus</h3>
+                    <p>
+                        Clear C# structure, data-driven design, scalable systems, readable UI flow, and responsive game feel.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ================================
+         PROJECT SNAPSHOTS
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>Project Snapshots</h2>
+            <p>
+                A quick look at the hub, mission flow, target range systems, weapon feedback,
+                settings, and input tools that make up Echo Systems Lab.
+            </p>
+        </div>
+
+        <div class="grid projects systems-grid">
+
+            <!-- IMAGE REF: Wide gameplay shot of the Echo Systems Lab hub / bedroom-office environment. -->
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/SystemsOverview.jpg"
+                     alt="Unity gameplay screenshot of the Echo Systems Lab hub environment showing the bedroom-office space and trial access area">
+
+                <div class="card-body">
+                    <h3>Hub Environment</h3>
+                    <p>
+                        The central space where the player accesses systems, launches trials,
+                        tests weapons, and returns after completing objectives.
+                    </p>
+                    <ul class="pill-list">
+                        <li>Hub</li>
+                        <li>Environment</li>
+                        <li>Trial Access</li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- IMAGE REF: Gameplay/UI shot of the mission terminal showing available, locked, and completed missions. -->
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/TargetRangeMissionTerminal.jpg"
+                     alt="Unity gameplay screenshot of the mission terminal UI showing available target range missions and unlock state">
+
+                <div class="card-body">
+                    <h3>Mission Terminal</h3>
+                    <p>
+                        A data-driven mission selection flow where completed trials unlock
+                        future drills and keep the hub progression readable.
+                    </p>
+                    <ul class="pill-list">
+                        <li>Mission UI</li>
+                        <li>Unlocks</li>
+                        <li>Progression</li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- IMAGE REF: Unity Inspector shot of a TargetRangeMissionData ScriptableObject with drill rules visible. -->
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/MissionSO.jpg"
+                     alt="Unity Inspector screenshot of a Target Range mission ScriptableObject showing mission rules, timer, target group, and objective settings">
+
+                <div class="card-body">
+                    <h3>Mission Data</h3>
+                    <p>
+                        Each drill can define its weapon reward, target group, objective rules,
+                        timer, required destroyed targets, and completion behavior.
+                    </p>
+                    <ul class="pill-list">
+                        <li>ScriptableObjects</li>
+                        <li>Mission Rules</li>
+                        <li>Target Range</li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- IMAGE REF: Audio settings menu showing all mixer-backed sliders. -->
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/AudioSettings.jpg"
+                     alt="Unity gameplay screenshot of the audio settings menu with mixer-backed sliders for master, music, SFX, weapons, UI, and ambience volume">
+
+                <div class="card-body">
+                    <h3>Audio Settings</h3>
+                    <p>
+                        Mixer-backed settings for master, music, SFX, weapons, UI,
+                        and ambience volume, tied into reusable audio event systems.
+                    </p>
+                    <ul class="pill-list">
+                        <li>Settings UI</li>
+                        <li>Audio Mixer</li>
+                        <li>Subsystems</li>
+                    </ul>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         SYSTEM MAP
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>System Map</h2>
+            <p>
+                The project is organized around connected systems that can be expanded, reused, and tuned independently.
+            </p>
+        </div>
+
+        <div class="grid projects">
+
+            <!-- SYSTEM: MISSION FLOW -->
+            <article class="card">
+                <!-- IMAGE REF: Mission terminal UI showing mission buttons, unlock state, and trial availability. -->
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/TargetRangeMissionTerminal.jpg"
+                     alt="Unity gameplay screenshot of the mission terminal showing mission buttons, completion status, and target range unlock flow">
+
+                <div class="card-body">
+                    <h3>Mission Flow</h3>
+
+                    <p>
+                        Mission data, terminal data, unlock requirements, mission buttons, scene loading,
+                        current-scene execution, and completed mission tracking.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>MissionData</li>
+                        <li>MissionTerminalData</li>
+                        <li>Unlock Logic</li>
+                    </ul>
+                </div>
+
+                <div class="card-actions">
+                    <a class="btn small" href="mission-terminal.html">View System</a>
+                </div>
+            </article>
+
+            <!-- SYSTEM: TARGET RANGE -->
+            <article class="card">
+                <!-- IMAGE REF: Unity Inspector shot of TargetRangeMissionData or gameplay shot of active timed target range HUD. -->
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/MissionSO.jpg"
+                     alt="Unity Inspector screenshot of TargetRangeMissionData showing timer, required destroyed targets, active target limits, respawn rules, and completion settings">
+
+                <div class="card-body">
+                    <h3>Target Range Framework</h3>
+
+                    <p>
+                        Runtime mission state, timer logic, targets destroyed, score, shots, hits, accuracy,
+                        drill completion, full trial completion, and return-to-hub flow.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Mission State</li>
+                        <li>HUD Stats</li>
+                        <li>Trial Completion</li>
+                    </ul>
+                </div>
+
+                <div class="card-actions">
+                    <a class="btn small" href="target-range-mission-framework.html">View System</a>
+                </div>
+            </article>
+
+            <!-- SYSTEM: WEAPONS -->
+            <article class="card">
+                <!-- IMAGE REF: Gameplay shot showing the bandolier HUD, owned weapons, or mission weapon loadout restrictions. -->
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/Bandolier1.jpg"
+                     alt="Unity gameplay screenshot showing weapon loadout behavior with the bandolier HUD and mission weapon selection">
+
+                <div class="card-body">
+                    <h3>Weapon Systems</h3>
+
+                    <p>
+                        Weapon data, ammo data, view model spawning, projectile patterns, reload modes,
+                        empty-fire behavior, owned weapons, temporary mission weapons, and loadout restrictions.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>WeaponData</li>
+                        <li>AmmoData</li>
+                        <li>Loadouts</li>
+                    </ul>
+                </div>
+
+                <div class="card-actions">
+                    <a class="btn small" href="weapon-data-and-loadout.html">View System</a>
+                </div>
+            </article>
+
+            <!-- SYSTEM: GAME FEEL -->
+            <article class="card">
+                <!-- IMAGE REF: Gameplay shot showing muzzle flash, weapon view model feedback, reticle feedback, or recoil behavior. -->
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/MuzzleFlare.jpg"
+                     alt="Unity gameplay screenshot of weapon handling feedback showing muzzle flash, view model recoil, and reticle-centered shooting feedback">
+
+                <div class="card-body">
+                    <h3>Weapon Handling & Feedback</h3>
+
+                    <p>
+                        View model kickback, muzzle flash, fire feedback, reticle recoil, passive reticle motion,
+                        look sway, movement bob, idle bob, reload hooks, and dry fire feedback.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Game Feel</li>
+                        <li>View Models</li>
+                        <li>Reticle Feedback</li>
+                    </ul>
+                </div>
+
+                <div class="card-actions">
+                    <a class="btn small" href="weapon-handling-feedback.html">View System</a>
+                </div>
+            </article>
+
+            <!-- SYSTEM: AUDIO -->
+            <article class="card">
+                <!-- IMAGE REF: Audio settings menu, AudioMixer routing, GameAudioManager, or AudioEventData inspector. -->
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/AudioSettings.jpg"
+                     alt="Unity gameplay screenshot of the audio subsystem settings menu with mixer-backed volume controls">
+
+                <div class="card-body">
+                    <h3>Audio Subsystem</h3>
+
+                    <p>
+                        A refactored audio setup using reusable audio events, weapon audio data, mixer groups,
+                        audio settings, UI sounds, ambience, music, and footstep surface data.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>AudioEventData</li>
+                        <li>Audio Mixer</li>
+                        <li>Subsystem Design</li>
+                    </ul>
+                </div>
+
+                <div class="card-actions">
+                    <a class="btn small" href="audio-subsystem.html">View System</a>
+                </div>
+            </article>
+
+            <!-- SYSTEM: SAVE PROGRESSION -->
+            <article class="card">
+                <!-- IMAGE REF: Gameplay or inspector shot showing locked/unlocked weapons, PlayerProgress, SaveManager, or completed mission state. -->
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/WeaponLockState.jpg"
+                     alt="Unity gameplay screenshot showing weapon unlock state and persistent progression after completing missions">
+
+                <div class="card-body">
+                    <h3>Save & Progression</h3>
+
+                    <p>
+                        Persistent save data for completed mission IDs, owned weapon IDs,
+                        active weapon selection, weapon type XP, last scene data, and unlock flow.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>SaveManager</li>
+                        <li>PlayerProgress</li>
+                        <li>Unlocks</li>
+                    </ul>
+                </div>
+
+                <div class="card-actions">
+                    <a class="btn small" href="save-progress-unlocks.html">View System</a>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         ARCHITECTURE NOTES
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>Architecture Notes</h2>
+            <p>
+                The project separates data, control flow, presentation, and feedback so systems can change without cracking the whole machine open.
+            </p>
+        </div>
+
+        <div class="about-wrap">
+            <div class="about-text">
+                <h3>Data-Driven Design</h3>
+
+                <p>
+                    Core game rules are stored in ScriptableObjects where possible. Weapons, ammo, handling behavior,
+                    audio events, mission definitions, target range drill rules, music tracks, ambience layers,
+                    and footstep surfaces can be tuned without rewriting controller code.
+                </p>
+
+                <h3>Controller Separation</h3>
+
+                <p>
+                    The player is split into focused responsibilities. Input reading, movement, interaction,
+                    weapon control, weapon loadout, view model feedback, reticle feedback, audio playback,
+                    ammo HUD, and footstep audio are handled by separate components.
+                </p>
+
+                <h3>Reusable Feedback Hooks</h3>
+
+                <p>
+                    Weapon firing and reloading are treated as gameplay events that other systems can respond to.
+                    That allows view model feedback, reticle feedback, audio, HUD updates, progression, and mission scoring
+                    to stay connected without being jammed into one overgrown controller.
+                </p>
+            </div>
+
+            <div class="about-highlights">
+                <div class="about-card">
+                    <h3>Data Layer</h3>
+                    <ul>
+                        <li>MissionData</li>
+                        <li>TargetRangeMissionData</li>
+                        <li>WeaponData</li>
+                        <li>AmmoData</li>
+                        <li>WeaponHandlingData</li>
+                        <li>AudioEventData</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3>Runtime Layer</h3>
+                    <ul>
+                        <li>TargetRangeMissionController</li>
+                        <li>PlayerWeaponController</li>
+                        <li>PlayerWeaponLoadoutController</li>
+                        <li>GameAudioManager</li>
+                        <li>MusicManager</li>
+                        <li>SaveManager</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3>Presentation Layer</h3>
+                    <ul>
+                        <li>TargetRangeHUD</li>
+                        <li>WeaponAmmoHUD</li>
+                        <li>WeaponBandolierHUD</li>
+                        <li>InteractionPromptUI</li>
+                        <li>SettingsMenuUI</li>
+                        <li>PlayerReticleRecoilUI</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================
+         PROBLEMS SOLVED
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>Problems Solved</h2>
+            <p>
+                Echo Systems Lab is built from real iteration: testing, breaking, refactoring, and turning messy feature growth into cleaner systems.
+            </p>
+        </div>
+
+        <div class="toolkit-grid">
+
+            <div class="toolkit-card">
+                <h4>Mission Restrictions</h4>
+                <p>
+                    Unlocked weapons stay in the player collection, but mission drills can temporarily restrict weapon selection
+                    so each challenge remains fair and intentional.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>Target Objective Modes</h4>
+                <p>
+                    Target groups support both respawning drills and destroy-all modes, allowing different challenge types
+                    without rebuilding the target framework.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>Weapon Feel</h4>
+                <p>
+                    Visual weapon handling was separated into dedicated view model and reticle controllers,
+                    allowing recoil, sway, kickback, bob, and feedback to be tuned per weapon.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>Audio Refactor</h4>
+                <p>
+                    Weapon and UI sounds were pulled out of gameplay controllers into reusable audio data and audio managers,
+                    reducing code clutter and improving routing through the mixer.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         PORTFOLIO VALUE
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>Portfolio Value</h2>
+            <p>
+                This project demonstrates more than individual scripts. It shows how I structure gameplay systems so they can connect, scale, and stay readable.
+            </p>
+        </div>
+
+        <div class="about-wrap">
+            <div class="about-text">
+                <h3>What This Demonstrates</h3>
+
+                <p>
+                    Echo Systems Lab demonstrates the kind of systems programming I want to keep building professionally:
+                    modular components, clear data flow, reusable patterns, meaningful player feedback, and an architecture that can grow.
+                </p>
+
+                <p>
+                    The strongest part of the project is how the systems work together. Mission data controls available drills.
+                    Mission completion updates player progress. Progress unlocks new content. Weapon data controls behavior.
+                    Handling data controls feel. Audio data controls feedback. UI listens to runtime state and communicates it clearly.
+                </p>
+
+                <p>
+                    That connectedness is the point: the project is a small lab, but it is built like a larger game framework waking up.
+                </p>
+            </div>
+
+            <div class="about-highlights">
+                <div class="about-card">
+                    <h3>Shows</h3>
+                    <ul>
+                        <li>Unity C# gameplay architecture</li>
+                        <li>ScriptableObject-driven systems</li>
+                        <li>Runtime state management</li>
+                        <li>HUD and feedback integration</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3>Highlights</h3>
+                    <ul>
+                        <li>Mission unlock flow</li>
+                        <li>Target range framework</li>
+                        <li>Weapon and ammo data</li>
+                        <li>Audio subsystem refactor</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3>Next Improvements</h3>
+                    <ul>
+                        <li>More polished hub environment</li>
+                        <li>Expanded Combat Trial</li>
+                        <li>Additional movement challenges</li>
+                        <li>More screenshots and gameplay captures</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================
+         NEXT SYSTEM PAGES
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>Related System Breakdowns</h2>
+            <p>
+                These pages expand the overview into focused technical write-ups.
+            </p>
+        </div>
+
+        <div class="grid projects">
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>Target Range Mission Framework</h3>
+                    <p>
+                        Runtime mission state, timers, objective counting, accuracy, scoring, completion, and return-to-hub behavior.
+                    </p>
+                </div>
+
+                <div class="card-actions">
+                    <a class="btn small" href="target-range-mission-framework.html">Open Page</a>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>Weapon Handling & Feedback</h3>
+                    <p>
+                        View model kickback, reticle feedback, muzzle flash, fire hooks, reload hooks, sway, bob, and game feel tuning.
+                    </p>
+                </div>
+
+                <div class="card-actions">
+                    <a class="btn small" href="weapon-handling-feedback.html">Open Page</a>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>Audio Subsystem</h3>
+                    <p>
+                        AudioEventData, GameAudioManager, WeaponAudioData, MusicManager, ambience, footsteps, UI sounds, and mixer settings.
+                    </p>
+                </div>
+
+                <div class="card-actions">
+                    <a class="btn small" href="audio-subsystem.html">Open Page</a>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         FOOTER
+    ================================ -->
+    <footer class="site-footer">
+        <p>&copy; <span id="year"></span> Jesse “Echo” Adams</p>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>
+<!-- systems/echo-systems-lab-overview.html END -->s
