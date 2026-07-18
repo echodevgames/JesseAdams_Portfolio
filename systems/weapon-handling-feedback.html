@@ -1,0 +1,1091 @@
+<!-- systems/weapon-handling-feedback.html START -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- ================================
+         Metadata & SEO
+    ================================ -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- systems/weapon-handling-feedback.html -->
+    <title>Weapon Handling & Feedback | Unity Systems Portfolio | Jesse Adams</title>
+    <meta name="description" content="A Unity C# weapon handling and feedback system breakdown for Echo Systems Lab covering weapon kickback, reticle recoil, muzzle flash, reload feedback, dry fire feedback, movement sway, idle bob, and view model feel." />
+
+    <!-- ================================
+         Favicon & Font
+    ================================ -->
+    <link rel="icon" href="../assets/favicon.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+    <!-- ================================
+         CSS
+    ================================ -->
+    <link rel="stylesheet" href="../CSS/style.css" />
+    <link rel="stylesheet" href="../CSS/styleSystems.css" />
+</head>
+
+<body>
+
+    <!-- ================================
+         HEADER / NAV
+    ================================ -->
+    <header class="site-header">
+        <a class="brand" href="../index.html#home">Jesse Adams - EchoDevGames</a>
+
+        <button class="nav-toggle" aria-label="Open navigation" aria-expanded="false">☰</button>
+
+        <nav class="site-nav" aria-label="Primary">
+            <a href="../index.html#home">Home</a>
+            <a href="../tabs/systems.html">Systems</a>
+            <a href="../tabs/caseStudies.html">Case Studies</a>
+            <a href="../tabs/projects.html">Projects</a>
+            <a href="../tabs/contact.html">Contact</a>
+            <a class="btn small" href="../assets/Resumes/Jesse_Adams_Resume_6-23-26.pdf" target="_blank" rel="noopener">Resume</a>
+        </nav>
+    </header>
+
+    <!-- ================================
+         HERO
+    ================================ -->
+    <main class="hero">
+        <div class="hero-inner">
+            <h1>Weapon Handling & Feedback</h1>
+
+            <p class="lead">
+                A modular Unity weapon feel system for view model kickback, reticle recoil, muzzle flash,
+                reload cues, dry fire feedback, movement sway, idle bob, and readable weapon response.
+            </p>
+
+            <ul class="pill-list">
+                <li>Unity 6</li>
+                <li>C#</li>
+                <li>Game Feel</li>
+                <li>View Models</li>
+                <li>Reticle Feedback</li>
+                <li>Inspector Tuning</li>
+            </ul>
+
+            <div class="cta">
+                <a class="btn" href="../tabs/systems.html">Back to Systems</a>
+                <a class="btn ghost" href="weapon-data-and-loadout.html">Weapon Data</a>
+                <a class="btn ghost" href="target-range-mission-framework.html">Target Range</a>
+                <a class="btn ghost" href="audio-subsystem.html">Audio Subsystem</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- ================================
+         OVERVIEW
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>System Overview</h2>
+            <p>
+                This system makes weapons feel responsive without making the camera feel like it got punched by a forklift.
+            </p>
+        </div>
+
+        <div class="about-wrap">
+            <div class="about-text">
+                <h3>What It Does</h3>
+
+                <p>
+                    The Weapon Handling & Feedback system gives each weapon its own feel profile through WeaponHandlingData.
+                    Instead of hardcoding pistol recoil, shotgun kick, rifle sway, reticle movement, and reload cues inside the player controller,
+                    the system stores those values in reusable ScriptableObjects.
+                </p>
+
+                <p>
+                    The view model controller applies local position and rotation offsets for fire kickback, movement bob, look sway, and idle motion.
+                    The reticle controller mirrors the weapon’s feel with UI motion and scale pulses, giving the player readable feedback without forcing heavy camera recoil.
+                </p>
+
+                <p>
+                    The result is a weapon feel layer that can be tuned per weapon, reused across new weapons, and expanded without bloating the firing code.
+                </p>
+            </div>
+
+            <div class="about-highlights">
+                <div class="about-card">
+                    <h3>Primary Role</h3>
+                    <p>
+                        Add readable, tunable feedback to weapon use through view model motion, reticle motion, muzzle flash, reload hooks, and dry fire cues.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3>Core Loop</h3>
+                    <p>
+                        Fire weapon → Apply kickback → Pulse reticle → Spawn muzzle flash → Recover smoothly → Keep aim readable.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3>Portfolio Value</h3>
+                    <p>
+                        Demonstrates game feel implementation, data-driven tuning, UI feedback, and clean separation between mechanics and presentation.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================
+         SCREENSHOTS
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>Feedback Snapshots</h2>
+            <p>
+                Screenshot references for inspector-tuned handling values, gameplay feedback, reticle behavior, muzzle flash, and reload feel.
+            </p>
+        </div>
+
+        <div class="grid projects systems-grid">
+
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/WeaponHandlingInspector.jpg"
+                     alt="Unity Inspector screenshot of WeaponHandlingData showing fire kickback, random rotation kick, limits, recovery, look sway, movement bob, idle bob, muzzle flash, reticle recoil, and reticle passive motion fields">
+
+                <div class="card-body">
+                    <h3>WeaponHandlingData</h3>
+                    <p>
+                        Weapon feel is tuned from a ScriptableObject so each weapon can have unique kick, sway, bob, reticle behavior, and flash setup.
+                    </p>
+                    <ul class="pill-list">
+                        <li>ScriptableObject</li>
+                        <li>Inspector Tuning</li>
+                        <li>Weapon Feel</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/ReticleRecoilGameplay.jpg"
+                     alt="Gameplay screenshot showing reticle recoil or reticle pulse during weapon firing">
+
+                <div class="card-body">
+                    <h3>Reticle Recoil</h3>
+                    <p>
+                        The reticle reacts to firing without requiring aggressive camera recoil, keeping player aim readable.
+                    </p>
+                    <ul class="pill-list">
+                        <li>Reticle UI</li>
+                        <li>Fire Feedback</li>
+                        <li>Readability</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/MuzzleFlashGameplay.jpg"
+                     alt="Gameplay screenshot showing muzzle flash spawned from the weapon muzzle point during firing">
+
+                <div class="card-body">
+                    <h3>Muzzle Flash</h3>
+                    <p>
+                        Muzzle flash data controls prefab, muzzle point lookup, local offsets, lifetime, and parenting behavior.
+                    </p>
+                    <ul class="pill-list">
+                        <li>Muzzle Point</li>
+                        <li>VFX</li>
+                        <li>Fire Readability</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/ReloadFeedbackGameplay.jpg"
+                     alt="Gameplay screenshot showing reload feedback with ammo HUD, weapon model, or reload prompt visible">
+
+                <div class="card-body">
+                    <h3>Reload Feedback</h3>
+                    <p>
+                        Reload start, insert, and end hooks let weapons support full-clip reloads and one-round-at-a-time reloads.
+                    </p>
+                    <ul class="pill-list">
+                        <li>Reload Hooks</li>
+                        <li>Dry Fire</li>
+                        <li>Ammo Feedback</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/WeaponSwayGameplay.jpg"
+                     alt="Gameplay screenshot showing first-person weapon view model sway, bob, or idle motion while moving through the test environment">
+
+                <div class="card-body">
+                    <h3>Sway, Bob & Idle Motion</h3>
+                    <p>
+                        Movement and look input create subtle view model motion so held weapons feel connected to player movement.
+                    </p>
+                    <ul class="pill-list">
+                        <li>Look Sway</li>
+                        <li>Movement Bob</li>
+                        <li>Idle Bob</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/PlayerWeaponViewModelControllerInspector.jpg"
+                     alt="Unity Inspector screenshot of PlayerWeaponViewModelController showing fallback kickback, fallback limits, fallback recovery, animator triggers, and debug settings">
+
+                <div class="card-body">
+                    <h3>View Model Controller</h3>
+                    <p>
+                        The controller applies layered offsets and smooth recovery while still providing safe fallback values.
+                    </p>
+                    <ul class="pill-list">
+                        <li>View Model</li>
+                        <li>Fallbacks</li>
+                        <li>Smoothing</li>
+                    </ul>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         PLAYER FLOW
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>Feedback Flow</h2>
+            <p>
+                The firing system sends an event, then the feel systems handle presentation like a swarm of tiny stagehands.
+            </p>
+        </div>
+
+        <div class="toolkit-grid">
+
+            <div class="toolkit-card">
+                <h4>1. Weapon Fires</h4>
+                <p>
+                    PlayerWeaponController validates input, ammo, reload state, fire rate, and projectile spawning.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>2. Handling Data Is Read</h4>
+                <p>
+                    The active weapon provides WeaponHandlingData so fire kick, reticle kick, muzzle flash, and passive motion can use weapon-specific values.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>3. View Model Kicks</h4>
+                <p>
+                    The weapon model receives local position and rotation offsets, then smoothly returns toward its base transform.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>4. Reticle Reacts</h4>
+                <p>
+                    The reticle moves and pulses to sell weapon impact without dragging the player camera around.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>5. Muzzle Flash Spawns</h4>
+                <p>
+                    A short-lived muzzle flash prefab appears at the weapon muzzle point, optionally parented to the muzzle.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>6. Reload and Dry Fire Hooks Trigger</h4>
+                <p>
+                    Reload start, insert, end, and dry fire cues keep empty weapons and reload timing readable.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         KEY COMPONENTS
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>Key Components</h2>
+            <p>
+                The system keeps weapon mechanics, weapon feel, UI feedback, VFX, and audio routing in separate lanes.
+            </p>
+        </div>
+
+        <div class="grid projects systems-grid">
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>WeaponHandlingData</h3>
+
+                    <p>
+                        Stores fire kickback, random kick, max offsets, recovery speeds, look sway,
+                        movement bob, idle bob, muzzle flash setup, reticle recoil, passive reticle motion, and animator trigger names.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Data Asset</li>
+                        <li>Weapon Feel</li>
+                        <li>Tuning</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>PlayerWeaponViewModelController</h3>
+
+                    <p>
+                        Applies kickback and passive motion to the active weapon model using local offsets, snappiness, return speeds, and safe fallbacks.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>View Model</li>
+                        <li>Kickback</li>
+                        <li>Recovery</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>PlayerReticleRecoilUI</h3>
+
+                    <p>
+                        Moves and scales the reticle based on weapon fire, passive movement, look input, and idle settings.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Reticle</li>
+                        <li>UI Motion</li>
+                        <li>Player Feedback</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>Muzzle Flash Hooks</h3>
+
+                    <p>
+                        Uses handling data to spawn muzzle flash prefabs at the active weapon muzzle point with configurable offsets and lifetime.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>VFX</li>
+                        <li>Muzzle Point</li>
+                        <li>Fire Feedback</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>Reload Feedback Hooks</h3>
+
+                    <p>
+                        Supports reload start, reload insert, reload end, and dry fire triggers, allowing full reload and one-round reload weapons to feel different.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Reload</li>
+                        <li>Dry Fire</li>
+                        <li>Animation Hooks</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>WeaponAudioData Link</h3>
+
+                    <p>
+                        Audio moved into its own subsystem, but WeaponHandlingData still works alongside weapon audio events to create complete feedback.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Audio Events</li>
+                        <li>Weapon Audio</li>
+                        <li>Subsystems</li>
+                    </ul>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         DESIGN NOTES
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>Design Notes</h2>
+            <p>
+                The major design choice was to make the reticle and weapon feel related, but not physically identical.
+            </p>
+        </div>
+
+        <div class="about-wrap">
+            <div class="about-text">
+                <h3>Why Reticle Recoil Instead of Heavy Camera Recoil?</h3>
+
+                <p>
+                    Heavy camera recoil can make a weapon feel powerful, but it also changes the player’s view and can become uncomfortable in a test range built around precision.
+                    For Echo Systems Lab, the better choice was to keep the player camera readable and let the weapon model and reticle carry most of the firing response.
+                </p>
+
+                <p>
+                    The reticle can kick, drift, pulse, and return to center while the weapon view model reacts independently.
+                    This sells impact without making the player feel like their whole head is attached to the recoil spring.
+                </p>
+
+                <p>
+                    WeaponHandlingData also supports shared logic between weapon kick and reticle kick, so the two can feel connected instead of randomly arguing in the UI attic.
+                </p>
+            </div>
+
+            <div class="about-highlights">
+                <div class="about-card">
+                    <h3>Readable Aim</h3>
+                    <p>
+                        Reticle feedback shows weapon response without violently moving the player camera.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3>Per-Weapon Identity</h3>
+                    <p>
+                        Pistols, shotguns, automatics, and future weapons can all have different kick, sway, and reload feel.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3>Layered Feedback</h3>
+                    <p>
+                        Fire feedback, passive motion, reticle motion, VFX, and reload cues combine into one readable feel layer.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================
+         SOURCE CODE DROPDOWNS
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>Source Code Snapshot</h2>
+            <p>
+                These dropdowns show the data structure and view model controller behind the weapon feel layer.
+            </p>
+        </div>
+
+        <div class="source-details-wrap">
+
+            <details class="source-details">
+                <summary>
+                    <span>WeaponHandlingData.cs</span>
+                    <small>ScriptableObject tuning for kickback, sway, bob, muzzle flash, reticle recoil, reload cues, and animator triggers</small>
+                </summary>
+
+                <pre class="code-card"><code>//-----WeaponHandlingData.cs START-----
+using UnityEngine;
+
+[CreateAssetMenu(
+    fileName = "WeaponHandlingData_NewWeapon",
+    menuName = "Echo Systems Lab/Weapons/Weapon Handling Data")]
+public class WeaponHandlingData : ScriptableObject
+{
+    [Header("Fire Kickback")]
+    public Vector3 firePositionKick = new Vector3(0f, -0.015f, -0.08f);
+    public Vector3 fireRotationKick = new Vector3(-4f, 0f, 0f);
+
+    [Header("Fire Randomness")]
+    public Vector3 randomRotationKick = new Vector3(1f, 0.75f, 1.25f);
+
+    [Header("Limits")]
+    public Vector3 maxPositionOffset = new Vector3(0.08f, 0.08f, 0.18f);
+    public Vector3 maxRotationOffset = new Vector3(12f, 6f, 8f);
+
+    [Header("Recovery")]
+    public float positionSnappiness = 24f;
+    public float rotationSnappiness = 24f;
+    public float positionReturnSpeed = 12f;
+    public float rotationReturnSpeed = 12f;
+
+    [Header("Look Sway")]
+    public bool useLookSway = true;
+    public Vector3 lookSwayPositionAmount = new Vector3(0.015f, 0.015f, 0f);
+    public Vector3 lookSwayRotationAmount = new Vector3(1.5f, 2.5f, 1f);
+    public Vector3 maxLookSwayPosition = new Vector3(0.06f, 0.06f, 0.02f);
+    public Vector3 maxLookSwayRotation = new Vector3(6f, 8f, 5f);
+    public float lookSwaySnappiness = 14f;
+    public float lookSwayReturnSpeed = 10f;
+
+    [Header("Movement Bob")]
+    public bool useMovementBob = true;
+    public Vector3 movementBobPositionAmount = new Vector3(0.025f, 0.018f, 0.01f);
+    public Vector3 movementBobRotationAmount = new Vector3(1.2f, 0.8f, 1.6f);
+    public float movementBobFrequency = 8f;
+    public float movementBobSnappiness = 12f;
+    public float movementBobReturnSpeed = 10f;
+    public float movementInputThreshold = 0.1f;
+
+    [Header("Idle Bob")]
+    public bool useIdleBob = true;
+    public Vector3 idleBobPositionAmount = new Vector3(0f, 0.006f, 0f);
+    public Vector3 idleBobRotationAmount = new Vector3(0.25f, 0.15f, 0.15f);
+    public float idleBobFrequency = 1.6f;
+    public float idleBobSnappiness = 8f;
+
+    [Header("Muzzle Flash")]
+    public GameObject muzzleFlashPrefab;
+    public string muzzlePointName = "MuzzlePoint";
+    public Vector3 muzzleFlashLocalPositionOffset;
+    public Vector3 muzzleFlashLocalEulerOffset;
+    public float muzzleFlashLifetime = 0.08f;
+    public bool parentMuzzleFlashToMuzzle = true;
+
+    [Header("Reticle Recoil")]
+    public bool useReticleRecoil = true;
+    public bool useWeaponKickForReticle = true;
+    public Vector2 reticleKickXRange = new Vector2(-4f, 4f);
+    public Vector2 reticleKickYRange = new Vector2(6f, 12f);
+    public Vector2 reticlePixelsPerWeaponRotationDegree = new Vector2(2.2f, 2.8f);
+    public float reticleRollToHorizontalInfluence = 0.35f;
+    public float maxReticleKickOffset = 22f;
+    public float reticleKickSnappiness = 28f;
+    public float reticleReturnSpeed = 16f;
+
+    [Header("Reticle Passive Motion")]
+    public bool useReticlePassiveMotion = true;
+    public bool useReticleLookSway = true;
+    public Vector2 reticleLookSwayAmount = new Vector2(1.5f, 1.25f);
+    public bool useReticleMovementBob = true;
+    public Vector2 reticleMovementBobAmount = new Vector2(1.4f, 0.8f);
+    public float reticleMovementBobFrequency = 8f;
+    public float reticleMovementInputThreshold = 0.1f;
+    public bool useReticleIdleBob = true;
+    public Vector2 reticleIdleBobAmount = new Vector2(0f, 0.35f);
+    public float reticleIdleBobFrequency = 1.6f;
+    public float maxReticlePassiveOffset = 6f;
+    public float reticlePassiveSnappiness = 18f;
+
+    [Header("Reticle Pulse")]
+    public bool useReticleScalePulse = true;
+    public float reticleScaleKick = 0.12f;
+    public float maxReticleScaleKick = 0.25f;
+    public float reticleScaleSnappiness = 32f;
+    public float reticleScaleReturnSpeed = 18f;
+
+    [Header("Reload Animator Triggers")]
+    public string reloadStartTriggerName = "ReloadStart";
+    public string reloadInsertTriggerName = "ReloadInsert";
+    public string reloadEndTriggerName = "ReloadEnd";
+    public string dryFireTriggerName = "DryFire";
+
+    [Header("Animator Triggers")]
+    public bool useAnimatorTriggers = true;
+    public string fireTriggerName = "Fire";
+    public string reloadTriggerName = "Reload";
+    public string equipTriggerName = "Equip";
+}
+//-----WeaponHandlingData.cs END-----</code></pre>
+            </details>
+
+            <details class="source-details">
+                <summary>
+                    <span>PlayerWeaponViewModelController.cs</span>
+                    <small>Applies active weapon kickback, random rotation, recovery, and animator triggers to the weapon view model</small>
+                </summary>
+
+                <pre class="code-card"><code>//-----PlayerWeaponViewModelController.cs START-----
+using UnityEngine;
+
+public class PlayerWeaponViewModelController : MonoBehaviour
+{
+    [Header("Fallback Handling")]
+    [SerializeField] private Vector3 fallbackFirePositionKick = new Vector3(0f, -0.015f, -0.08f);
+    [SerializeField] private Vector3 fallbackFireRotationKick = new Vector3(-4f, 0f, 0f);
+    [SerializeField] private Vector3 fallbackRandomRotationKick = new Vector3(1f, 0.75f, 1.25f);
+
+    [Header("Fallback Limits")]
+    [SerializeField] private Vector3 fallbackMaxPositionOffset = new Vector3(0.08f, 0.08f, 0.18f);
+    [SerializeField] private Vector3 fallbackMaxRotationOffset = new Vector3(12f, 6f, 8f);
+
+    [Header("Fallback Recovery")]
+    [SerializeField] private float fallbackPositionSnappiness = 24f;
+    [SerializeField] private float fallbackRotationSnappiness = 24f;
+    [SerializeField] private float fallbackPositionReturnSpeed = 12f;
+    [SerializeField] private float fallbackRotationReturnSpeed = 12f;
+
+    [Header("Fallback Animator Triggers")]
+    [SerializeField] private bool fallbackUseAnimatorTriggers = true;
+    [SerializeField] private string fallbackFireTriggerName = "Fire";
+    [SerializeField] private string fallbackReloadTriggerName = "Reload";
+    [SerializeField] private string fallbackEquipTriggerName = "Equip";
+
+    [Header("Debug")]
+    [SerializeField] private bool debugLogs;
+
+    private Transform activeViewModel;
+    private Animator activeAnimator;
+    private WeaponHandlingData activeHandlingData;
+
+    private Vector3 baseLocalPosition;
+    private Vector3 baseLocalEulerAngles;
+    private Vector3 baseLocalScale;
+
+    private Vector3 targetPositionOffset;
+    private Vector3 targetRotationOffset;
+
+    private Vector3 currentPositionOffset;
+    private Vector3 currentRotationOffset;
+
+    private void Update()
+    {
+        if (activeViewModel == null)
+            return;
+
+        float deltaTime = Time.deltaTime;
+
+        targetPositionOffset = Vector3.Lerp(
+            targetPositionOffset,
+            Vector3.zero,
+            GetPositionReturnSpeed() * deltaTime);
+
+        targetRotationOffset = Vector3.Lerp(
+            targetRotationOffset,
+            Vector3.zero,
+            GetRotationReturnSpeed() * deltaTime);
+
+        currentPositionOffset = Vector3.Lerp(
+            currentPositionOffset,
+            targetPositionOffset,
+            GetPositionSnappiness() * deltaTime);
+
+        currentRotationOffset = Vector3.Lerp(
+            currentRotationOffset,
+            targetRotationOffset,
+            GetRotationSnappiness() * deltaTime);
+
+        ApplyViewModelTransform();
+    }
+
+    public void SetActiveViewModel(Transform viewModelTransform, WeaponHandlingData handlingData)
+    {
+        activeViewModel = viewModelTransform;
+        activeHandlingData = handlingData;
+
+        activeAnimator = null;
+
+        targetPositionOffset = Vector3.zero;
+        targetRotationOffset = Vector3.zero;
+        currentPositionOffset = Vector3.zero;
+        currentRotationOffset = Vector3.zero;
+
+        if (activeViewModel == null)
+            return;
+
+        baseLocalPosition = activeViewModel.localPosition;
+        baseLocalEulerAngles = activeViewModel.localEulerAngles;
+        baseLocalScale = activeViewModel.localScale;
+
+        activeAnimator = activeViewModel.GetComponentInChildren&lt;Animator&gt;(true);
+
+        ApplyViewModelTransform();
+        PlayEquipFeedback();
+
+        if (debugLogs)
+            Debug.Log($"View model controller linked to: {activeViewModel.name}");
+    }
+
+    public void ClearActiveViewModel()
+    {
+        activeViewModel = null;
+        activeAnimator = null;
+        activeHandlingData = null;
+
+        targetPositionOffset = Vector3.zero;
+        targetRotationOffset = Vector3.zero;
+        currentPositionOffset = Vector3.zero;
+        currentRotationOffset = Vector3.zero;
+    }
+
+    public void PlayFireFeedback()
+    {
+        AddPositionKick(GetFirePositionKick());
+        AddRotationKick(GetFireRotationKick() + GetRandomRotationKick());
+
+        TrySetAnimatorTrigger(GetFireTriggerName());
+
+        if (debugLogs)
+            Debug.Log("View model fire feedback played.");
+    }
+
+    public void PlayReloadFeedback()
+    {
+        TrySetAnimatorTrigger(GetReloadTriggerName());
+
+        if (debugLogs)
+            Debug.Log("View model reload feedback played.");
+    }
+
+    public void PlayEquipFeedback()
+    {
+        TrySetAnimatorTrigger(GetEquipTriggerName());
+
+        if (debugLogs)
+            Debug.Log("View model equip feedback played.");
+    }
+
+    private void AddPositionKick(Vector3 kick)
+    {
+        targetPositionOffset += kick;
+        targetPositionOffset = ClampVector(targetPositionOffset, GetMaxPositionOffset());
+    }
+
+    private void AddRotationKick(Vector3 kick)
+    {
+        targetRotationOffset += kick;
+        targetRotationOffset = ClampVector(targetRotationOffset, GetMaxRotationOffset());
+    }
+
+    private Vector3 ClampVector(Vector3 value, Vector3 maxAbs)
+    {
+        value.x = Mathf.Clamp(value.x, -Mathf.Abs(maxAbs.x), Mathf.Abs(maxAbs.x));
+        value.y = Mathf.Clamp(value.y, -Mathf.Abs(maxAbs.y), Mathf.Abs(maxAbs.y));
+        value.z = Mathf.Clamp(value.z, -Mathf.Abs(maxAbs.z), Mathf.Abs(maxAbs.z));
+
+        return value;
+    }
+
+    private Vector3 GetRandomRotationKick()
+    {
+        Vector3 random = GetRandomRotationKickRange();
+
+        return new Vector3(
+            Random.Range(-random.x, random.x),
+            Random.Range(-random.y, random.y),
+            Random.Range(-random.z, random.z));
+    }
+
+    private void ApplyViewModelTransform()
+    {
+        if (activeViewModel == null)
+            return;
+
+        activeViewModel.localPosition = baseLocalPosition + currentPositionOffset;
+        activeViewModel.localRotation = Quaternion.Euler(baseLocalEulerAngles + currentRotationOffset);
+        activeViewModel.localScale = baseLocalScale;
+    }
+
+    private void TrySetAnimatorTrigger(string triggerName)
+    {
+        if (!ShouldUseAnimatorTriggers())
+            return;
+
+        if (activeAnimator == null)
+            return;
+
+        if (string.IsNullOrWhiteSpace(triggerName))
+            return;
+
+        activeAnimator.SetTrigger(triggerName);
+    }
+
+    private Vector3 GetFirePositionKick()
+    {
+        return activeHandlingData != null
+            ? activeHandlingData.firePositionKick
+            : fallbackFirePositionKick;
+    }
+
+    private Vector3 GetFireRotationKick()
+    {
+        return activeHandlingData != null
+            ? activeHandlingData.fireRotationKick
+            : fallbackFireRotationKick;
+    }
+
+    private Vector3 GetRandomRotationKickRange()
+    {
+        return activeHandlingData != null
+            ? activeHandlingData.randomRotationKick
+            : fallbackRandomRotationKick;
+    }
+
+    private Vector3 GetMaxPositionOffset()
+    {
+        return activeHandlingData != null
+            ? activeHandlingData.maxPositionOffset
+            : fallbackMaxPositionOffset;
+    }
+
+    private Vector3 GetMaxRotationOffset()
+    {
+        return activeHandlingData != null
+            ? activeHandlingData.maxRotationOffset
+            : fallbackMaxRotationOffset;
+    }
+
+    private float GetPositionSnappiness()
+    {
+        return activeHandlingData != null
+            ? Mathf.Max(0.01f, activeHandlingData.positionSnappiness)
+            : Mathf.Max(0.01f, fallbackPositionSnappiness);
+    }
+
+    private float GetRotationSnappiness()
+    {
+        return activeHandlingData != null
+            ? Mathf.Max(0.01f, activeHandlingData.rotationSnappiness)
+            : Mathf.Max(0.01f, fallbackRotationSnappiness);
+    }
+
+    private float GetPositionReturnSpeed()
+    {
+        return activeHandlingData != null
+            ? Mathf.Max(0.01f, activeHandlingData.positionReturnSpeed)
+            : Mathf.Max(0.01f, fallbackPositionReturnSpeed);
+    }
+
+    private float GetRotationReturnSpeed()
+    {
+        return activeHandlingData != null
+            ? Mathf.Max(0.01f, activeHandlingData.rotationReturnSpeed)
+            : Mathf.Max(0.01f, fallbackRotationReturnSpeed);
+    }
+
+    private bool ShouldUseAnimatorTriggers()
+    {
+        return activeHandlingData != null
+            ? activeHandlingData.useAnimatorTriggers
+            : fallbackUseAnimatorTriggers;
+    }
+
+    private string GetFireTriggerName()
+    {
+        return activeHandlingData != null
+            ? activeHandlingData.fireTriggerName
+            : fallbackFireTriggerName;
+    }
+
+    private string GetReloadTriggerName()
+    {
+        return activeHandlingData != null
+            ? activeHandlingData.reloadTriggerName
+            : fallbackReloadTriggerName;
+    }
+
+    private string GetEquipTriggerName()
+    {
+        return activeHandlingData != null
+            ? activeHandlingData.equipTriggerName
+            : fallbackEquipTriggerName;
+    }
+}
+//-----PlayerWeaponViewModelController.cs END-----</code></pre>
+            </details>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         PROBLEMS SOLVED
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>Problems Solved</h2>
+            <p>
+                This system turned weapon feel from scattered controller logic into a tuning layer.
+            </p>
+        </div>
+
+        <div class="about-wrap">
+            <div class="about-text">
+                <h3>Key Iteration Wins</h3>
+
+                <p>
+                    The first firing loop worked mechanically, but weapons still needed physical response.
+                    Adding kickback directly to the weapon controller would have worked for one weapon, but it would have become sticky code syrup once multiple weapons entered the project.
+                </p>
+
+                <p>
+                    By moving feel values into WeaponHandlingData, each weapon can define how heavy, snappy, twitchy, stable, or floaty it should feel.
+                    The pistol can feel crisp, the shotgun can shove harder, and automatics can recover differently.
+                </p>
+
+                <p>
+                    The reticle also became part of the feedback stack.
+                    Instead of relying only on the weapon mesh, the UI now helps communicate fire impact, movement, and aim stability.
+                </p>
+            </div>
+
+            <div class="about-highlights">
+                <div class="about-card">
+                    <h3>Before</h3>
+                    <p>
+                        Firing worked, but weapons lacked layered visual response and per-weapon feel tuning.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3>After</h3>
+                    <p>
+                        Weapons use data-driven kick, reticle reaction, muzzle flash, sway, bob, and reload feedback.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3>Result</h3>
+                    <p>
+                        New weapons can feel distinct through inspector values instead of controller rewrites.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================
+         PORTFOLIO VALUE
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>Portfolio Value</h2>
+            <p>
+                This system shows practical game feel work layered on top of existing gameplay mechanics.
+            </p>
+        </div>
+
+        <div class="about-wrap">
+            <div class="about-text">
+                <h3>What This Demonstrates</h3>
+
+                <p>
+                    Weapon Handling & Feedback demonstrates how I approach responsiveness and readability.
+                    The system does not just make weapons fire. It makes weapon use communicate impact, timing, reload state, movement, and player control.
+                </p>
+
+                <p>
+                    It also shows that feedback systems benefit from separation.
+                    Firing, view model feedback, reticle feedback, muzzle flash, reload hooks, and audio events can work together without collapsing into one enormous player script.
+                </p>
+
+                <p>
+                    For portfolio purposes, this is a strong example of turning mechanical functionality into a polished, tunable player-facing system.
+                </p>
+            </div>
+
+            <div class="about-highlights">
+                <div class="about-card">
+                    <h3>Demonstrates</h3>
+                    <ul>
+                        <li>Data-driven game feel</li>
+                        <li>View model feedback</li>
+                        <li>Reticle UI feedback</li>
+                        <li>Inspector-friendly tuning</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3>Good For</h3>
+                    <ul>
+                        <li>Gameplay programmer roles</li>
+                        <li>Systems programmer roles</li>
+                        <li>Technical design discussion</li>
+                        <li>Unity portfolio walkthroughs</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3>Next Improvements</h3>
+                    <ul>
+                        <li>Animation event reload sync</li>
+                        <li>Procedural recoil patterns</li>
+                        <li>Per-weapon aim stability</li>
+                        <li>Attachment-based handling modifiers</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================
+         RELATED SYSTEMS
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>Related Systems</h2>
+            <p>
+                Weapon feedback sits between weapon data, target range gameplay, audio routing, and player input.
+            </p>
+        </div>
+
+        <div class="grid projects systems-grid">
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>Weapon Data, Loadout & Drill Restrictions</h3>
+                    <p>
+                        Covers WeaponData, owned weapons, active weapon state, ammo data, loadout cycling, and trial restrictions.
+                    </p>
+                </div>
+
+                <div class="card-actions">
+                    <a class="btn small" href="weapon-data-and-loadout.html">Open Page</a>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>Target Range Mission Framework</h3>
+                    <p>
+                        Covers target objectives, scoring, hit tracking, accuracy, completion state, and mission flow.
+                    </p>
+                </div>
+
+                <div class="card-actions">
+                    <a class="btn small" href="target-range-mission-framework.html">Open Page</a>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>Audio Subsystem</h3>
+                    <p>
+                        Covers reusable audio events, weapon audio data, mixer routing, music, ambience, footsteps, UI sounds, and settings.
+                    </p>
+                </div>
+
+                <div class="card-actions">
+                    <a class="btn small" href="audio-subsystem.html">Open Page</a>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         FOOTER
+    ================================ -->
+    <footer class="site-footer">
+        <p>&copy; <span id="year"></span> Jesse “Echo” Adams</p>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>
+<!-- systems/weapon-handling-feedback.html END -->
