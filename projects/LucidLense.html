@@ -2,18 +2,70 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Lucid Lens — State-Driven Gameplay & UI | Jesse Adams</title>
-    <meta name="description" content="Lucid Lens case study focusing on Blueprint state management, UI/UX flow, and gameplay mode switching in Unreal Engine 5.">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- ================================
+         Metadata & SEO
+    ================================ -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- projects/LucidLense.html -->
+    <title>Lucid Lens | State-Driven Gameplay & UI | Jesse Adams</title>
+    <meta name="description" content="Lucid Lens case study covering Unreal Engine 5 Blueprint state management, mask-based gameplay modes, UI/UX flow, pause logic, HUD feedback, and gameplay state transitions." />
+
+    <!-- ================================
+         Canonical / Social Preview
+    ================================ -->
+    <link rel="canonical" href="https://echodevgames.github.io/JesseAdams_Portfolio/projects/LucidLense.html" />
+
+    <meta property="og:title" content="Lucid Lens | State-Driven Gameplay & UI | Jesse Adams" />
+    <meta property="og:description" content="Lucid Lens case study covering Unreal Engine 5 Blueprint state management, mask-based gameplay modes, UI/UX flow, pause logic, HUD feedback, and gameplay state transitions." />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://echodevgames.github.io/JesseAdams_Portfolio/projects/LucidLense.html" />
+    <meta property="og:site_name" content="EchoDevGames" />
+    <meta property="og:image" content="https://echodevgames.github.io/JesseAdams_Portfolio/assets/Images/Banners/EchoDevGamesBanner.png" />
+    <meta property="og:image:secure_url" content="https://echodevgames.github.io/JesseAdams_Portfolio/assets/Images/Banners/EchoDevGamesBanner.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="EchoDevGames portfolio share image for Jesse Adams, game developer and systems programmer." />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Lucid Lens | State-Driven Gameplay & UI | Jesse Adams" />
+    <meta name="twitter:description" content="Lucid Lens case study covering Unreal Engine 5 Blueprint state management, mask-based gameplay modes, UI/UX flow, pause logic, HUD feedback, and gameplay state transitions." />
+    <meta name="twitter:image" content="https://echodevgames.github.io/JesseAdams_Portfolio/assets/Images/Banners/EchoDevGamesBanner.png" />
+
+    <!-- ================================
+         Favicon & Font
+    ================================ -->
+    <link rel="icon" href="../assets/favicon.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+    <!-- ================================
+         CSS
+    ================================ -->
     <link rel="stylesheet" href="../CSS/style.css" />
 </head>
 
 <body>
 
-    <header class="site-header">
-        <a class="brand" href="../tabs/projects.html">← Back to Projects</a>
-    </header>
+<!-- ================================
+     HEADER / NAV
+================================ -->
+<header class="site-header">
+    <a class="brand" href="../index.html#home">Jesse Adams - EchoDevGames</a>
+
+    <button class="nav-toggle" aria-label="Open navigation" aria-expanded="false">☰</button>
+
+    <nav class="site-nav" aria-label="Primary">
+        <a href="../index.html#home">Home</a>
+        <a href="../tabs/systems.html">Systems</a>
+        <a href="../tabs/caseStudies.html">Case Studies</a>
+        <a href="../tabs/projects.html">Projects</a>
+        <a href="../tabs/wanted.html">Wanted</a>
+        <a href="../tabs/contact.html">Contact</a>
+        <a class="btn small" href="../assets/Resumes/Jesse_Adams_Resume_6-23-26.pdf" target="_blank" rel="noopener">Resume</a>
+    </nav>
+</header>
 
     <main class="section">
         <div class="case-wrapper">
@@ -301,12 +353,13 @@
             </section>
 
             <footer class="site-footer">
-                <a class="btn" href="../index.html#projects">Back to Projects</a>
+                <a class="btn" href="../tabs/projects.html">Back to Projects</a>
+                <p>&copy; <span id="year"></span> Jesse “Echo” Adams</p>
             </footer>
 
         </div>
     </main>
-
+<script src="../script.js"></script>
 </body>
 </html>
 <!-- LucidLense.html END -->

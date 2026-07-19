@@ -1,0 +1,557 @@
+<!-- systems/interaction-system.html START -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- ================================
+         Metadata & SEO
+    ================================ -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- systems/interaction-system.html -->
+    <title>Interaction & Prompt System | Unity Systems Portfolio | Jesse Adams</title>
+    <meta name="description" content="Unity C# interaction and prompt system covering raycast interaction, IInteractable objects, world prompts, mission terminals, weapon pedestals, and reusable player-facing interaction flow." />
+    <link rel="canonical" href="https://echodevgames.github.io/JesseAdams_Portfolio/systems/interaction-system.html" />
+
+    <!-- ================================
+         Open Graph / Discord / Social Preview
+    ================================ -->
+    <meta property="og:title" content="Interaction & Prompt System | Unity Systems Portfolio | Jesse Adams" />
+    <meta property="og:description" content="A Unity C# interaction system for Echo Systems Lab using raycasts, IInteractable objects, prompts, mission terminals, weapon pedestals, and reusable world interaction flow." />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://echodevgames.github.io/JesseAdams_Portfolio/systems/interaction-system.html" />
+    <meta property="og:site_name" content="EchoDevGames" />
+    <meta property="og:image" content="https://echodevgames.github.io/JesseAdams_Portfolio/assets/Images/Banners/EchoDevGamesBanner.png" />
+    <meta property="og:image:secure_url" content="https://echodevgames.github.io/JesseAdams_Portfolio/assets/Images/Banners/EchoDevGamesBanner.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="EchoDevGames portfolio share image for Jesse Adams, game developer and systems programmer." />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Interaction & Prompt System | Unity Systems Portfolio | Jesse Adams" />
+    <meta name="twitter:description" content="Reusable Unity interaction flow using raycasts, prompts, IInteractable objects, terminals, and weapon pedestals." />
+    <meta name="twitter:image" content="https://echodevgames.github.io/JesseAdams_Portfolio/assets/Images/Banners/EchoDevGamesBanner.png" />
+
+    <!-- ================================
+         Favicon & Font
+    ================================ -->
+    <link rel="icon" href="../assets/favicon.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+    <!-- ================================
+         CSS
+    ================================ -->
+    <link rel="stylesheet" href="../CSS/style.css" />
+    <link rel="stylesheet" href="../CSS/styleSystems.css" />
+</head>
+
+<body>
+
+    <!-- ================================
+         HEADER / NAV
+    ================================ -->
+    <header class="site-header">
+        <a class="brand" href="../index.html#home">Jesse Adams - EchoDevGames</a>
+
+        <button class="nav-toggle" aria-label="Open navigation" aria-expanded="false">☰</button>
+
+        <nav class="site-nav" aria-label="Primary">
+            <a href="../index.html#home">Home</a>
+            <a href="../tabs/systems.html">Systems</a>
+            <a href="../tabs/caseStudies.html">Case Studies</a>
+            <a href="../tabs/projects.html">Projects</a>
+            <a href="../tabs/wanted.html">Wanted</a>
+            <a href="../tabs/contact.html">Contact</a>
+            <a class="btn small" href="../assets/Resumes/Jesse_Adams_Resume_6-23-26.pdf" target="_blank" rel="noopener">Resume</a>
+        </nav>
+    </header>
+
+    <!-- ================================
+         HERO
+    ================================ -->
+    <main class="hero">
+        <div class="hero-inner">
+            <h1>Interaction & Prompt System</h1>
+
+            <p class="lead">
+                A reusable Unity interaction layer for raycast-based object detection, player prompts,
+                mission terminals, weapon pedestals, and world objects that expose simple interaction behavior through interfaces.
+            </p>
+
+            <ul class="pill-list">
+                <li>Unity 6</li>
+                <li>C#</li>
+                <li>Interfaces</li>
+                <li>Raycasts</li>
+                <li>World Interaction</li>
+                <li>Prompt UI</li>
+            </ul>
+
+            <div class="cta">
+                <a class="btn" href="../tabs/systems.html">Back to Systems</a>
+                <a class="btn ghost" href="mission-terminal.html">Mission Terminal</a>
+                <a class="btn ghost" href="weapon-data-and-loadout.html">Weapon Loadout</a>
+                <a class="btn ghost" href="target-range-mission-framework.html">Target Range</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- ================================
+         OVERVIEW
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>System Overview</h2>
+            <p>
+                This system lets the player look at usable objects, see a prompt, press interact, and let the object decide what happens.
+            </p>
+        </div>
+
+        <div class="about-wrap">
+            <div class="about-text">
+                <h3>What It Does</h3>
+
+                <p>
+                    The Interaction & Prompt System gives Echo Systems Lab a reusable way to connect the player to world objects.
+                    Instead of hardcoding terminal logic, weapon pickup logic, and prompt text directly inside the player controller,
+                    interactable objects expose their behavior through a shared interface.
+                </p>
+
+                <p>
+                    The player interactor casts forward from the camera, checks for an interactable target,
+                    shows the correct prompt, and calls the target’s interaction method when the player presses the interact input.
+                    This lets objects like mission terminals, weapon pedestals, and future puzzle devices each own their own response.
+                </p>
+
+                <p>
+                    The result is a clean interaction pipeline that is easy to extend.
+                    New interactable objects can be added without rewriting the player controller or duplicating prompt logic.
+                </p>
+            </div>
+
+            <div class="about-highlights">
+                <div class="about-card">
+                    <h3>Primary Role</h3>
+                    <p>
+                        Detect usable world objects, show player-facing prompts, and route interaction input into object-owned behavior.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3>Core Loop</h3>
+                    <p>
+                        Look at object → Detect interactable → Show prompt → Press interact → Object handles action.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3>Portfolio Value</h3>
+                    <p>
+                        Demonstrates interface-based architecture, player UI feedback, input routing, and reusable world interaction design.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================
+         SCREENSHOTS
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>Interaction System Snapshots</h2>
+            <p>
+                Screenshot references for prompts, interactable setup, mission terminal use, weapon pedestal pickup flow, and object-owned behavior.
+            </p>
+        </div>
+
+        <div class="grid projects systems-grid">
+
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/PedestalInteraction.jpg"
+                     alt="Unity gameplay screenshot showing a weapon pedestal interaction prompt visible while the player looks at the pedestal">
+
+                <div class="card-body">
+                    <h3>Weapon Pedestal Prompt</h3>
+                    <p>
+                        The player receives a readable prompt when looking at an interactable weapon pedestal.
+                    </p>
+                    <ul class="pill-list">
+                        <li>Prompt UI</li>
+                        <li>Weapon Pedestal</li>
+                        <li>Interactable</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/TargetRangeMissionTerminal.jpg"
+                     alt="Unity gameplay screenshot of the mission terminal opened through the interaction system">
+
+                <div class="card-body">
+                    <h3>Mission Terminal Interaction</h3>
+                    <p>
+                        The same interaction path can open mission UI, proving the system is not limited to pickups.
+                    </p>
+                    <ul class="pill-list">
+                        <li>Terminal</li>
+                        <li>Mission UI</li>
+                        <li>World Object</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/PlayerInteractorInspector.jpg"
+                     alt="Unity Inspector screenshot of PlayerInteractor showing camera reference, interact distance, layer mask, prompt UI reference, and debug values">
+
+                <div class="card-body">
+                    <h3>Player Interactor Setup</h3>
+                    <p>
+                        The interactor owns detection range, raycast setup, prompt connection, and input-triggered interaction routing.
+                    </p>
+                    <ul class="pill-list">
+                        <li>Raycast</li>
+                        <li>Detection</li>
+                        <li>Inspector Setup</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/InteractPromptUIInspector.jpg"
+                     alt="Unity Inspector screenshot of InteractPromptUI showing prompt root and TextMeshPro prompt text references">
+
+                <div class="card-body">
+                    <h3>Prompt UI</h3>
+                    <p>
+                        Prompt display is separated from interactable behavior so the UI can be reused across many object types.
+                    </p>
+                    <ul class="pill-list">
+                        <li>TextMeshPro</li>
+                        <li>Prompt Display</li>
+                        <li>UI Layer</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/WeaponDataInspector.jpg"
+                     alt="Unity Inspector screenshot of WeaponData used by an interactable weapon pickup or pedestal">
+
+                <div class="card-body">
+                    <h3>Object-Owned Data</h3>
+                    <p>
+                        Interactable objects can reference data assets, allowing the interaction system to stay generic.
+                    </p>
+                    <ul class="pill-list">
+                        <li>Data Driven</li>
+                        <li>WeaponData</li>
+                        <li>Reusable Flow</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/LivingRoom.jpg"
+                     alt="Unity gameplay screenshot of the Echo Systems Lab hub environment where interactable objects are placed in the world">
+
+                <div class="card-body">
+                    <h3>Hub World Usage</h3>
+                    <p>
+                        The hub uses interactable objects to connect environment exploration with mission flow and gameplay setup.
+                    </p>
+                    <ul class="pill-list">
+                        <li>Hub</li>
+                        <li>World Objects</li>
+                        <li>Player Flow</li>
+                    </ul>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         INTERACTION FLOW
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>Interaction Flow</h2>
+            <p>
+                The player interactor is the scout, the prompt is the signpost, and the interactable object is the tiny machine behind the curtain.
+            </p>
+        </div>
+
+        <div class="toolkit-grid">
+
+            <div class="toolkit-card">
+                <h4>1. Player Looks Forward</h4>
+                <p>
+                    The interactor casts from the player camera to find usable objects in front of the player.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>2. Raycast Finds Target</h4>
+                <p>
+                    The hit object is checked for an IInteractable implementation on itself or its parent object.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>3. Prompt Text Updates</h4>
+                <p>
+                    If the object can be interacted with, the prompt UI displays the object’s interaction message.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>4. Player Presses Interact</h4>
+                <p>
+                    The input reader reports an interact press and the player interactor calls the target’s interaction method.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>5. Object Handles Behavior</h4>
+                <p>
+                    The mission terminal can open UI, while a weapon pedestal can equip a weapon and hide its visual.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>6. Prompt Clears Safely</h4>
+                <p>
+                    When the player looks away, interaction becomes unavailable and the prompt hides.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         KEY COMPONENTS
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>Key Components</h2>
+            <p>
+                Each script owns one slice of the interaction pipeline so the system stays flexible and calm instead of becoming spaghetti confetti.
+            </p>
+        </div>
+
+        <div class="grid projects systems-grid">
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>IInteractable</h3>
+                    <p>
+                        A shared interface for world objects that can provide prompt text and respond when the player interacts.
+                    </p>
+                    <ul class="pill-list">
+                        <li>Interface</li>
+                        <li>Loose Coupling</li>
+                        <li>World Objects</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>PlayerInteractor</h3>
+                    <p>
+                        Performs raycast detection, tracks the current interactable target, updates prompts, and forwards interact input.
+                    </p>
+                    <ul class="pill-list">
+                        <li>Raycast</li>
+                        <li>Input Routing</li>
+                        <li>Prompt State</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>InteractPromptUI</h3>
+                    <p>
+                        Shows and hides the prompt root and updates the TextMeshPro prompt message.
+                    </p>
+                    <ul class="pill-list">
+                        <li>Prompt</li>
+                        <li>TextMeshPro</li>
+                        <li>UI Feedback</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>Mission Terminal</h3>
+                    <p>
+                        Uses the interaction system as the player-facing entry point into mission selection and unlock flow.
+                    </p>
+                    <ul class="pill-list">
+                        <li>Mission UI</li>
+                        <li>Terminal</li>
+                        <li>Hub Flow</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>Weapon Pedestal</h3>
+                    <p>
+                        Lets a mission present a weapon in the world, respond to interaction, equip the player, and update pedestal visibility.
+                    </p>
+                    <ul class="pill-list">
+                        <li>Weapon Equip</li>
+                        <li>Pedestal</li>
+                        <li>Trial Setup</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>Future Interactables</h3>
+                    <p>
+                        The same interface can support doors, switches, terminals, elevators, pickups, puzzle props, tutorial signs, and test devices.
+                    </p>
+                    <ul class="pill-list">
+                        <li>Expandable</li>
+                        <li>Reusable</li>
+                        <li>Tool Friendly</li>
+                    </ul>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         DESIGN NOTES
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>Design Notes</h2>
+            <p>
+                The important design decision is that the player finds interactables, but the interactable decides what interaction means.
+            </p>
+        </div>
+
+        <div class="about-wrap">
+            <div class="about-text">
+                <h3>Why Use an Interface?</h3>
+
+                <p>
+                    Without an interface, the player controller would need to know about every possible object type:
+                    mission terminals, weapon pedestals, doors, pickups, puzzle objects, and future trial props.
+                    That turns the player script into a junk drawer with a keyboard.
+                </p>
+
+                <p>
+                    With IInteractable, the player only asks a simple question:
+                    “Can this object be interacted with?”
+                    If the answer is yes, the object provides prompt text and handles its own behavior.
+                </p>
+
+                <p>
+                    This keeps the player-side code generic and lets each object own its unique interaction response.
+                    It also makes the system easier to test because prompt display, raycast detection, and object behavior are separate concerns.
+                </p>
+            </div>
+
+            <div class="about-highlights">
+                <div class="about-card">
+                    <h3>Generic Detection</h3>
+                    <p>
+                        The player interactor does not need to know what kind of object it found.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3>Object-Owned Behavior</h3>
+                    <p>
+                        Each interactable object owns its action, prompt message, and setup data.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3>Expandable Hub</h3>
+                    <p>
+                        New terminals, pickups, and trial objects can be added without rewriting player interaction logic.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================
+         RELATED SYSTEMS
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>Related Systems</h2>
+            <p>
+                The interaction layer connects directly into mission selection, weapon equipment, input, and progression.
+            </p>
+        </div>
+
+        <div class="grid projects systems-grid">
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>Mission Terminal & Unlock Flow</h3>
+                    <p>
+                        Uses interaction to open the terminal and route the player into available missions.
+                    </p>
+                    <div class="card-actions">
+                        <a class="btn small" href="mission-terminal.html">View System</a>
+                    </div>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>Weapon Data & Loadout</h3>
+                    <p>
+                        Uses interactable pedestals and pickups to equip mission weapons and expand player loadouts.
+                    </p>
+                    <div class="card-actions">
+                        <a class="btn small" href="weapon-data-and-loadout.html">View System</a>
+                    </div>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>Input & Keybindings</h3>
+                    <p>
+                        Supplies the interact button input while letting menus safely disable gameplay actions.
+                    </p>
+                    <div class="card-actions">
+                        <a class="btn small" href="input-and-keybindings.html">View System</a>
+                    </div>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <footer class="site-footer">
+        <p>&copy; <span id="year"></span> Jesse “Echo” Adams</p>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>
+<!-- systems/interaction-system.html END -->

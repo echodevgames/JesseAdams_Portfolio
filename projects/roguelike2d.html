@@ -10,359 +10,359 @@
     <link rel="stylesheet" href="../CSS/style.css" />
 </head>
 
-<body>
+    <body>
 
-
-    <!-- =========================================
-    CASE STUDY HEADER
-    ========================================= -->
-    <header class="site-header">
-        <a class="brand" href="../tabs/projects.html">← Back to Projects</a>
-    </header>
-
-    <main class="section">
 
         <!-- =========================================
-        CENTERED PAGE WRAPPER
+        CASE STUDY HEADER
         ========================================= -->
-        <div class="case-wrapper">
+        <header class="site-header">
+            <a class="brand" href="../tabs/projects.html">← Back to Projects</a>
+        </header>
+
+        <main class="section">
 
             <!-- =========================================
-    HERO / INTRO
-    ========================================= -->
-            <section class="section-head">
-                <h1>RogueLike2D — Unity Learn (C#)</h1>
-                <p class="lead">
-                    A classic 2D turn-based roguelike built in Unity, focused on procedural level generation,
-                    deterministic AI behavior, resource-driven survival, and scalable game architecture.
-                </p>
-            </section>
+            CENTERED PAGE WRAPPER
+            ========================================= -->
+            <div class="case-wrapper">
 
-            <img src="../assets/thumb_roguelike2d.png" alt="RogueLike2D gameplay overview" class="wide-img">
+                <!-- =========================================
+        HERO / INTRO
+        ========================================= -->
+                <section class="section-head">
+                    <h1>RogueLike2D — Unity Learn (C#)</h1>
+                    <p class="lead">
+                        A classic 2D turn-based roguelike built in Unity, focused on procedural level generation,
+                        deterministic AI behavior, resource-driven survival, and scalable game architecture.
+                    </p>
+                </section>
 
-            <!-- =========================================
-    PROJECT OVERVIEW
-    ========================================= -->
-            <section>
-                <h2>Project Overview</h2>
+                <img src="../assets/thumb_roguelike2d.png" alt="RogueLike2D gameplay overview" class="wide-img">
 
-                <p>
-                    This project recreates a traditional roguelike gameplay loop using modern Unity systems.
-                    Built as part of the Unity Learn curriculum, the focus was not visual fidelity, but
-                    <strong>systems design</strong>: turn order, procedural content, AI decision-making,
-                    and state management.
-                </p>
+                <!-- =========================================
+        PROJECT OVERVIEW
+        ========================================= -->
+                <section>
+                    <h2>Project Overview</h2>
 
-
-                <ul class="pill-list">
-                    <li>Unity 2D</li>
-                    <li>C#</li>
-                    <li>Turn-Based Systems</li>
-                    <li>Procedural Generation</li>
-                    <li>AI Behavior</li>
-                    <li>UI Feedback</li>
-                </ul>
+                    <p>
+                        This project recreates a traditional roguelike gameplay loop using modern Unity systems.
+                        Built as part of the Unity Learn curriculum, the focus was not visual fidelity, but
+                        <strong>systems design</strong>: turn order, procedural content, AI decision-making,
+                        and state management.
+                    </p>
 
 
-            </section>
-
-            <!-- =========================================
-    DESIGN GOALS
-    ========================================= -->
-            <section>
-                <h2>Design Goals</h2>
-
-                <p>
-                    The project was approached as a systems exercise rather than a prototype.
-                    Every mechanic needed to support scalability, clarity, and deterministic behavior.
-                </p>
-
-                <div class="pill-row">
-                    <span class="pill">Deterministic</span>
-                    <span class="pill">Modular</span>
-                    <span class="pill">Scalable</span>
-                    <span class="pill">Readable</span>
-                    <span class="pill">System-Driven</span>
-                </div>
-
-                <ul>
-                    <li>
-                        <strong>Turn-based clarity</strong><br>
-                        Every action resolves in a predictable order. No overlapping input, no race conditions,
-                        and no frame-dependent logic.
-                    </li>
-
-                    <li>
-                        <strong>Procedural replayability</strong><br>
-                        Levels are generated dynamically using constrained randomness while preserving
-                        navigability and gameplay balance.
-                    </li>
-
-                    <li>
-                        <strong>Simple, readable AI</strong><br>
-                        Enemy logic prioritizes debuggability and intent over complex pathfinding.
-                    </li>
-
-                    <li>
-                        <strong>Clear player feedback</strong><br>
-                        UI, audio, and visual responses reinforce cause-and-effect for every action.
-                    </li>
-                </ul>
-            </section>
-
-            <!-- =========================================
-    CORE ARCHITECTURE
-    ========================================= -->
-            <section>
-                <h2>Core Architecture</h2>
-
-                <p>
-                    The game is structured around a central <strong>GameManager</strong> that coordinates
-                    turn order, level progression, and persistent player state.
-                </p>
-
-                <div class="pill-row">
-                    <span class="pill">Centralized State</span>
-                    <span class="pill">Turn Locking</span>
-                    <span class="pill">Scene Persistence</span>
-                </div>
-
-<pre class="arch-diagram"><code>
-┌──────────────────────────────┐
-│         GameManager          │
-│------------------------------│
-│ Level Progression            │
-│ Turn Control                 │
-│ Game Over State              │
-│ Player Persistence           │
-└──────────────┬───────────────┘
-               │
-     ┌─────────┴─────────┐
-     │                   │
-┌──────────────┐   ┌──────────────┐
-│ BoardManager │   │ Turn System  │
-│--------------│   │--------------│
-│ Dungeon Gen  │   │ Player Turn  │
-│ Spawn Logic  │   │ Enemy Turn   │
-└──────────────┘   └──────────────┘
-</code></pre>
-
-                <p class="caption">
-                    All gameplay systems route through a single authoritative controller.
-                    This prevents desynchronization between player input, AI behavior, and world state.
-                </p>
-            </section>
-
-            <!-- =========================================
-    PROCEDURAL DUNGEON GENERATION
-    ========================================= -->
-            <section>
-                <h2>Procedural Dungeon Generation</h2>
-
-                <p>
-                    Each level is generated at runtime using a grid-based system.
-                    The dungeon layout changes every playthrough while maintaining
-                    consistent gameplay rules.
-                </p>
-
-                <div class="pill-row">
-                    <span class="pill">2D Arrays</span>
-                    <span class="pill">Constrained Randomness</span>
-                    <span class="pill">Tilemap-Based</span>
-                </div>
-
-                <ul>
-                    <li>Outer walls define level boundaries</li>
-                    <li>Interior tiles are filled with walkable floor</li>
-                    <li>Obstacles are placed using randomized empty cells</li>
-                    <li>Enemy and item spawns use tracked free positions</li>
-                </ul>
-
-                <img src="../assets/BoardManagerComponent.png" alt="Dungeon generation steps" class="wide-img">
-            </section>
-
-            <!-- =========================================
-    TURN-BASED PLAYER SYSTEM
-    ========================================= -->
-            <section>
-                <h2>Player & Turn-Based Movement</h2>
-
-                <p>
-                    The player operates entirely within the turn system.
-                    Every input resolves into a single action: move, attack, or wait.
-                </p>
-
-                <div class="pill-row">
-                    <span class="pill">Grid-Based</span>
-                    <span class="pill">Input Locking</span>
-                    <span class="pill">Action Cost</span>
-                </div>
-
-                <ul>
-                    <li>Movement consumes a turn and food resource</li>
-                    <li>Attempting to move into an enemy triggers an attack</li>
-                    <li>Blocked movement prevents wasted turns</li>
-                </ul>
-
-                <p>
-                    This design guarantees fairness: the player and enemies always
-                    act under the same rules.
-                </p>
-            </section>
-
-            <!-- =========================================
-    ENEMY AI BEHAVIOR
-    ========================================= -->
-            <section>
-                <h2>Enemy AI Behavior</h2>
-
-                <p>
-                    Enemy behavior is intentionally simple and deterministic.
-                    Each enemy performs exactly one action per enemy turn.
-                </p>
-
-                <div class="pill-row">
-                    <span class="pill">Distance-Based Logic</span>
-                    <span class="pill">Axis Priority</span>
-                    <span class="pill">Turn-Limited</span>
-                </div>
-
-                <ul>
-                    <li>Enemies track player position</li>
-                    <li>Movement prioritizes X or Y axis based on distance</li>
-                    <li>Adjacent enemies attack instead of moving</li>
-                </ul>
-
-                <p>
-                    This approach avoids complex pathfinding while producing readable,
-                    predictable combat encounters.
-                </p>
-            </section>
-
-            <!-- =========================================
-    RESOURCE & SURVIVAL SYSTEM
-    ========================================= -->
-            <section>
-                <h2>Resource Management & Survival</h2>
-
-                <p>
-                    Food serves as both health and a time constraint.
-                    Every action pushes the player closer to failure.
-                </p>
-
-                <div class="pill-row">
-                    <span class="pill">Dual-Purpose Resource</span>
-                    <span class="pill">Pacing Control</span>
-                    <span class="pill">Risk / Reward</span>
-                </div>
-
-                <ul>
-                    <li>Movement consumes food</li>
-                    <li>Enemy attacks reduce food</li>
-                    <li>Pickups restore food and extend survival</li>
-                </ul>
-
-                <img src="../assets/RogueLikeFood.png" alt="Food and level UI" class="wide-img">
-            </section>
-
-            <!-- =========================================
-    UI & PLAYER FEEDBACK
-    ========================================= -->
-            <section>
-                <h2>UI & Player Feedback</h2>
-
-                <p>
-                    Feedback systems reinforce every player action and consequence.
-                    The UI communicates state clearly without overwhelming the screen.
-                </p>
-
-                <div class="pill-row">
-                    <span class="pill">Immediate Feedback</span>
-                    <span class="pill">Minimal UI</span>
-                    <span class="pill">Clear State</span>
-                </div>
-
-                <ul>
-                    <li>Food counter updates per action</li>
-                    <li>Screen flashes on damage</li>
-                    <li>Level transition text reinforces progression</li>
-                    <li>Game Over screen halts input and communicates failure</li>
-                </ul>
-            </section>
+                    <ul class="pill-list">
+                        <li>Unity 2D</li>
+                        <li>C#</li>
+                        <li>Turn-Based Systems</li>
+                        <li>Procedural Generation</li>
+                        <li>AI Behavior</li>
+                        <li>UI Feedback</li>
+                    </ul>
 
 
-            <!-- =========================================
-         PLAY THE GAME
-    ========================================= -->
-            <section>
-                <h2>Play RogueLike2D</h2>
+                </section>
 
-                <p>
-                    This project is available to play on Unity Play. The build demonstrates
-                    turn-based systems, procedural generation, AI behavior, and the UI feedback
-                    loop described above.
-                </p>
+                <!-- =========================================
+        DESIGN GOALS
+        ========================================= -->
+                <section>
+                    <h2>Design Goals</h2>
 
-                <div class="cta">
-                    <a class="btn"
-                       href="https://play.unity.com/en/games/9fcb9378-256b-433b-8112-f12e2410ee41/roguelike-tutorial-upload"
-                       target="_blank"
-                       rel="noopener">
-                        ▶ Play on Unity Play
-                    </a>
-                </div>
-            </section>
+                    <p>
+                        The project was approached as a systems exercise rather than a prototype.
+                        Every mechanic needed to support scalability, clarity, and deterministic behavior.
+                    </p>
+
+                    <div class="pill-row">
+                        <span class="pill">Deterministic</span>
+                        <span class="pill">Modular</span>
+                        <span class="pill">Scalable</span>
+                        <span class="pill">Readable</span>
+                        <span class="pill">System-Driven</span>
+                    </div>
+
+                    <ul>
+                        <li>
+                            <strong>Turn-based clarity</strong><br>
+                            Every action resolves in a predictable order. No overlapping input, no race conditions,
+                            and no frame-dependent logic.
+                        </li>
+
+                        <li>
+                            <strong>Procedural replayability</strong><br>
+                            Levels are generated dynamically using constrained randomness while preserving
+                            navigability and gameplay balance.
+                        </li>
+
+                        <li>
+                            <strong>Simple, readable AI</strong><br>
+                            Enemy logic prioritizes debuggability and intent over complex pathfinding.
+                        </li>
+
+                        <li>
+                            <strong>Clear player feedback</strong><br>
+                            UI, audio, and visual responses reinforce cause-and-effect for every action.
+                        </li>
+                    </ul>
+                </section>
+
+                <!-- =========================================
+        CORE ARCHITECTURE
+        ========================================= -->
+                <section>
+                    <h2>Core Architecture</h2>
+
+                    <p>
+                        The game is structured around a central <strong>GameManager</strong> that coordinates
+                        turn order, level progression, and persistent player state.
+                    </p>
+
+                    <div class="pill-row">
+                        <span class="pill">Centralized State</span>
+                        <span class="pill">Turn Locking</span>
+                        <span class="pill">Scene Persistence</span>
+                    </div>
+
+    <pre class="arch-diagram"><code>
+    ┌──────────────────────────────┐
+    │         GameManager          │
+    │------------------------------│
+    │ Level Progression            │
+    │ Turn Control                 │
+    │ Game Over State              │
+    │ Player Persistence           │
+    └──────────────┬───────────────┘
+                │
+        ┌─────────┴─────────┐
+        │                   │
+    ┌──────────────┐   ┌──────────────┐
+    │ BoardManager │   │ Turn System  │
+    │--------------│   │--------------│
+    │ Dungeon Gen  │   │ Player Turn  │
+    │ Spawn Logic  │   │ Enemy Turn   │
+    └──────────────┘   └──────────────┘
+    </code></pre>
+
+                    <p class="caption">
+                        All gameplay systems route through a single authoritative controller.
+                        This prevents desynchronization between player input, AI behavior, and world state.
+                    </p>
+                </section>
+
+                <!-- =========================================
+        PROCEDURAL DUNGEON GENERATION
+        ========================================= -->
+                <section>
+                    <h2>Procedural Dungeon Generation</h2>
+
+                    <p>
+                        Each level is generated at runtime using a grid-based system.
+                        The dungeon layout changes every playthrough while maintaining
+                        consistent gameplay rules.
+                    </p>
+
+                    <div class="pill-row">
+                        <span class="pill">2D Arrays</span>
+                        <span class="pill">Constrained Randomness</span>
+                        <span class="pill">Tilemap-Based</span>
+                    </div>
+
+                    <ul>
+                        <li>Outer walls define level boundaries</li>
+                        <li>Interior tiles are filled with walkable floor</li>
+                        <li>Obstacles are placed using randomized empty cells</li>
+                        <li>Enemy and item spawns use tracked free positions</li>
+                    </ul>
+
+                    <img src="../assets/BoardManagerComponent.png" alt="Dungeon generation steps" class="wide-img">
+                </section>
+
+                <!-- =========================================
+        TURN-BASED PLAYER SYSTEM
+        ========================================= -->
+                <section>
+                    <h2>Player & Turn-Based Movement</h2>
+
+                    <p>
+                        The player operates entirely within the turn system.
+                        Every input resolves into a single action: move, attack, or wait.
+                    </p>
+
+                    <div class="pill-row">
+                        <span class="pill">Grid-Based</span>
+                        <span class="pill">Input Locking</span>
+                        <span class="pill">Action Cost</span>
+                    </div>
+
+                    <ul>
+                        <li>Movement consumes a turn and food resource</li>
+                        <li>Attempting to move into an enemy triggers an attack</li>
+                        <li>Blocked movement prevents wasted turns</li>
+                    </ul>
+
+                    <p>
+                        This design guarantees fairness: the player and enemies always
+                        act under the same rules.
+                    </p>
+                </section>
+
+                <!-- =========================================
+        ENEMY AI BEHAVIOR
+        ========================================= -->
+                <section>
+                    <h2>Enemy AI Behavior</h2>
+
+                    <p>
+                        Enemy behavior is intentionally simple and deterministic.
+                        Each enemy performs exactly one action per enemy turn.
+                    </p>
+
+                    <div class="pill-row">
+                        <span class="pill">Distance-Based Logic</span>
+                        <span class="pill">Axis Priority</span>
+                        <span class="pill">Turn-Limited</span>
+                    </div>
+
+                    <ul>
+                        <li>Enemies track player position</li>
+                        <li>Movement prioritizes X or Y axis based on distance</li>
+                        <li>Adjacent enemies attack instead of moving</li>
+                    </ul>
+
+                    <p>
+                        This approach avoids complex pathfinding while producing readable,
+                        predictable combat encounters.
+                    </p>
+                </section>
+
+                <!-- =========================================
+        RESOURCE & SURVIVAL SYSTEM
+        ========================================= -->
+                <section>
+                    <h2>Resource Management & Survival</h2>
+
+                    <p>
+                        Food serves as both health and a time constraint.
+                        Every action pushes the player closer to failure.
+                    </p>
+
+                    <div class="pill-row">
+                        <span class="pill">Dual-Purpose Resource</span>
+                        <span class="pill">Pacing Control</span>
+                        <span class="pill">Risk / Reward</span>
+                    </div>
+
+                    <ul>
+                        <li>Movement consumes food</li>
+                        <li>Enemy attacks reduce food</li>
+                        <li>Pickups restore food and extend survival</li>
+                    </ul>
+
+                    <img src="../assets/RogueLikeFood.png" alt="Food and level UI" class="wide-img">
+                </section>
+
+                <!-- =========================================
+        UI & PLAYER FEEDBACK
+        ========================================= -->
+                <section>
+                    <h2>UI & Player Feedback</h2>
+
+                    <p>
+                        Feedback systems reinforce every player action and consequence.
+                        The UI communicates state clearly without overwhelming the screen.
+                    </p>
+
+                    <div class="pill-row">
+                        <span class="pill">Immediate Feedback</span>
+                        <span class="pill">Minimal UI</span>
+                        <span class="pill">Clear State</span>
+                    </div>
+
+                    <ul>
+                        <li>Food counter updates per action</li>
+                        <li>Screen flashes on damage</li>
+                        <li>Level transition text reinforces progression</li>
+                        <li>Game Over screen halts input and communicates failure</li>
+                    </ul>
+                </section>
+
+
+                <!-- =========================================
+            PLAY THE GAME
+        ========================================= -->
+                <section>
+                    <h2>Play RogueLike2D</h2>
+
+                    <p>
+                        This project is available to play on Unity Play. The build demonstrates
+                        turn-based systems, procedural generation, AI behavior, and the UI feedback
+                        loop described above.
+                    </p>
+
+                    <div class="cta">
+                        <a class="btn"
+                        href="https://play.unity.com/en/games/9fcb9378-256b-433b-8112-f12e2410ee41/roguelike-tutorial-upload"
+                        target="_blank"
+                        rel="noopener">
+                            ▶ Play on Unity Play
+                        </a>
+                    </div>
+                </section>
 
 
 
-            <!-- =========================================
-    KEY TAKEAWAYS
-    ========================================= -->
-            <section>
-                <h2>What I Learned</h2>
+                <!-- =========================================
+        KEY TAKEAWAYS
+        ========================================= -->
+                <section>
+                    <h2>What I Learned</h2>
 
-                <p>
-                    RogueLike2D reinforced that strong games emerge from strong systems.
-                    Simplicity, clarity, and deterministic logic outperform complexity
-                    when building scalable gameplay.
-                </p>
+                    <p>
+                        RogueLike2D reinforced that strong games emerge from strong systems.
+                        Simplicity, clarity, and deterministic logic outperform complexity
+                        when building scalable gameplay.
+                    </p>
 
-                <div class="pill-row">
-                    <span class="pill">Systems Thinking</span>
-                    <span class="pill">Turn-Based Design</span>
-                    <span class="pill">AI Readability</span>
-                    <span class="pill">Procedural Logic</span>
-                </div>
+                    <div class="pill-row">
+                        <span class="pill">Systems Thinking</span>
+                        <span class="pill">Turn-Based Design</span>
+                        <span class="pill">AI Readability</span>
+                        <span class="pill">Procedural Logic</span>
+                    </div>
 
-                <ul>
-                    <li>
-                        <strong>Turn-based games demand strict control flow</strong><br>
-                        Input must be gated and actions serialized to prevent logic errors.
-                    </li>
+                    <ul>
+                        <li>
+                            <strong>Turn-based games demand strict control flow</strong><br>
+                            Input must be gated and actions serialized to prevent logic errors.
+                        </li>
 
-                    <li>
-                        <strong>Simple AI can still feel intelligent</strong><br>
-                        Predictability allows players to learn and plan.
-                    </li>
+                        <li>
+                            <strong>Simple AI can still feel intelligent</strong><br>
+                            Predictability allows players to learn and plan.
+                        </li>
 
-                    <li>
-                        <strong>Procedural systems need constraints</strong><br>
-                        Randomness is only fun when bounded by design rules.
-                    </li>
-                </ul>
-            </section>
+                        <li>
+                            <strong>Procedural systems need constraints</strong><br>
+                            Randomness is only fun when bounded by design rules.
+                        </li>
+                    </ul>
+                </section>
 
-            <!-- =========================================
-    FOOTER
-    ========================================= -->
-            <footer class="site-footer">
-                <a class="btn" href="../index.html#projects">Back to Projects</a>
-            </footer>
+                <!-- =========================================
+        FOOTER
+        ========================================= -->
+                <footer class="site-footer">
+                    <a class="btn" href="../index.html#projects">Back to Projects</a>
+                </footer>
 
-        </div>
-    </main>
+            </div>
+        </main>
 
-</body>
+    </body>
 </html>
 
 <!-- roguelike2d.html END -->

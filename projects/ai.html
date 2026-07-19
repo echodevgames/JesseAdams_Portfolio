@@ -1,37 +1,143 @@
-<!-- ai.html END -->
-
+<!-- projects/ai.html START -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>AI Behavior & Combat (UE5) – Case Study</title>
-    <link rel="stylesheet" href="../CSS/style.css">
+    <!-- ================================
+         Metadata & SEO
+    ================================ -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- projects/ai.html -->
+    <title>AI Behavior & Combat | UE5 Systems Case Study | Jesse Adams</title>
+    <meta name="description" content="Unreal Engine 5 AI behavior and combat case study covering patrol, pursuit, attack behavior, animation-driven events, Blueprint-to-C++ migration, behavior tasks, and gameplay interfaces." />
+
+    <!-- ================================
+         Canonical / Social Preview
+    ================================ -->
+    <link rel="canonical" href="https://echodevgames.github.io/JesseAdams_Portfolio/projects/ai.html" />
+
+    <meta property="og:title" content="AI Behavior & Combat | UE5 Systems Case Study | Jesse Adams" />
+    <meta property="og:description" content="Unreal Engine 5 AI behavior and combat case study covering patrol, pursuit, attack behavior, animation-driven events, Blueprint-to-C++ migration, behavior tasks, and gameplay interfaces." />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://echodevgames.github.io/JesseAdams_Portfolio/projects/ai.html" />
+    <meta property="og:site_name" content="EchoDevGames" />
+    <meta property="og:image" content="https://echodevgames.github.io/JesseAdams_Portfolio/assets/Images/Banners/EchoDevGamesBanner.png" />
+    <meta property="og:image:secure_url" content="https://echodevgames.github.io/JesseAdams_Portfolio/assets/Images/Banners/EchoDevGamesBanner.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="EchoDevGames portfolio share image for Jesse Adams, game developer and systems programmer." />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="AI Behavior & Combat | UE5 Systems Case Study | Jesse Adams" />
+    <meta name="twitter:description" content="Unreal Engine 5 AI behavior and combat case study covering patrol, pursuit, attack behavior, animation-driven events, Blueprint-to-C++ migration, behavior tasks, and gameplay interfaces." />
+    <meta name="twitter:image" content="https://echodevgames.github.io/JesseAdams_Portfolio/assets/Images/Banners/EchoDevGamesBanner.png" />
+
+    <!-- ================================
+         Favicon & Font
+    ================================ -->
+    <link rel="icon" href="../assets/favicon.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+    <!-- ================================
+         CSS
+    ================================ -->
+    <link rel="stylesheet" href="../CSS/style.css" />
 </head>
+
 <body>
+    <!-- ================================
+         HEADER / NAV
+    ================================ -->
     <header class="site-header">
-        <a class="brand" href="../tabs/projects.html">← Back to Projects</a>
-        <nav class="site-nav"><a href="../index.html#about">About</a><a href="../index.html#contact">Contact</a></nav>
+        <a class="brand" href="../index.html#home">Jesse Adams - EchoDevGames</a>
+
+        <button class="nav-toggle" aria-label="Open navigation" aria-expanded="false">☰</button>
+
+        <nav class="site-nav" aria-label="Primary">
+            <a href="../index.html#home">Home</a>
+            <a href="../tabs/systems.html">Systems</a>
+            <a href="../tabs/caseStudies.html">Case Studies</a>
+            <a href="../tabs/projects.html">Projects</a>
+            <a href="../tabs/wanted.html">Wanted</a>
+            <a href="../tabs/contact.html">Contact</a>
+            <a class="btn small" href="../assets/Resumes/Jesse_Adams_Resume_6-23-26.pdf" target="_blank" rel="noopener">Resume</a>
+        </nav>
     </header>
 
     <main class="section">
-        <div class="section-head"><h1>AI Behavior & Combat (UE5)</h1><p>Modular behavior tasks for patrol, pursue, and attack with animation-driven events. Converted Blueprint logic to C++ tasks and interfaces.</p></div>
+        <div class="section-head">
+            <h1>AI Behavior & Combat</h1>
+            <p>
+                Modular behavior tasks for patrol, pursue, and attack flow with animation-driven events,
+                gameplay interfaces, and cleaner C++ architecture.
+            </p>
+        </div>
+
         <article class="card" style="max-width:1100px;margin:0 auto;">
-            <img class="wide-img" src="../assets/ai_demo.png" alt="AI Behavior & Combat (UE5)">
+            <img class="wide-img"
+                 src="../assets/ai_demo.png"
+                 alt="AI behavior and combat system screenshot from Unreal Engine 5">
+
             <div class="card-body">
                 <h2>Overview</h2>
-                <p>Modular behavior tasks for patrol, pursue, and attack with animation-driven events. Converted Blueprint logic to C++ tasks and interfaces.</p>
+
+                <p>
+                    This case study focuses on AI behavior and combat structure in Unreal Engine 5.
+                    The work centered on turning scattered Blueprint logic into cleaner gameplay systems
+                    using behavior tasks, interfaces, and animation-driven combat events.
+                </p>
+
+                <p>
+                    The goal was to make enemies easier to reason about, easier to tune, and easier to extend
+                    as new combat behaviors were added.
+                </p>
+
                 <h2>Highlights</h2>
-                <ul><li>Design goals and constraints documented</li><li>Architecture notes with diagrams/screenshots</li><li>Key challenges and how they were solved</li></ul>
+
+                <ul>
+                    <li>Structured enemy behavior around patrol, pursue, and attack states</li>
+                    <li>Converted Blueprint-heavy behavior into cleaner C++ tasks and interfaces</li>
+                    <li>Used animation-driven events to control combat timing and hit windows</li>
+                    <li>Separated AI decision-making from combat response logic</li>
+                    <li>Improved maintainability by reducing duplicated behavior logic</li>
+                </ul>
+
+                <h2>Technical Focus</h2>
+
+                <ul class="pill-list">
+                    <li>Unreal Engine 5</li>
+                    <li>C++</li>
+                    <li>AI Behavior</li>
+                    <li>Combat Systems</li>
+                    <li>Behavior Tasks</li>
+                    <li>Animation Events</li>
+                </ul>
+
                 <h2>Demo</h2>
-                <p><a class="btn small ghost" href="https://rokanhellhound1.itch.io/burn-your-bacon" target="_blank" rel="noopener">Play on Itch.io</a></p>
-                <div class="card-actions" style="margin-top:16px;"><a class="btn small" href="../index.html#projects">Back</a></div>
+
+                <p>
+                    <a class="btn small ghost"
+                       href="https://rokanhellhound1.itch.io/burn-your-bacon"
+                       target="_blank"
+                       rel="noopener">
+                        Play on itch.io
+                    </a>
+                </p>
+
+                <div class="card-actions" style="margin-top:16px;">
+                    <a class="btn small" href="../tabs/projects.html">Back to Projects</a>
+                </div>
             </div>
         </article>
     </main>
 
-    <footer class="site-footer"><p>&copy; 2025 Jesse “Echo” Adams</p></footer>
+    <footer class="site-footer">
+        <p>&copy; <span id="year"></span> Jesse “Echo” Adams</p>
+    </footer>
+
+    <script src="../script.js"></script>
 </body>
 </html>
-
-<!-- ai.html END -->
+<!-- projects/ai.html END -->
