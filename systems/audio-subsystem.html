@@ -1,0 +1,1178 @@
+<!-- systems/audio-subsystem.html START -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- ================================
+         Metadata & SEO
+    ================================ -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- systems/audio-subsystem.html -->
+    <title>Audio Subsystem | Unity Systems Portfolio | Jesse Adams</title>
+    <meta name="description" content="A Unity C# audio subsystem breakdown for Echo Systems Lab covering reusable audio event data, weapon audio, music management, ambience layers, UI sounds, footstep surfaces, mixer routing, and volume settings." />
+
+    <!-- ================================
+         Favicon & Font
+    ================================ -->
+    <link rel="icon" href="../assets/favicon.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+    <!-- ================================
+         CSS
+    ================================ -->
+    <link rel="stylesheet" href="../CSS/style.css" />
+    <link rel="stylesheet" href="../CSS/styleSystems.css" />
+</head>
+
+<body>
+
+    <!-- ================================
+         HEADER / NAV
+    ================================ -->
+    <header class="site-header">
+        <a class="brand" href="../index.html#home">Jesse Adams - EchoDevGames</a>
+
+        <button class="nav-toggle" aria-label="Open navigation" aria-expanded="false">☰</button>
+
+        <nav class="site-nav" aria-label="Primary">
+            <a href="../index.html#home">Home</a>
+            <a href="../tabs/systems.html">Systems</a>
+            <a href="../tabs/caseStudies.html">Case Studies</a>
+            <a href="../tabs/projects.html">Projects</a>
+            <a href="../tabs/contact.html">Contact</a>
+            <a class="btn small" href="../assets/Resumes/Jesse_Adams_Resume_6-23-26.pdf" target="_blank" rel="noopener">Resume</a>
+        </nav>
+    </header>
+
+    <!-- ================================
+         HERO
+    ================================ -->
+    <main class="hero">
+        <div class="hero-inner">
+            <h1>Audio Subsystem</h1>
+
+            <p class="lead">
+                A reusable Unity audio architecture for one-shot sound events, weapon audio,
+                music playback, ambience loops, UI sounds, footsteps, mixer routing,
+                and player-facing volume settings.
+            </p>
+
+            <ul class="pill-list">
+                <li>Unity 6</li>
+                <li>C#</li>
+                <li>Audio Mixer</li>
+                <li>ScriptableObjects</li>
+                <li>Subsystem Design</li>
+                <li>Player Feedback</li>
+            </ul>
+
+            <div class="cta">
+                <a class="btn" href="../tabs/systems.html">Back to Systems</a>
+                <a class="btn ghost" href="echo-systems-lab-overview.html">Lab Overview</a>
+                <a class="btn ghost" href="weapon-handling-feedback.html">Weapon Handling</a>
+                <a class="btn ghost" href="input-and-keybindings.html">Input & Keybindings</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- ================================
+         OVERVIEW
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>System Overview</h2>
+            <p>
+                The audio subsystem turns raw sound clips into reusable, routed, tunable gameplay feedback.
+            </p>
+        </div>
+
+        <div class="about-wrap">
+            <div class="about-text">
+                <h3>What It Does</h3>
+
+                <p>
+                    The Echo Systems Lab audio subsystem separates audio playback from gameplay logic.
+                    Instead of placing raw AudioClip arrays directly inside every weapon, button, menu, and player script,
+                    the project uses reusable audio data assets that describe how sounds should be selected, routed, pitched,
+                    spatialized, throttled, and played.
+                </p>
+
+                <p>
+                    The central GameAudioManager handles one-shot playback for gameplay, UI, weapons, footsteps, and other short sounds.
+                    MusicManager handles looping tracks and crossfades. SceneAmbienceController handles layered environmental loops.
+                    AudioSettingsManager connects player-facing sliders to exposed AudioMixer parameters.
+                </p>
+
+                <p>
+                    This keeps audio flexible as the project grows. A weapon can fire, reload, dry fire, and equip using different audio events.
+                    A menu can bind hover and click sounds automatically. A floor surface can define its own footstep, jump, and landing sounds.
+                    The result is less audio clutter in gameplay scripts and a cleaner tuning workflow in the Inspector.
+                </p>
+            </div>
+
+            <div class="about-highlights">
+                <div class="about-card">
+                    <h3>Primary Role</h3>
+                    <p>
+                        Provide reusable audio playback, mixer routing, volume settings, ambience, music, UI feedback, weapon sounds, and footsteps.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3>Core Loop</h3>
+                    <p>
+                        Gameplay event → Audio data lookup → Manager playback → Mixer routing → Player hears readable feedback.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3>Portfolio Value</h3>
+                    <p>
+                        Demonstrates subsystem design, ScriptableObject-driven tuning, audio routing, UI settings, and feedback architecture.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================
+         SCREENSHOTS
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>Audio System Snapshots</h2>
+            <p>
+                Screenshot references for audio settings, audio event data, weapon audio data,
+                mixer routing, music, ambience, footsteps, and UI audio binding.
+            </p>
+        </div>
+
+        <div class="grid projects systems-grid">
+
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/AudioSettings.jpg"
+                     alt="Unity gameplay screenshot of the audio settings menu showing master, music, SFX, weapons, UI, and ambience volume sliders">
+
+                <div class="card-body">
+                    <h3>Audio Settings Menu</h3>
+                    <p>
+                        Player-facing sliders connect to exposed mixer parameters for master, music, SFX, weapons, UI, and ambience volume.
+                    </p>
+                    <ul class="pill-list">
+                        <li>Settings UI</li>
+                        <li>Audio Mixer</li>
+                        <li>Volume Control</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/AudioEventDataInspector.jpg"
+                     alt="Unity Inspector screenshot of AudioEventData showing clip array, selection mode, mixer routing, volume, pitch range, spatial settings, cooldown, and playback rules">
+
+                <div class="card-body">
+                    <h3>AudioEventData</h3>
+                    <p>
+                        Reusable audio event assets define clip selection, pitch variation, volume variation, mixer routing, cooldown, and spatial settings.
+                    </p>
+                    <ul class="pill-list">
+                        <li>ScriptableObject</li>
+                        <li>One-Shot Audio</li>
+                        <li>Randomization</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/WeaponAudioDataInspector.jpg"
+                     alt="Unity Inspector screenshot of WeaponAudioData showing fire, dry fire, equip, reload start, reload insert, reload end, chamber, shell eject, and safety click audio events">
+
+                <div class="card-body">
+                    <h3>Weapon Audio Data</h3>
+                    <p>
+                        Weapon sounds are grouped into data assets so fire, dry fire, equip, reload, chamber, shell eject, and safety clicks stay modular.
+                    </p>
+                    <ul class="pill-list">
+                        <li>Weapon Audio</li>
+                        <li>Reload Events</li>
+                        <li>Data-Driven</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/AudioMixerRouting.jpg"
+                     alt="Unity Audio Mixer screenshot showing master, music, SFX, weapons, UI, and ambience mixer groups with exposed volume parameters">
+
+                <div class="card-body">
+                    <h3>Mixer Routing</h3>
+                    <p>
+                        Mixer groups separate sound categories so player settings can control broad audio layers without touching individual clips.
+                    </p>
+                    <ul class="pill-list">
+                        <li>Master</li>
+                        <li>Weapons</li>
+                        <li>UI</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/MusicManagerInspector.jpg"
+                     alt="Unity Inspector screenshot of MusicManager and MusicStarter showing track data, play on start, force restart, fade timing, and persistent music playback">
+
+                <div class="card-body">
+                    <h3>Music Playback</h3>
+                    <p>
+                        MusicManager uses two AudioSources for crossfading tracks and MusicStarter objects let scenes request music cleanly.
+                    </p>
+                    <ul class="pill-list">
+                        <li>MusicManager</li>
+                        <li>Crossfade</li>
+                        <li>Scene Start</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/FootstepSurfaceDataInspector.jpg"
+                     alt="Unity Inspector screenshot of FootstepSurfaceData showing walk, run, jump takeoff, landing audio, and optional step interval override values">
+
+                <div class="card-body">
+                    <h3>Footstep Surfaces</h3>
+                    <p>
+                        Footstep surface data lets floor objects define walk, run, jump, and landing audio through scene tags and raycast detection.
+                    </p>
+                    <ul class="pill-list">
+                        <li>Footsteps</li>
+                        <li>Surfaces</li>
+                        <li>Landing Audio</li>
+                    </ul>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         AUDIO FLOW
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>Audio Flow</h2>
+            <p>
+                The system keeps playback logic centralized while letting each feature request the sound it needs.
+            </p>
+        </div>
+
+        <div class="toolkit-grid">
+
+            <div class="toolkit-card">
+                <h4>1. Gameplay Event Fires</h4>
+                <p>
+                    A weapon fires, reload starts, a UI button is clicked, the player lands, or a scene starts music.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>2. Audio Data Is Read</h4>
+                <p>
+                    The calling system reads a relevant ScriptableObject such as AudioEventData, WeaponAudioData, UIAudioData, MusicTrackData, or FootstepSurfaceData.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>3. Manager Handles Playback</h4>
+                <p>
+                    GameAudioManager handles one-shots, MusicManager handles tracks, and SceneAmbienceController handles ambience layers.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>4. Mixer Group Routes Sound</h4>
+                <p>
+                    Sounds flow into mixer groups like Weapons, UI, Music, SFX, or Ambience so settings can adjust categories independently.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>5. Variation Is Applied</h4>
+                <p>
+                    Audio events can randomize clip, volume, and pitch so repeated sounds avoid becoming a tiny robotic woodpecker.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>6. Cleanup Is Automatic</h4>
+                <p>
+                    One-shot audio objects destroy themselves after playback, keeping the scene free of invisible sound debris.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         KEY COMPONENTS
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>Key Components</h2>
+            <p>
+                Each audio script handles one lane of responsibility so the subsystem stays expandable.
+            </p>
+        </div>
+
+        <div class="grid projects systems-grid">
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>AudioEventData</h3>
+
+                    <p>
+                        Defines reusable one-shot behavior: clip selection, random or sequential playback,
+                        mixer output, volume range, pitch range, spatial settings, cooldown, and pause behavior.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Audio Data</li>
+                        <li>Clip Selection</li>
+                        <li>Pitch Variation</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>GameAudioManager</h3>
+
+                    <p>
+                        Central one-shot playback service. It creates temporary AudioSource objects,
+                        applies audio event settings, plays the selected clip, and destroys the object after playback.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>One-Shots</li>
+                        <li>AudioSource Pool</li>
+                        <li>Cleanup</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>AudioSettingsManager</h3>
+
+                    <p>
+                        Loads and saves volume settings, converts normalized slider values to decibels,
+                        and applies them to exposed AudioMixer parameters.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Volume Settings</li>
+                        <li>PlayerPrefs</li>
+                        <li>Mixer Params</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>WeaponAudioData</h3>
+
+                    <p>
+                        Groups weapon-related audio events so each weapon can define fire, dry fire, equip,
+                        reload start, reload insert, reload end, chamber, shell eject, and safety click sounds.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Weapon Sounds</li>
+                        <li>Reload Cues</li>
+                        <li>Feedback Data</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>MusicManager</h3>
+
+                    <p>
+                        Plays MusicTrackData assets, crossfades between tracks, supports loop settings,
+                        and persists across scenes through the bootstrap.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Music</li>
+                        <li>Crossfade</li>
+                        <li>Persistent</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>SceneAmbienceController</h3>
+
+                    <p>
+                        Plays one or more ambience loop layers for a scene, fading them in and out while keeping ambience setup separate from music.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Ambience</li>
+                        <li>Layered Loops</li>
+                        <li>Fades</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>PlayerFootstepAudioController</h3>
+
+                    <p>
+                        Uses movement, grounded state, surface raycasts, and jump events to play walk, run, jump takeoff, and landing audio.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Footsteps</li>
+                        <li>Surface Tags</li>
+                        <li>Jump / Land</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>UIAudioBinder</h3>
+
+                    <p>
+                        Automatically binds UI audio to buttons, sliders, toggles, and dropdowns so menus can gain feedback without manual wiring on every control.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>UI Sounds</li>
+                        <li>Menu Feedback</li>
+                        <li>Auto Binding</li>
+                    </ul>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         SUBSYSTEM MAP
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>Subsystem Map</h2>
+            <p>
+                The audio system is split into data, playback, settings, and feature-specific requesters.
+            </p>
+        </div>
+
+        <div class="about-wrap">
+            <div class="about-text">
+                <h3>How the Pieces Connect</h3>
+
+                <p>
+                    AudioEventData is the core one-shot data unit. It describes what should play and how it should sound.
+                    GameAudioManager turns that data into a temporary AudioSource and handles playback details.
+                </p>
+
+                <p>
+                    Higher-level systems use their own data wrappers. WeaponAudioData groups weapon sounds.
+                    UIAudioData groups menu sounds. FootstepSurfaceData groups surface-specific step and landing sounds.
+                    MusicTrackData and AmbienceLoopData handle longer looping audio.
+                </p>
+
+                <p>
+                    AudioSettingsManager sits above all of this and controls mixer volume parameters,
+                    giving the player control over broad audio categories without changing individual asset values.
+                </p>
+            </div>
+
+            <div class="about-highlights">
+                <div class="about-card">
+                    <h3>Data Layer</h3>
+                    <ul>
+                        <li>AudioEventData</li>
+                        <li>WeaponAudioData</li>
+                        <li>UIAudioData</li>
+                        <li>FootstepSurfaceData</li>
+                        <li>MusicTrackData</li>
+                        <li>AmbienceLoopData</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3>Playback Layer</h3>
+                    <ul>
+                        <li>GameAudioManager</li>
+                        <li>MusicManager</li>
+                        <li>SceneAmbienceController</li>
+                        <li>AudioSource one-shots</li>
+                        <li>Crossfade sources</li>
+                        <li>Loop sources</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3>Feature Layer</h3>
+                    <ul>
+                        <li>PlayerWeaponAudioController</li>
+                        <li>PlayerFootstepAudioController</li>
+                        <li>UIAudioBinder</li>
+                        <li>MusicStarter</li>
+                        <li>Settings menu UI</li>
+                        <li>Scene ambience objects</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================
+         MIXER ROUTING
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>Mixer Routing & Settings</h2>
+            <p>
+                The mixer gives the player broad control while preserving per-sound tuning in data assets.
+            </p>
+        </div>
+
+        <div class="toolkit-grid">
+
+            <div class="toolkit-card">
+                <h4>Master Volume</h4>
+                <p>
+                    Controls the full audio output and acts as the final player-facing volume gate.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>Music Volume</h4>
+                <p>
+                    Controls looping music tracks managed by MusicManager and requested by MusicStarter objects.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>SFX Volume</h4>
+                <p>
+                    Handles general sound effects that do not fit into more specific subgroups.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>Weapons Volume</h4>
+                <p>
+                    Separates weapon fire, reload, dry fire, equip, chamber, and related mechanical sounds.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>UI Volume</h4>
+                <p>
+                    Controls button clicks, hovers, toggles, sliders, dropdowns, menu open, menu close, and back sounds.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>Ambience Volume</h4>
+                <p>
+                    Controls scene ambience layers separately from music, allowing environmental tone to be tuned independently.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         FEATURE BREAKDOWN
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>Feature Breakdown</h2>
+            <p>
+                The subsystem covers four major audio families: weapons, footsteps, interface sounds, and long-form loops.
+            </p>
+        </div>
+
+        <div class="about-wrap">
+            <div class="about-text">
+                <h3>Weapons</h3>
+
+                <p>
+                    Weapon audio is routed through PlayerWeaponAudioController and WeaponAudioData.
+                    The weapon controller raises events when the weapon fires, dry fires, reloads, inserts a round, finishes reloading, or equips.
+                    The audio controller listens to those events and plays the appropriate data-driven sound.
+                </p>
+
+                <h3>Footsteps</h3>
+
+                <p>
+                    Footsteps use surface data instead of hardcoded clips. The player raycasts down to find a FootstepSurfaceTag,
+                    then selects the current surface audio. This supports different walk, run, jump, and landing sounds for tile, grass,
+                    metal, wood, or future materials.
+                </p>
+
+                <h3>Menus</h3>
+
+                <p>
+                    UIAudioBinder can attach sound behavior to buttons, sliders, toggles, and dropdowns.
+                    This keeps menu feedback consistent without manually wiring every button click by hand.
+                </p>
+
+                <h3>Music & Ambience</h3>
+
+                <p>
+                    Music and ambience are separated. MusicManager handles major tracks and crossfades.
+                    SceneAmbienceController handles layered loops that belong to the current environment.
+                </p>
+            </div>
+
+            <div class="about-highlights">
+                <div class="about-card">
+                    <h3>Weapon Events</h3>
+                    <ul>
+                        <li>Fire</li>
+                        <li>Dry fire</li>
+                        <li>Equip</li>
+                        <li>Reload start</li>
+                        <li>Reload insert</li>
+                        <li>Reload end</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3>Surface Events</h3>
+                    <ul>
+                        <li>Walk footstep</li>
+                        <li>Run footstep</li>
+                        <li>Jump takeoff</li>
+                        <li>Landing</li>
+                        <li>Surface override intervals</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3>UI Events</h3>
+                    <ul>
+                        <li>Button hover</li>
+                        <li>Button click</li>
+                        <li>Menu open</li>
+                        <li>Menu close</li>
+                        <li>Slider change</li>
+                        <li>Toggle change</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================
+         SOURCE CODE DROPDOWNS
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>Source Code Snapshot</h2>
+            <p>
+                These dropdowns show the core reusable audio event data and one-shot playback manager.
+                Most other audio pieces are best shown through Inspector screenshots because their value is in clean data wiring.
+            </p>
+        </div>
+
+        <div class="source-details-wrap">
+
+            <details class="source-details">
+                <summary>
+                    <span>AudioEventData.cs</span>
+                    <small>Reusable one-shot audio data for clips, mixer routing, volume, pitch, spatial settings, cooldowns, and selection mode</small>
+                </summary>
+
+                <pre class="code-card"><code>//-----AudioEventData.cs START-----
+using UnityEngine;
+using UnityEngine.Audio;
+
+public enum AudioEventSelectionMode
+{
+    Random,
+    Sequential
+}
+
+[CreateAssetMenu(
+    fileName = "AudioEventData_NewEvent",
+    menuName = "Echo Systems Lab/Audio/Audio Event Data")]
+public class AudioEventData : ScriptableObject
+{
+    [Header("Clips")]
+    public AudioClip[] clips;
+    public AudioEventSelectionMode selectionMode = AudioEventSelectionMode.Random;
+
+    [Header("Mixer Routing")]
+    public AudioMixerGroup outputMixerGroup;
+
+    [Header("Volume")]
+    [Range(0f, 1f)]
+    public float volume = 1f;
+
+    [Tooltip("Optional extra random multiplier applied after Volume.")]
+    public Vector2 volumeMultiplierRange = new Vector2(1f, 1f);
+
+    [Header("Pitch")]
+    public Vector2 pitchRange = new Vector2(1f, 1f);
+
+    [Header("Spatial Settings")]
+    [Range(0f, 1f)]
+    public float spatialBlend = 0f;
+
+    public float minDistance = 1f;
+    public float maxDistance = 30f;
+    public AudioRolloffMode rolloffMode = AudioRolloffMode.Logarithmic;
+
+    [Header("Playback Rules")]
+    [Tooltip("Prevents this AudioEventData from playing again until this cooldown expires.")]
+    public float cooldownSeconds = 0f;
+
+    [Tooltip("Useful for pause-menu UI sounds if you later use AudioListener.pause.")]
+    public bool ignoreListenerPause = false;
+
+    [Header("Debug")]
+    public bool debugLogs = false;
+
+    [System.NonSerialized] private int nextSequentialIndex;
+    [System.NonSerialized] private float nextAllowedPlayTime;
+
+    public bool TryGetClip(out AudioClip clip)
+    {
+        clip = null;
+
+        if (!CanPlay())
+        {
+            if (debugLogs)
+                Debug.Log($"{name} audio event blocked by cooldown.");
+
+            return false;
+        }
+
+        clip = SelectClip();
+
+        if (clip == null)
+        {
+            if (debugLogs)
+                Debug.LogWarning($"{name} audio event has no valid clip.");
+
+            return false;
+        }
+
+        MarkPlayed();
+        return true;
+    }
+
+    public void ApplyToAudioSource(AudioSource source, AudioMixerGroup fallbackMixerGroup)
+    {
+        if (source == null)
+            return;
+
+        source.playOnAwake = false;
+        source.loop = false;
+
+        source.outputAudioMixerGroup = outputMixerGroup != null
+            ? outputMixerGroup
+            : fallbackMixerGroup;
+
+        source.volume = GetRandomVolume();
+        source.pitch = GetRandomPitch();
+
+        source.spatialBlend = Mathf.Clamp01(spatialBlend);
+        source.minDistance = Mathf.Max(0f, minDistance);
+        source.maxDistance = Mathf.Max(source.minDistance, maxDistance);
+        source.rolloffMode = rolloffMode;
+        source.ignoreListenerPause = ignoreListenerPause;
+    }
+
+    public float GetRandomPitch()
+    {
+        float minPitch = Mathf.Min(pitchRange.x, pitchRange.y);
+        float maxPitch = Mathf.Max(pitchRange.x, pitchRange.y);
+
+        return Random.Range(minPitch, maxPitch);
+    }
+
+    public float GetRandomVolume()
+    {
+        float minMultiplier = Mathf.Min(volumeMultiplierRange.x, volumeMultiplierRange.y);
+        float maxMultiplier = Mathf.Max(volumeMultiplierRange.x, volumeMultiplierRange.y);
+
+        float multiplier = Random.Range(minMultiplier, maxMultiplier);
+        return Mathf.Clamp01(volume * multiplier);
+    }
+
+    public float GetPlaybackDuration(AudioClip clip, float pitch)
+    {
+        if (clip == null)
+            return 0f;
+
+        float safePitch = Mathf.Max(0.01f, Mathf.Abs(pitch));
+        return clip.length / safePitch;
+    }
+
+    private bool CanPlay()
+    {
+        if (cooldownSeconds &lt;= 0f)
+            return true;
+
+        return Time.unscaledTime &gt;= nextAllowedPlayTime;
+    }
+
+    private void MarkPlayed()
+    {
+        if (cooldownSeconds &lt;= 0f)
+            return;
+
+        nextAllowedPlayTime = Time.unscaledTime + cooldownSeconds;
+    }
+
+    private AudioClip SelectClip()
+    {
+        if (clips == null || clips.Length == 0)
+            return null;
+
+        switch (selectionMode)
+        {
+            case AudioEventSelectionMode.Sequential:
+                return SelectSequentialClip();
+
+            case AudioEventSelectionMode.Random:
+            default:
+                return SelectRandomClip();
+        }
+    }
+
+    private AudioClip SelectRandomClip()
+    {
+        if (clips == null || clips.Length == 0)
+            return null;
+
+        for (int i = 0; i &lt; clips.Length; i++)
+        {
+            AudioClip clip = clips[Random.Range(0, clips.Length)];
+
+            if (clip != null)
+                return clip;
+        }
+
+        return null;
+    }
+
+    private AudioClip SelectSequentialClip()
+    {
+        if (clips == null || clips.Length == 0)
+            return null;
+
+        for (int i = 0; i &lt; clips.Length; i++)
+        {
+            int index = nextSequentialIndex;
+            nextSequentialIndex++;
+
+            if (nextSequentialIndex &gt;= clips.Length)
+                nextSequentialIndex = 0;
+
+            AudioClip clip = clips[index];
+
+            if (clip != null)
+                return clip;
+        }
+
+        return null;
+    }
+}
+//-----AudioEventData.cs END-----</code></pre>
+            </details>
+
+            <details class="source-details">
+                <summary>
+                    <span>GameAudioManager.cs</span>
+                    <small>Central one-shot playback, temporary AudioSource creation, mixer fallback routing, and cleanup</small>
+                </summary>
+
+                <pre class="code-card"><code>//-----GameAudioManager.cs START-----
+using System.Collections;
+using UnityEngine;
+using UnityEngine.Audio;
+
+public class GameAudioManager : MonoBehaviour
+{
+    public static GameAudioManager Instance { get; private set; }
+
+    [Header("Lifetime")]
+    [SerializeField] private bool dontDestroyOnLoad = true;
+
+    [Header("Fallback Routing")]
+    [Tooltip("Used if an AudioEventData does not have an output mixer group assigned.")]
+    [SerializeField] private AudioMixerGroup fallbackMixerGroup;
+
+    [Header("One Shot Cleanup")]
+    [SerializeField] private float cleanupPaddingSeconds = 0.15f;
+
+    [Header("Debug")]
+    [SerializeField] private bool debugLogs = false;
+
+    private Transform oneShotRoot;
+
+    private void Awake()
+    {
+        if (Instance != null &amp;&amp; Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+
+        if (dontDestroyOnLoad)
+            DontDestroyOnLoad(gameObject);
+
+        CreateOneShotRoot();
+    }
+
+    public AudioSource PlayOneShot(AudioEventData audioEvent)
+    {
+        return PlayOneShotInternal(
+            audioEvent,
+            transform.position,
+            null,
+            false);
+    }
+
+    public AudioSource PlayOneShotAtPosition(AudioEventData audioEvent, Vector3 worldPosition)
+    {
+        return PlayOneShotInternal(
+            audioEvent,
+            worldPosition,
+            null,
+            true);
+    }
+
+    public AudioSource PlayOneShotAttached(AudioEventData audioEvent, Transform parent)
+    {
+        Vector3 position = parent != null
+            ? parent.position
+            : transform.position;
+
+        return PlayOneShotInternal(
+            audioEvent,
+            position,
+            parent,
+            parent != null);
+    }
+
+    private AudioSource PlayOneShotInternal(
+        AudioEventData audioEvent,
+        Vector3 worldPosition,
+        Transform parent,
+        bool useWorldPosition)
+    {
+        if (audioEvent == null)
+            return null;
+
+        if (!audioEvent.TryGetClip(out AudioClip clip))
+            return null;
+
+        GameObject audioObject = new GameObject($"AudioEvent_{audioEvent.name}");
+
+        if (parent != null)
+        {
+            audioObject.transform.SetParent(parent);
+            audioObject.transform.localPosition = Vector3.zero;
+            audioObject.transform.localRotation = Quaternion.identity;
+        }
+        else
+        {
+            audioObject.transform.SetParent(oneShotRoot);
+            audioObject.transform.position = useWorldPosition ? worldPosition : transform.position;
+            audioObject.transform.rotation = Quaternion.identity;
+        }
+
+        AudioSource source = audioObject.AddComponent&lt;AudioSource&gt;();
+
+        audioEvent.ApplyToAudioSource(source, fallbackMixerGroup);
+
+        source.clip = clip;
+        source.Play();
+
+        float duration = audioEvent.GetPlaybackDuration(clip, source.pitch);
+        StartCoroutine(DestroyAfterPlayback(audioObject, duration + cleanupPaddingSeconds));
+
+        if (debugLogs)
+            Debug.Log($"Played audio event: {audioEvent.name} / Clip: {clip.name}");
+
+        return source;
+    }
+
+    private IEnumerator DestroyAfterPlayback(GameObject audioObject, float delaySeconds)
+    {
+        if (delaySeconds &gt; 0f)
+            yield return new WaitForSecondsRealtime(delaySeconds);
+
+        if (audioObject != null)
+            Destroy(audioObject);
+    }
+
+    private void CreateOneShotRoot()
+    {
+        if (oneShotRoot != null)
+            return;
+
+        GameObject rootObject = new GameObject("OneShotAudioRoot");
+        rootObject.transform.SetParent(transform);
+        rootObject.transform.localPosition = Vector3.zero;
+        rootObject.transform.localRotation = Quaternion.identity;
+
+        oneShotRoot = rootObject.transform;
+    }
+}
+//-----GameAudioManager.cs END-----</code></pre>
+            </details>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         PROBLEMS SOLVED
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>Problems Solved</h2>
+            <p>
+                This system came from cleaning audio out of gameplay scripts and giving sound its own proper machinery.
+            </p>
+        </div>
+
+        <div class="about-wrap">
+            <div class="about-text">
+                <h3>Key Iteration Wins</h3>
+
+                <p>
+                    Early weapon audio could work when sounds were directly attached to weapon handling or gameplay scripts,
+                    but that approach started to create duplicated fields, unclear routing, and scattered playback logic.
+                </p>
+
+                <p>
+                    Moving audio into reusable data assets made the system easier to inspect and tune.
+                    A reload sound failing was no longer a code mystery. It could be checked directly in the AudioEventData asset,
+                    where missing clips, routing, cooldowns, pitch, and volume settings are visible.
+                </p>
+
+                <p>
+                    The persistent bootstrap also made audio more reliable across scene changes.
+                    Music, settings, save systems, and one-shot playback can live on the root bootstrap object,
+                    avoiding duplicate managers and scene-specific setup traps.
+                </p>
+            </div>
+
+            <div class="about-highlights">
+                <div class="about-card">
+                    <h3>Scattered Clips</h3>
+                    <p>
+                        Replaced raw clip references spread across gameplay scripts with reusable audio event data.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3>Reload Audio Debugging</h3>
+                    <p>
+                        Audio event assets make missing clips, cooldowns, routing, and pitch settings easy to inspect.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3>Scene Persistence</h3>
+                    <p>
+                        Core audio managers live under the bootstrap so they can persist cleanly between hub, menu, and trial scenes.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================
+         PORTFOLIO VALUE
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>Portfolio Value</h2>
+            <p>
+                The audio subsystem shows that feedback systems are architecture too, not just polish added at the end.
+            </p>
+        </div>
+
+        <div class="toolkit-grid">
+
+            <div class="toolkit-card">
+                <h4>Reusable Data</h4>
+                <p>
+                    AudioEventData, WeaponAudioData, UIAudioData, MusicTrackData, AmbienceLoopData, and FootstepSurfaceData make audio behavior configurable.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>Clean Separation</h4>
+                <p>
+                    Weapons, UI, movement, music, and ambience request audio without owning low-level playback and cleanup logic.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>Player Control</h4>
+                <p>
+                    Mixer-backed settings give players category-level control over music, SFX, weapons, UI, and ambience.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>Debuggable Workflow</h4>
+                <p>
+                    Missing clips and routing issues are visible in Inspector assets instead of buried inside controller branches.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>Scalable Feedback</h4>
+                <p>
+                    New weapons, surfaces, menus, tracks, and scenes can plug into the same audio framework.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>Professional Architecture</h4>
+                <p>
+                    The subsystem demonstrates event-based feedback, persistence, data-driven tuning, and player-facing settings.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         FOOTER
+    ================================ -->
+    <footer class="site-footer">
+        <p>&copy; <span id="year"></span> Jesse “Echo” Adams</p>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>
+<!-- systems/audio-subsystem.html END -->

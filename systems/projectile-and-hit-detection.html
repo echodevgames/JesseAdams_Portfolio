@@ -1,0 +1,877 @@
+<!-- systems/projectile-and-hit-detection.html START -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- ================================
+         Metadata & SEO
+    ================================ -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- systems/projectile-and-hit-detection.html -->
+    <title>Projectile & Hit Detection | Unity Systems Portfolio | Jesse Adams</title>
+    <meta name="description" content="A Unity C# projectile and hit detection system breakdown for Echo Systems Lab covering projectile spawning, sweep detection, trigger and collision routing, damage payloads, IDamageable targets, dropped projectile behavior, and mission hit registration." />
+
+    <!-- ================================
+         Favicon & Font
+    ================================ -->
+    <link rel="icon" href="../assets/favicon.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+    <!-- ================================
+         CSS
+    ================================ -->
+    <link rel="stylesheet" href="../CSS/style.css" />
+    <link rel="stylesheet" href="../CSS/styleSystems.css" />
+</head>
+
+<body>
+
+    <!-- ================================
+         HEADER / NAV
+    ================================ -->
+    <header class="site-header">
+        <a class="brand" href="../index.html#home">Jesse Adams - EchoDevGames</a>
+
+        <button class="nav-toggle" aria-label="Open navigation" aria-expanded="false">☰</button>
+
+        <nav class="site-nav" aria-label="Primary">
+            <a href="../index.html#home">Home</a>
+            <a href="../tabs/systems.html">Systems</a>
+            <a href="../tabs/caseStudies.html">Case Studies</a>
+            <a href="../tabs/projects.html">Projects</a>
+            <a href="../tabs/contact.html">Contact</a>
+            <a class="btn small" href="../assets/Resumes/Jesse_Adams_Resume_6-23-26.pdf" target="_blank" rel="noopener">Resume</a>
+        </nav>
+    </header>
+
+    <!-- ================================
+         HERO
+    ================================ -->
+    <main class="hero">
+        <div class="hero-inner">
+            <h1>Projectile & Hit Detection</h1>
+
+            <p class="lead">
+                A reusable Unity projectile system for weapon fire, pellet spreads, sweep detection,
+                trigger and collision routing, damage payloads, owner filtering, dropped missed projectiles,
+                and mission hit registration.
+            </p>
+
+            <ul class="pill-list">
+                <li>Unity 6</li>
+                <li>C#</li>
+                <li>Projectiles</li>
+                <li>Hit Detection</li>
+                <li>IDamageable</li>
+                <li>DamageInfo</li>
+            </ul>
+
+            <div class="cta">
+                <a class="btn" href="../tabs/systems.html">Back to Systems</a>
+                <a class="btn ghost" href="target-spawning-and-objectives.html">Target Spawning</a>
+                <a class="btn ghost" href="weapon-data-and-loadout.html">Weapon Data</a>
+                <a class="btn ghost" href="weapon-handling-feedback.html">Weapon Handling</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- ================================
+         OVERVIEW
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>System Overview</h2>
+            <p>
+                This system handles what happens after the player pulls the trigger and before the target breaks.
+            </p>
+        </div>
+
+        <div class="about-wrap">
+            <div class="about-text">
+                <h3>What It Does</h3>
+
+                <p>
+                    The Projectile & Hit Detection system turns weapon fire into physical gameplay events.
+                    A weapon spawns one or more projectiles, each projectile travels forward using its configured speed,
+                    checks for valid collisions, ignores the player who fired it, and routes damage into any object that implements IDamageable.
+                </p>
+
+                <p>
+                    The projectile carries weapon context through DamageInfo, including damage amount, weapon ID,
+                    weapon type, source object, and hit point. This keeps the target system flexible because targets do not need to know
+                    which weapon fired the shot. They only need to know that damage arrived.
+                </p>
+
+                <p>
+                    The system also supports missed projectile behavior. Projectiles can destroy after a lifetime,
+                    or they can lose their active damage state and drop to the ground as harmless physical objects.
+                </p>
+            </div>
+
+            <div class="about-highlights">
+                <div class="about-card">
+                    <h3>Primary Role</h3>
+                    <p>
+                        Move projectiles through the world, detect valid hits, route damage, and report successful target hits to mission tracking.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3>Core Loop</h3>
+                    <p>
+                        Spawn projectile → Move forward → Sweep for hit → Build DamageInfo → Damage target → Destroy or drop.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3>Portfolio Value</h3>
+                    <p>
+                        Demonstrates collision handling, interface-based damage routing, context payloads, projectile cleanup, and reusable weapon-fire architecture.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================
+         SCREENSHOTS
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>Projectile System Snapshots</h2>
+            <p>
+                Screenshot references for projectile inspector setup, ammo data, pellet spread, target impacts,
+                dropped missed projectiles, and damage routing.
+            </p>
+        </div>
+
+        <div class="grid projects systems-grid">
+
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/ProjectileInspector.jpg"
+                     alt="Unity Inspector screenshot of a projectile prefab showing Projectile component fields for sweep detection, sweep radius, hit mask, miss behavior, drop timing, rigidbody, and collider setup">
+
+                <div class="card-body">
+                    <h3>Projectile Prefab Setup</h3>
+                    <p>
+                        Projectile prefabs expose hit detection and miss behavior values so bullets, shells, and pellets can behave differently.
+                    </p>
+                    <ul class="pill-list">
+                        <li>Projectile</li>
+                        <li>Rigidbody</li>
+                        <li>Collider</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/AmmoDataInspector.jpg"
+                     alt="Unity Inspector screenshot of AmmoData showing projectile prefab, damage, speed, lifetime, ammo display name, and ammo identity">
+
+                <div class="card-body">
+                    <h3>AmmoData Configuration</h3>
+                    <p>
+                        AmmoData defines projectile prefab, damage, speed, lifetime, and ammo identity before the projectile is initialized.
+                    </p>
+                    <ul class="pill-list">
+                        <li>AmmoData</li>
+                        <li>Damage</li>
+                        <li>Projectile Prefab</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/ProjectileHitGameplay.jpg"
+                     alt="Gameplay screenshot showing a projectile or pellet hitting a target in the target range">
+
+                <div class="card-body">
+                    <h3>Target Impact</h3>
+                    <p>
+                        Valid hits route damage into TargetHealth through IDamageable, then mission hit tracking updates accuracy and score.
+                    </p>
+                    <ul class="pill-list">
+                        <li>Hit Routing</li>
+                        <li>TargetHealth</li>
+                        <li>Mission Hit</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/ShotgunSpreadGameplay.jpg"
+                     alt="Gameplay screenshot showing shotgun spread or multiple projectile pellets traveling toward target range targets">
+
+                <div class="card-body">
+                    <h3>Projectile Patterns</h3>
+                    <p>
+                        Multi-projectile weapons can spawn several projectiles per shot, supporting shotgun-style spread patterns.
+                    </p>
+                    <ul class="pill-list">
+                        <li>Pellets</li>
+                        <li>Spread</li>
+                        <li>Multi-Shot</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/DroppedProjectilesGameplay.jpg"
+                     alt="Gameplay screenshot showing missed projectiles or shotgun pellets dropped harmlessly on the ground after their active flight time expires">
+
+                <div class="card-body">
+                    <h3>Dropped Missed Projectiles</h3>
+                    <p>
+                        Missed shots can become harmless dropped objects instead of disappearing instantly, giving the scene extra physical feedback.
+                    </p>
+                    <ul class="pill-list">
+                        <li>Miss Behavior</li>
+                        <li>Drop</li>
+                        <li>Cleanup</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/DamageInfoDiagram.png"
+                     alt="Screenshot or diagram showing projectile damage routing through DamageInfo into IDamageable and TargetHealth">
+
+                <div class="card-body">
+                    <h3>Damage Payload Routing</h3>
+                    <p>
+                        DamageInfo carries weapon context through the hit pipeline so targets and mission systems can react intelligently.
+                    </p>
+                    <ul class="pill-list">
+                        <li>DamageInfo</li>
+                        <li>IDamageable</li>
+                        <li>Loose Coupling</li>
+                    </ul>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         HIT FLOW
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>Hit Detection Flow</h2>
+            <p>
+                The projectile behaves like a tiny courier goblin carrying damage paperwork at unsafe speeds.
+            </p>
+        </div>
+
+        <div class="toolkit-grid">
+
+            <div class="toolkit-card">
+                <h4>1. Weapon Spawns Projectile</h4>
+                <p>
+                    The weapon controller creates the projectile prefab and passes in damage, weapon ID, weapon type, owner, speed, and lifetime.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>2. Projectile Initializes</h4>
+                <p>
+                    The projectile stores its damage context, disables gravity, sets velocity, caches previous position, and starts its lifetime timer.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>3. Sweep Detection Runs</h4>
+                <p>
+                    If enabled, the projectile sphere casts between its previous and current positions to reduce missed hits at high speeds.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>4. Collider Is Filtered</h4>
+                <p>
+                    The projectile ignores its owner, owner child objects, and other projectiles so shots do not collide with the firing player or pellet siblings.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>5. IDamageable Is Found</h4>
+                <p>
+                    The hit object, its parent, or its children are checked for IDamageable so the damage target can be flexible.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>6. DamageInfo Is Sent</h4>
+                <p>
+                    The projectile builds a DamageInfo payload and sends it to the damageable target, then destroys itself.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         DETECTION MODES
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>Detection Modes</h2>
+            <p>
+                The system combines Unity collision events with optional sweep detection for more reliable projectile hits.
+            </p>
+        </div>
+
+        <div class="about-wrap">
+            <div class="about-text">
+                <h3>Why Sweep Detection Matters</h3>
+
+                <p>
+                    Fast projectiles can move far between physics steps. If a small projectile skips across a target between frames,
+                    a normal collision event may not always tell the full story. Sweep detection helps cover that gap by checking
+                    the path from the previous position to the current position.
+                </p>
+
+                <p>
+                    The projectile uses a sphere cast with a configurable radius and hit mask.
+                    This gives the hit test a small amount of thickness, which works well for bullets, pellets, and fast target range projectiles.
+                </p>
+
+                <p>
+                    Trigger and collision callbacks still remain available, which makes the projectile more forgiving across different prefab setups.
+                    The projectile can work with trigger colliders, solid colliders, and sweep checks depending on the object setup.
+                </p>
+            </div>
+
+            <div class="about-highlights">
+                <div class="about-card">
+                    <h3>Sweep Detection</h3>
+                    <ul>
+                        <li>Uses previous position</li>
+                        <li>Checks travel distance</li>
+                        <li>Sphere casts through hit mask</li>
+                        <li>Sorts hits by distance</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3>Trigger Hits</h3>
+                    <ul>
+                        <li>Supports trigger colliders</li>
+                        <li>Works with target hit volumes</li>
+                        <li>Skips dropped projectiles</li>
+                        <li>Routes through ProcessHit</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3>Collision Hits</h3>
+                    <ul>
+                        <li>Supports solid colliders</li>
+                        <li>Uses contact point when available</li>
+                        <li>Can destroy on solid misses</li>
+                        <li>Shares same damage path</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================
+         DAMAGE ROUTING
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>Damage Routing</h2>
+            <p>
+                Projectiles do not need to know what a target is. They only need to know whether it can take damage.
+            </p>
+        </div>
+
+        <div class="toolkit-grid">
+
+            <div class="toolkit-card">
+                <h4>IDamageable Interface</h4>
+                <p>
+                    The projectile searches for IDamageable instead of directly referencing TargetHealth.
+                    This keeps the projectile reusable for future enemies, props, destructibles, or test objects.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>DamageInfo Payload</h4>
+                <p>
+                    DamageInfo stores damage amount, weapon ID, weapon type, source object, and hit point.
+                    The target receives context without needing to inspect the projectile.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>Mission Hit Registration</h4>
+                <p>
+                    Valid damageable hits notify the mission controller, allowing accuracy, hit count, score, and weapon XP systems to respond.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>Owner Filtering</h4>
+                <p>
+                    The projectile ignores the player object that fired it and any child colliders under that owner.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>Projectile Filtering</h4>
+                <p>
+                    Projectiles ignore other projectiles so pellet clusters and rapid fire do not collide into their own tiny traffic jam.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>Solid Miss Handling</h4>
+                <p>
+                    If a projectile hits a non-damageable solid object, it can destroy itself instead of bouncing forever or haunting the range.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         MISS BEHAVIOR
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>Miss Behavior</h2>
+            <p>
+                Not every shot hits a target. The system still needs those misses to behave cleanly.
+            </p>
+        </div>
+
+        <div class="about-wrap">
+            <div class="about-text">
+                <h3>Destroy or Drop</h3>
+
+                <p>
+                    Projectiles support two miss behaviors. DestroyAfterLifetime is the cleanest option:
+                    a projectile lives for a set amount of time and then disappears.
+                </p>
+
+                <p>
+                    DropAfterFlightTime creates a more physical result. After the active flight window ends,
+                    the projectile becomes harmless, turns gravity back on, reduces its velocity, receives random angular velocity,
+                    and optionally makes its collider solid.
+                </p>
+
+                <p>
+                    This is especially useful for visible pellets, darts, bolts, shells, or other projectiles where misses should leave a little battlefield confetti behind.
+                    It adds feedback without letting missed projectiles keep damaging things after their active flight is over.
+                </p>
+            </div>
+
+            <div class="about-highlights">
+                <div class="about-card">
+                    <h3>Destroy After Lifetime</h3>
+                    <ul>
+                        <li>Simple cleanup</li>
+                        <li>Good for invisible bullets</li>
+                        <li>Low scene clutter</li>
+                        <li>Predictable lifetime</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3>Drop After Flight Time</h3>
+                    <ul>
+                        <li>Projectile becomes harmless</li>
+                        <li>Gravity turns on</li>
+                        <li>Velocity is reduced</li>
+                        <li>Object cleans up later</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3>Safety Detail</h3>
+                    <p>
+                        Dropped projectiles set their hit state so they stop dealing damage before becoming physical clutter.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================
+         KEY COMPONENTS
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>Key Components</h2>
+            <p>
+                The projectile pipeline stays compact by separating ammo data, projectile movement, damage payloads, and target response.
+            </p>
+        </div>
+
+        <div class="grid projects systems-grid">
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>Projectile</h3>
+
+                    <p>
+                        Handles initialization, velocity, lifetime, sweep detection, collision callbacks,
+                        owner filtering, damage routing, miss behavior, and cleanup.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Movement</li>
+                        <li>Hit Detection</li>
+                        <li>Cleanup</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>AmmoData</h3>
+
+                    <p>
+                        Defines projectile prefab, damage, speed, lifetime, ammo identity, and projectile behavior values used during weapon fire.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Ammo</li>
+                        <li>Damage</li>
+                        <li>Speed</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>DamageInfo</h3>
+
+                    <p>
+                        Carries damage amount, weapon ID, weapon type, source object, and hit position into the target response layer.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Damage Payload</li>
+                        <li>Weapon Context</li>
+                        <li>Hit Point</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>IDamageable</h3>
+
+                    <p>
+                        Provides a simple contract for anything that can receive damage from projectiles.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Interface</li>
+                        <li>Loose Coupling</li>
+                        <li>Reusable Damage</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>PlayerWeaponController</h3>
+
+                    <p>
+                        Spawns projectiles, creates projectile patterns, applies spread, and passes weapon context into projectile initialization.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Spawner</li>
+                        <li>Spread</li>
+                        <li>Weapon Context</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>TargetHealth</h3>
+
+                    <p>
+                        Receives DamageInfo through IDamageable, subtracts health, plays destruction feedback, and notifies mission target logic.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Health</li>
+                        <li>Damage Response</li>
+                        <li>Target Destroyed</li>
+                    </ul>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         INSPECTOR WORKFLOW
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>Inspector Workflow</h2>
+            <p>
+                This page works best with inspector and gameplay screenshots rather than a full script dump.
+            </p>
+        </div>
+
+        <div class="about-wrap">
+            <div class="about-text">
+                <h3>What To Show Visually</h3>
+
+                <p>
+                    The Projectile component has useful Inspector values: sweep detection toggle,
+                    sweep radius, hit mask, miss behavior, drop timing, dropped velocity multiplier,
+                    collider behavior, Rigidbody setup, and prefab configuration.
+                </p>
+
+                <p>
+                    AmmoData is also important to show because it explains where projectile damage, speed, lifetime,
+                    and prefab references come from. Together, the projectile prefab and ammo asset tell a clear story:
+                    weapons ask ammo what to fire, then projectiles handle travel and hit routing.
+                </p>
+
+                <p>
+                    For gameplay shots, the strongest visuals are projectile impact, pellet spread, missed pellets dropped on the ground,
+                    and a target being destroyed after receiving routed damage.
+                </p>
+            </div>
+
+            <div class="about-highlights">
+                <div class="about-card">
+                    <h3>Best Inspector Shots</h3>
+                    <ul>
+                        <li>Projectile prefab with component expanded</li>
+                        <li>AmmoData asset with projectile settings</li>
+                        <li>Shotgun ammo or buckshot data</li>
+                        <li>TargetHealth damage receiver</li>
+                        <li>Layer mask and collider setup</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3>Best Gameplay Shots</h3>
+                    <ul>
+                        <li>Projectile impact moment</li>
+                        <li>Pellet spread in the range</li>
+                        <li>Dropped missed pellets</li>
+                        <li>Destroyed target after hit</li>
+                        <li>HUD hit count after damage</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3>Good Story Angle</h3>
+                    <p>
+                        Reusable projectile architecture that supports different weapons, ammo types, target objects, and miss behaviors.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================
+         PROBLEMS SOLVED
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>Problems Solved</h2>
+            <p>
+                This system grew from simple bullet collision into a reusable damage pipeline.
+            </p>
+        </div>
+
+        <div class="about-wrap">
+            <div class="about-text">
+                <h3>Key Iteration Wins</h3>
+
+                <p>
+                    The first projectile loop only needed to hit basic targets.
+                    As the weapon system expanded, projectiles needed to support spread patterns, different ammo data,
+                    reliable fast-hit detection, and cleaner missed-shot behavior.
+                </p>
+
+                <p>
+                    Sweep detection improved reliability for fast projectiles.
+                    DamageInfo improved context by letting each hit carry weapon identity, type, source, and impact position.
+                    IDamageable kept the projectile from depending directly on TargetHealth.
+                </p>
+
+                <p>
+                    The dropped projectile behavior added a small layer of physical feedback while keeping gameplay safe:
+                    once a projectile drops, it becomes harmless and eventually cleans itself up.
+                </p>
+            </div>
+
+            <div class="about-highlights">
+                <div class="about-card">
+                    <h3>Before</h3>
+                    <p>
+                        Projectiles were mainly a simple target damage test with limited miss behavior.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3>After</h3>
+                    <p>
+                        Projectiles support sweep detection, owner filtering, IDamageable routing, DamageInfo payloads, and harmless dropped misses.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3>Result</h3>
+                    <p>
+                        The same projectile pipeline can support pistols, shotguns, future weapons, destructibles, and target range objectives.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================
+         PORTFOLIO VALUE
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>Portfolio Value</h2>
+            <p>
+                This system shows the practical collision and damage-routing work underneath the weapon feel.
+            </p>
+        </div>
+
+        <div class="about-wrap">
+            <div class="about-text">
+                <h3>What This Demonstrates</h3>
+
+                <p>
+                    Projectile & Hit Detection demonstrates reusable Unity gameplay architecture for ranged combat and target interaction.
+                    It shows projectile initialization, physics setup, sweep detection, owner filtering, interface-based damage routing,
+                    damage payload design, mission hit registration, and cleanup behavior.
+                </p>
+
+                <p>
+                    This is important because projectile systems can become brittle when every weapon, target, and collision case is hardcoded.
+                    This system keeps those responsibilities separated so new weapons and target types can reuse the same pipeline.
+                </p>
+
+                <p>
+                    For portfolio purposes, this is a strong technical support page:
+                    it proves that the weapon system is not just visual polish. There is a reusable hit pipeline underneath the fireworks.
+                </p>
+            </div>
+
+            <div class="about-highlights">
+                <div class="about-card">
+                    <h3>Demonstrates</h3>
+                    <ul>
+                        <li>Physics-based projectile handling</li>
+                        <li>Sweep hit detection</li>
+                        <li>Interface-based damage routing</li>
+                        <li>Reusable damage payloads</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3>Good For</h3>
+                    <ul>
+                        <li>Gameplay programmer roles</li>
+                        <li>Unity systems roles</li>
+                        <li>Combat systems discussion</li>
+                        <li>Portfolio walkthroughs</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3>Next Improvements</h3>
+                    <ul>
+                        <li>Impact decals</li>
+                        <li>Surface-specific hit effects</li>
+                        <li>Ricochet support</li>
+                        <li>Projectile pooling</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================
+         RELATED SYSTEMS
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>Related Systems</h2>
+            <p>
+                Projectile hit detection connects weapons, ammo, targets, mission tracking, and feedback systems.
+            </p>
+        </div>
+
+        <div class="grid projects systems-grid">
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>Target Spawning & Objective Modes</h3>
+                    <p>
+                        Covers target groups, target slots, respawning objectives, destroy-all targets, target health, and mission notifications.
+                    </p>
+                </div>
+
+                <div class="card-actions">
+                    <a class="btn small" href="target-spawning-and-objectives.html">Open Page</a>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>Weapon Data, Loadout & Drill Restrictions</h3>
+                    <p>
+                        Covers WeaponData, AmmoData, owned weapons, active weapon state, projectile patterns, and mission weapon restrictions.
+                    </p>
+                </div>
+
+                <div class="card-actions">
+                    <a class="btn small" href="weapon-data-and-loadout.html">Open Page</a>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>Weapon Handling & Feedback</h3>
+                    <p>
+                        Covers view model kickback, reticle recoil, muzzle flash, reload feedback, dry fire, sway, bob, and weapon feel.
+                    </p>
+                </div>
+
+                <div class="card-actions">
+                    <a class="btn small" href="weapon-handling-feedback.html">Open Page</a>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         FOOTER
+    ================================ -->
+    <footer class="site-footer">
+        <p>&copy; <span id="year"></span> Jesse “Echo” Adams</p>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>
+<!-- systems/projectile-and-hit-detection.html END -->
