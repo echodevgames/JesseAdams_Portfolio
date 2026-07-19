@@ -1,0 +1,814 @@
+<!-- systems/target-spawning-and-objectives.html START -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- ================================
+         Metadata & SEO
+    ================================ -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- systems/target-spawning-and-objectives.html -->
+    <title>Target Spawning & Objective Modes | Unity Systems Portfolio | Jesse Adams</title>
+    <meta name="description" content="A Unity C# target spawning and objective system breakdown for Echo Systems Lab covering target groups, target slots, respawning targets, destroy-all objectives, target health, damage routing, and mission notifications." />
+
+    <!-- ================================
+         Favicon & Font
+    ================================ -->
+    <link rel="icon" href="../assets/favicon.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+    <!-- ================================
+         CSS
+    ================================ -->
+    <link rel="stylesheet" href="../CSS/style.css" />
+    <link rel="stylesheet" href="../CSS/styleSystems.css" />
+</head>
+
+<body>
+
+    <!-- ================================
+         HEADER / NAV
+    ================================ -->
+    <header class="site-header">
+        <a class="brand" href="../index.html#home">Jesse Adams - EchoDevGames</a>
+
+        <button class="nav-toggle" aria-label="Open navigation" aria-expanded="false">☰</button>
+
+        <nav class="site-nav" aria-label="Primary">
+            <a href="../index.html#home">Home</a>
+            <a href="../tabs/systems.html">Systems</a>
+            <a href="../tabs/caseStudies.html">Case Studies</a>
+            <a href="../tabs/projects.html">Projects</a>
+            <a href="../tabs/contact.html">Contact</a>
+            <a class="btn small" href="../assets/Resumes/Jesse_Adams_Resume_6-23-26.pdf" target="_blank" rel="noopener">Resume</a>
+        </nav>
+    </header>
+
+    <!-- ================================
+         HERO
+    ================================ -->
+    <main class="hero">
+        <div class="hero-inner">
+            <h1>Target Spawning & Objective Modes</h1>
+
+            <p class="lead">
+                A reusable Unity target system for drill-specific target groups, target slots,
+                respawning objectives, destroy-all missions, target health, damage routing,
+                and mission completion notifications.
+            </p>
+
+            <ul class="pill-list">
+                <li>Unity 6</li>
+                <li>C#</li>
+                <li>Target Groups</li>
+                <li>Objective Modes</li>
+                <li>Damage Routing</li>
+                <li>Runtime Spawning</li>
+            </ul>
+
+            <div class="cta">
+                <a class="btn" href="../tabs/systems.html">Back to Systems</a>
+                <a class="btn ghost" href="target-range-mission-framework.html">Mission Framework</a>
+                <a class="btn ghost" href="weapon-data-and-loadout.html">Weapon Data</a>
+                <a class="btn ghost" href="projectile-and-hit-detection.html">Projectile Hits</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- ================================
+         OVERVIEW
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>System Overview</h2>
+            <p>
+                This system handles the targets themselves: where they appear, how they reset, how they break,
+                and how they tell the mission that progress happened.
+            </p>
+        </div>
+
+        <div class="about-wrap">
+            <div class="about-text">
+                <h3>What It Does</h3>
+
+                <p>
+                    The Target Spawning & Objective Modes system gives each target range mission a reusable way
+                    to activate the correct target group, choose active target slots, handle target destruction,
+                    and report objective progress back to the mission controller.
+                </p>
+
+                <p>
+                    Each target group can support different drill behavior. Some missions use active target limits
+                    and respawn delays, creating an arcade-style target loop. Other missions use destroy-all behavior,
+                    where targets stay broken and the objective is to clear the entire group.
+                </p>
+
+                <p>
+                    This keeps target behavior modular. The mission framework does not need to micromanage every target.
+                    It only needs to know which group is active and when a target has been destroyed.
+                </p>
+            </div>
+
+            <div class="about-highlights">
+                <div class="about-card">
+                    <h3>Primary Role</h3>
+                    <p>
+                        Manage target groups, activation, respawning, destroyed state, damage response, and mission objective notifications.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3>Core Loop</h3>
+                    <p>
+                        Activate group → Spawn active targets → Damage target → Destroy target → Notify mission → Respawn or preserve state.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3>Portfolio Value</h3>
+                    <p>
+                        Demonstrates modular objective design, runtime object management, damage interfaces, and reusable gameplay rules.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================
+         SCREENSHOTS
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>Target System Snapshots</h2>
+            <p>
+                Screenshot references for target group setup, target slots, active gameplay targets,
+                destroyed-state behavior, health values, and projectile hit routing.
+            </p>
+        </div>
+
+        <div class="grid projects systems-grid">
+
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/TargetRangeTargetGroup.jpg"
+                     alt="Unity Inspector screenshot of TargetRangeTargetGroup showing group ID, target slots, respawn settings, active target count, and objective mode values">
+
+                <div class="card-body">
+                    <h3>Target Group Inspector</h3>
+                    <p>
+                        Target groups define which targets belong to a drill and how that drill should activate, respawn, or preserve them.
+                    </p>
+                    <ul class="pill-list">
+                        <li>Target Group</li>
+                        <li>Group ID</li>
+                        <li>Respawn Rules</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/TargetSetupScript.jpg"
+                     alt="Unity Inspector screenshot showing target slot references assigned to a target range group">
+
+                <div class="card-body">
+                    <h3>Target Slot Setup</h3>
+                    <p>
+                        Slots let the range treat individual target objects as part of a larger drill-specific pool.
+                    </p>
+                    <ul class="pill-list">
+                        <li>Target Slots</li>
+                        <li>Pool Setup</li>
+                        <li>Inspector Workflow</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/Targets1.jpg"
+                     alt="Gameplay screenshot showing active targets spawned in the target range environment during a running mission">
+
+                <div class="card-body">
+                    <h3>Active Target Runtime</h3>
+                    <p>
+                        During a mission, only the correct group and target count are active, keeping each drill focused.
+                    </p>
+                    <ul class="pill-list">
+                        <li>Runtime Targets</li>
+                        <li>Mission Active</li>
+                        <li>Drill Focus</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/DestroyedTargetsGameplay.jpg"
+                     alt="Gameplay screenshot showing destroyed or broken targets after being hit during a target range drill">
+
+                <div class="card-body">
+                    <h3>Destroyed Target State</h3>
+                    <p>
+                        Destroy-all objectives can preserve broken target visuals instead of immediately resetting them.
+                    </p>
+                    <ul class="pill-list">
+                        <li>Destroyed State</li>
+                        <li>Visual Feedback</li>
+                        <li>Objective Progress</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/TargetHealthInspector.jpg"
+                     alt="Unity Inspector screenshot of TargetHealth showing health values, destroy effects, XP reward settings, and target damage configuration">
+
+                <div class="card-body">
+                    <h3>Target Health</h3>
+                    <p>
+                        TargetHealth receives damage, tracks remaining health, handles effects, and reports destruction.
+                    </p>
+                    <ul class="pill-list">
+                        <li>IDamageable</li>
+                        <li>Health</li>
+                        <li>Damage Response</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <img class="systems-card-image"
+                     src="../assets/Images/ScreenShots/EchoSystemsLab/ProjectileHitGameplay.jpg"
+                     alt="Gameplay screenshot showing a projectile hit or impact moment on a target during the target range mission">
+
+                <div class="card-body">
+                    <h3>Projectile Hit Routing</h3>
+                    <p>
+                        Projectiles route damage through IDamageable, allowing the target system to work with reusable weapon fire logic.
+                    </p>
+                    <ul class="pill-list">
+                        <li>Projectile</li>
+                        <li>DamageInfo</li>
+                        <li>Hit Detection</li>
+                    </ul>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         TARGET FLOW
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>Target Flow</h2>
+            <p>
+                The target group acts like a tiny stage manager, pushing targets on and off the range as the drill demands.
+            </p>
+        </div>
+
+        <div class="toolkit-grid">
+
+            <div class="toolkit-card">
+                <h4>1. Mission Selects Group</h4>
+                <p>
+                    The active mission references a target group ID, and the mission controller activates the matching group.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>2. Group Resets Targets</h4>
+                <p>
+                    The target group prepares its slots, hides inactive targets, and resets health or destroyed state as needed.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>3. Active Targets Spawn</h4>
+                <p>
+                    Based on the mission rules, the group chooses how many targets should be active at once.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>4. Projectile Deals Damage</h4>
+                <p>
+                    Projectile hit detection finds an IDamageable target and sends DamageInfo into TargetHealth.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>5. Target Is Destroyed</h4>
+                <p>
+                    TargetHealth handles health depletion, effects, XP rewards, and destroyed notifications.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>6. Group Updates Objective</h4>
+                <p>
+                    The target group reports the destroyed target to the mission controller, then respawns or preserves the target depending on mode.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         OBJECTIVE MODES
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>Objective Modes</h2>
+            <p>
+                Different target behaviors make the same range support different types of weapon drills.
+            </p>
+        </div>
+
+        <div class="about-wrap">
+            <div class="about-text">
+                <h3>Respawn Loops vs Destroy-All Targets</h3>
+
+                <p>
+                    Some target range drills work best when targets keep coming back. This creates a sustained scoring loop
+                    where the player focuses on speed, accuracy, and weapon control over a time limit.
+                </p>
+
+                <p>
+                    Other drills work better as a fixed-clear objective. In those cases, each target should stay destroyed,
+                    preserving the visual evidence of progress and making the room feel physically changed by the player’s actions.
+                </p>
+
+                <p>
+                    Supporting both modes inside the same target group system makes the range more reusable.
+                    The same framework can run quick reflex drills, precision clearing drills, shotgun spread tests,
+                    or future target puzzles without needing a new target controller for each mission.
+                </p>
+            </div>
+
+            <div class="about-highlights">
+                <div class="about-card">
+                    <h3>Respawning Targets</h3>
+                    <ul>
+                        <li>Useful for timed score drills</li>
+                        <li>Keeps the range active</li>
+                        <li>Supports max active target counts</li>
+                        <li>Uses respawn delay timing</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3>Destroy-All Targets</h3>
+                    <ul>
+                        <li>Useful for clear-the-room drills</li>
+                        <li>Preserves destroyed progress</li>
+                        <li>Makes completion visually readable</li>
+                        <li>Avoids unwanted respawn clutter</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3>Shared Benefits</h3>
+                    <ul>
+                        <li>Same mission pipeline</li>
+                        <li>Same damage routing</li>
+                        <li>Same HUD objective updates</li>
+                        <li>Different drill personalities</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================
+         KEY COMPONENTS
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>Key Components</h2>
+            <p>
+                Each target-side script has a focused responsibility, keeping the whole range from becoming a cardboard hydra.
+            </p>
+        </div>
+
+        <div class="grid projects systems-grid">
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>TargetRangeTargetGroup</h3>
+
+                    <p>
+                        Owns a group of target slots, group ID matching, active target selection, target activation,
+                        respawn timing, and objective-mode behavior.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Target Pool</li>
+                        <li>Activation</li>
+                        <li>Respawning</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>TargetRangeMissionTarget</h3>
+
+                    <p>
+                        Bridges each individual target to its group. It handles activation, hiding, reset calls,
+                        destroyed state preservation, and notification flow.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Target Slot</li>
+                        <li>Group Bridge</li>
+                        <li>Destroyed State</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>TargetHealth</h3>
+
+                    <p>
+                        Implements damage handling for targets. It receives DamageInfo, subtracts health,
+                        awards XP, spawns effects, and triggers destroyed callbacks.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Health</li>
+                        <li>Damage</li>
+                        <li>Destruction</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>IDamageable</h3>
+
+                    <p>
+                        Provides a simple interface that lets projectiles damage targets without knowing the exact target class.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Interface</li>
+                        <li>Reusable Damage</li>
+                        <li>Loose Coupling</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>DamageInfo</h3>
+
+                    <p>
+                        Carries damage amount, weapon ID, weapon type, source object, and hit point so damage events have useful context.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Damage Payload</li>
+                        <li>Weapon Context</li>
+                        <li>Hit Point</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>Projectile</h3>
+
+                    <p>
+                        Performs hit detection, ignores the weapon owner, detects IDamageable targets,
+                        registers hits with the mission, and sends DamageInfo forward.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Hit Detection</li>
+                        <li>Projectile Logic</li>
+                        <li>Mission Hits</li>
+                    </ul>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         DAMAGE ROUTING
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>Damage Routing</h2>
+            <p>
+                Damage travels through a small, reusable path instead of being hardwired to one specific target script.
+            </p>
+        </div>
+
+        <div class="toolkit-grid">
+
+            <div class="toolkit-card">
+                <h4>Projectile Moves</h4>
+                <p>
+                    The projectile travels using its configured speed, lifetime, collision settings, and optional sweep detection.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>Collision Is Checked</h4>
+                <p>
+                    The projectile checks hit colliders, ignores the owning player object, and filters out other projectiles.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>IDamageable Is Found</h4>
+                <p>
+                    The projectile searches for IDamageable on the hit object or its parent/children.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>Mission Hit Is Registered</h4>
+                <p>
+                    If the mission controller exists, the hit is counted for accuracy and scoring feedback.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>DamageInfo Is Sent</h4>
+                <p>
+                    The projectile packages weapon ID, weapon type, source object, hit point, and damage amount.
+                </p>
+            </div>
+
+            <div class="toolkit-card">
+                <h4>Target Responds</h4>
+                <p>
+                    TargetHealth applies the damage, handles destruction, awards XP, and notifies the mission target layer.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         INSPECTOR WORKFLOW
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>Inspector Workflow</h2>
+            <p>
+                Most tuning happens in Unity Inspector fields, which makes this page better served by images than full code dumps.
+            </p>
+        </div>
+
+        <div class="about-wrap">
+            <div class="about-text">
+                <h3>Why No Full Script Dropdown Here?</h3>
+
+                <p>
+                    This system is heavily driven by visible Unity setup: target group IDs, slot arrays,
+                    active target counts, respawn timing, target health values, effects, layers, and references.
+                    The Inspector tells the story better than a large script block would.
+                </p>
+
+                <p>
+                    The code still matters, but the portfolio value here is showing that the system is designer-friendly.
+                    A new target drill can be assembled by assigning targets to a group and tuning values, rather than rewriting target logic.
+                </p>
+
+                <p>
+                    That makes this a good example of practical Unity workflow: code creates the framework,
+                    while the Inspector becomes the control panel.
+                </p>
+            </div>
+
+            <div class="about-highlights">
+                <div class="about-card">
+                    <h3>Good Inspector Shots</h3>
+                    <ul>
+                        <li>TargetRangeTargetGroup component</li>
+                        <li>Target slot list expanded</li>
+                        <li>TargetHealth values</li>
+                        <li>Layer mask setup</li>
+                        <li>Destroyed target gameplay</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3>Good Gameplay Shots</h3>
+                    <ul>
+                        <li>Targets inactive before mission</li>
+                        <li>Targets active during mission</li>
+                        <li>Projectile impact moment</li>
+                        <li>Broken targets after destruction</li>
+                        <li>HUD progress after target hit</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3>Good Story Angle</h3>
+                    <p>
+                        Reusable range architecture where target behavior is configurable through scene setup and mission data.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================
+         PROBLEMS SOLVED
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>Problems Solved</h2>
+            <p>
+                This system came from the moment the range needed more than “shoot one object until it disappears.”
+            </p>
+        </div>
+
+        <div class="about-wrap">
+            <div class="about-text">
+                <h3>Key Iteration Wins</h3>
+
+                <p>
+                    The first target range version only needed simple target destruction.
+                    As weapon drills expanded, the system needed groups, respawns, active target limits,
+                    mission-specific objectives, and better destroyed-state handling.
+                </p>
+
+                <p>
+                    Respawning targets created good repeatable drills, but destroy-all objectives needed different behavior.
+                    Broken targets should not always reset instantly, especially when completion depends on clearing a room.
+                </p>
+
+                <p>
+                    Separating target groups from individual target health created a cleaner architecture.
+                    The health script worries about damage. The mission target script worries about target state.
+                    The target group worries about the active pool. The mission controller worries about the objective.
+                </p>
+            </div>
+
+            <div class="about-highlights">
+                <div class="about-card">
+                    <h3>Before</h3>
+                    <p>
+                        Targets were simple damageable objects without flexible group behavior or objective modes.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3>After</h3>
+                    <p>
+                        Target groups can activate specific drill areas, respawn targets, preserve destroyed state, and report objective progress.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3>Result</h3>
+                    <p>
+                        The range supports multiple drill styles without creating a new target system for every mission.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================
+         PORTFOLIO VALUE
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>Portfolio Value</h2>
+            <p>
+                This page shows the object-management side of the target range framework.
+            </p>
+        </div>
+
+        <div class="about-wrap">
+            <div class="about-text">
+                <h3>What This Demonstrates</h3>
+
+                <p>
+                    Target Spawning & Objective Modes demonstrates Unity gameplay architecture built around reusable runtime objects,
+                    configurable Inspector workflows, and clear event routing between targets, projectiles, mission state, and HUD feedback.
+                </p>
+
+                <p>
+                    It shows that the target range is not a hardcoded room. It is a flexible framework where each mission can activate
+                    different target groups and objective behavior through data and scene references.
+                </p>
+
+                <p>
+                    For portfolio purposes, this is a useful slice because it shows practical Unity problem solving:
+                    scene setup, runtime activation, interfaces, damage payloads, target pooling behavior, and objective updates all working together.
+                </p>
+            </div>
+
+            <div class="about-highlights">
+                <div class="about-card">
+                    <h3>Demonstrates</h3>
+                    <ul>
+                        <li>Runtime object activation</li>
+                        <li>Objective mode design</li>
+                        <li>Damage interface usage</li>
+                        <li>Inspector-driven workflow</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3>Good For</h3>
+                    <ul>
+                        <li>Gameplay programmer roles</li>
+                        <li>Unity systems roles</li>
+                        <li>Technical design discussion</li>
+                        <li>Portfolio walkthroughs</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3>Next Improvements</h3>
+                    <ul>
+                        <li>Weighted target selection</li>
+                        <li>Moving target support</li>
+                        <li>Weak point targets</li>
+                        <li>Target pattern presets</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================
+         RELATED SYSTEMS
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>Related Systems</h2>
+            <p>
+                Target spawning connects directly to mission state, projectile hit detection, weapon data, and saved progression.
+            </p>
+        </div>
+
+        <div class="grid projects systems-grid">
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>Target Range Mission Framework</h3>
+                    <p>
+                        Covers drill state, mission selection, HUD feedback, scoring, accuracy, trial completion, and return-to-hub flow.
+                    </p>
+                </div>
+
+                <div class="card-actions">
+                    <a class="btn small" href="target-range-mission-framework.html">Open Page</a>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>Projectile & Hit Detection</h3>
+                    <p>
+                        Covers projectile movement, sweep detection, collision routing, dropped projectile behavior, and damage payloads.
+                    </p>
+                </div>
+
+                <div class="card-actions">
+                    <a class="btn small" href="projectile-and-hit-detection.html">Open Page</a>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-body">
+                    <h3>Save, Progression & Unlocks</h3>
+                    <p>
+                        Covers completed mission IDs, weapon unlocks, active weapon data, weapon type XP, and save persistence.
+                    </p>
+                </div>
+
+                <div class="card-actions">
+                    <a class="btn small" href="save-progress-unlocks.html">Open Page</a>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- ================================
+         FOOTER
+    ================================ -->
+    <footer class="site-footer">
+        <p>&copy; <span id="year"></span> Jesse “Echo” Adams</p>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>
+<!-- systems/target-spawning-and-objectives.html END -->
