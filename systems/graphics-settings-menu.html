@@ -1,0 +1,419 @@
+<!-- systems/graphics-settings-menu.html START -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- ================================
+         Metadata & SEO
+    ================================ -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- systems/graphics-settings-menu.html -->
+    <title>Graphics Settings Menu | Unity Display Settings System | Jesse Adams</title>
+    <meta name="description" content="Unity graphics settings system for Echo Systems Lab featuring resolution selection, fullscreen/windowed mode, quality presets, VSync, FPS cap, brightness, UI scale, live preview, reset defaults, and PlayerPrefs persistence." />
+
+    <!-- ================================
+         Canonical / Social Preview
+    ================================ -->
+    <link rel="canonical" href="https://echodevgames.github.io/JesseAdams_Portfolio/systems/graphics-settings-menu.html" />
+
+    <meta property="og:title" content="Graphics Settings Menu | Unity Display Settings System | Jesse Adams" />
+    <meta property="og:description" content="Unity graphics settings system featuring resolution selection, fullscreen/windowed mode, quality presets, VSync, FPS cap, brightness, UI scale, live preview, reset defaults, and PlayerPrefs persistence." />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://echodevgames.github.io/JesseAdams_Portfolio/systems/graphics-settings-menu.html" />
+    <meta property="og:site_name" content="EchoDevGames" />
+    <meta property="og:image" content="https://echodevgames.github.io/JesseAdams_Portfolio/assets/Images/Banners/EchoDevGamesBanner.png" />
+    <meta property="og:image:secure_url" content="https://echodevgames.github.io/JesseAdams_Portfolio/assets/Images/Banners/EchoDevGamesBanner.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="EchoDevGames portfolio share image for Jesse Adams, game developer and systems programmer." />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Graphics Settings Menu | Unity Display Settings System | Jesse Adams" />
+    <meta name="twitter:description" content="Unity graphics settings system featuring resolution, fullscreen/windowed mode, quality presets, VSync, FPS cap, brightness, UI scale, live preview, and PlayerPrefs persistence." />
+    <meta name="twitter:image" content="https://echodevgames.github.io/JesseAdams_Portfolio/assets/Images/Banners/EchoDevGamesBanner.png" />
+
+    <!-- ================================
+         Favicon & Font
+    ================================ -->
+    <link rel="icon" href="../assets/favicon.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+    <!-- ================================
+         CSS
+    ================================ -->
+    <link rel="stylesheet" href="../CSS/style.css" />
+    <link rel="stylesheet" href="../CSS/styleSystems.css" />
+</head>
+
+<body>
+    <!-- ================================
+         HEADER / NAV
+    ================================ -->
+    <header class="site-header">
+        <a class="brand" href="../index.html#home">Jesse Adams - EchoDevGames</a>
+
+        <button class="nav-toggle" aria-label="Open navigation" aria-expanded="false">☰</button>
+
+        <nav class="site-nav" aria-label="Primary">
+            <a href="../index.html#home">Home</a>
+            <a href="../tabs/systems.html">Systems</a>
+            <a href="../tabs/caseStudies.html">Case Studies</a>
+            <a href="../tabs/projects.html">Projects</a>
+            <a href="../tabs/wanted.html">Wanted</a>
+            <a href="../tabs/contact.html">Contact</a>
+            <a class="btn small" href="../assets/Resumes/Jesse_Adams_Resume_6-23-26.pdf" target="_blank" rel="noopener">Resume</a>
+        </nav>
+    </header>
+
+    <!-- ================================
+         HERO
+    ================================ -->
+    <main class="hero">
+        <div class="hero-inner">
+            <h1>Graphics Settings Menu</h1>
+
+            <p class="lead">
+                A dedicated Unity settings system for resolution, window mode, quality presets,
+                VSync, FPS cap, brightness, UI scale, live preview, reset defaults, and persistent player preferences.
+            </p>
+
+            <div class="cta">
+                <a class="btn" href="../tabs/systems.html">Back to Systems</a>
+                <a class="btn ghost" href="audio-subsystem.html">Audio Subsystem</a>
+                <a class="btn ghost" href="input-and-keybindings.html">Input & Keybindings</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- ================================
+         OVERVIEW
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>System Overview</h2>
+            <p>
+                Milestone 5A expands Echo Systems Lab’s menu architecture with a player-facing graphics panel
+                that is separate from audio settings and built for clean persistence.
+            </p>
+        </div>
+
+        <article class="card" style="max-width:1100px;margin:0 auto;">
+            <img class="wide-img"
+                 src="../assets/Images/ScreenShots/EchoSystemsLab/GraphicsSettingsMenu.jpg"
+                 alt="Unity live build screenshot showing the Graphics Settings menu with resolution, FPS, quality, brightness, UI scale, windowed mode, VSync, apply, reset defaults, and back controls.">
+
+            <div class="card-body">
+                <h3>Milestone 5A - Graphics Settings Menu</h3>
+
+                <p>
+                    This system separates display preferences from the audio menu and gives players control over
+                    screen resolution, windowed/fullscreen behavior, graphics quality, VSync, FPS cap, brightness,
+                    and UI scale.
+                </p>
+
+                <p>
+                    Settings are staged in the UI first, then applied and saved through a dedicated manager.
+                    UI scale previews live while dragging the slider, and resets or unapplied back navigation restore
+                    the saved state cleanly.
+                </p>
+
+                <ul class="pill-list">
+                    <li>Unity 6</li>
+                    <li>C#</li>
+                    <li>Settings UI</li>
+                    <li>PlayerPrefs</li>
+                    <li>Display Options</li>
+                    <li>UI Scale</li>
+                </ul>
+            </div>
+        </article>
+    </section>
+
+    <!-- ================================
+         ARCHITECTURE
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>Architecture</h2>
+            <p>
+                The menu is split into small responsibilities so player preferences, UI controls,
+                brightness, and scale behavior are not tangled together.
+            </p>
+        </div>
+
+        <div class="grid projects">
+            <article class="card">
+                <img src="../assets/Images/ScreenShots/EchoSystemsLab/GraphicsSettingsManagerInspector.jpg"
+                     alt="Unity Inspector screenshot showing GraphicsSettingsManager defaults, visual ranges, resolution safety settings, and debug options.">
+
+                <div class="card-body">
+                    <h3>GraphicsSettingsManager</h3>
+
+                    <p>
+                        Owns the saved graphics state, loads and saves PlayerPrefs values, filters safe resolutions,
+                        applies Unity display settings, and broadcasts changes to listening UI systems.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Singleton</li>
+                        <li>PlayerPrefs</li>
+                        <li>Resolution</li>
+                        <li>Quality</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <img src="../assets/Images/ScreenShots/EchoSystemsLab/GraphicsSettingsMenuUIInspector.jpg"
+                     alt="Unity Inspector screenshot showing GraphicsSettingsMenuUI references for dropdowns, toggles, sliders, buttons, value labels, and the GraphicsSettingsManager.">
+
+                <div class="card-body">
+                    <h3>GraphicsSettingsMenuUI</h3>
+
+                    <p>
+                        Populates dropdown options, stages pending player choices, updates labels and status text,
+                        applies settings through the manager, and handles back/reset behavior.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>TMP Dropdowns</li>
+                        <li>Toggles</li>
+                        <li>Sliders</li>
+                        <li>Menu Flow</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <img src="../assets/Images/ScreenShots/EchoSystemsLab/GraphicsSettingsLiveBuild.jpg"
+                     alt="Live Windows build screenshot demonstrating the Graphics Settings menu running outside the Unity editor.">
+
+                <div class="card-body">
+                    <h3>Live Build Testing</h3>
+
+                    <p>
+                        The system was verified in a Windows build where resolution, fullscreen/windowed mode,
+                        brightness, UI scale, apply, reset, and persistence behavior could be tested realistically.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Standalone Build</li>
+                        <li>Persistence</li>
+                        <li>Display Testing</li>
+                    </ul>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- ================================
+         FEATURE BREAKDOWN
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>Feature Breakdown</h2>
+            <p>
+                The menu is designed as a practical player settings panel, not just a static UI mockup.
+            </p>
+        </div>
+
+        <div class="grid projects">
+            <article class="card">
+                <img src="../assets/Images/ScreenShots/EchoSystemsLab/GraphicsResolutionDropdown.jpg"
+                     alt="Screenshot of the resolution dropdown showing safe widescreen resolution options in the Graphics Settings menu.">
+
+                <div class="card-body">
+                    <h3>Resolution & Window Mode</h3>
+
+                    <p>
+                        Resolution options are filtered for safe widescreen layouts, while fullscreen uses a safer
+                        native-resolution path to avoid awkward aspect-ratio clipping.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Resolution</li>
+                        <li>Windowed</li>
+                        <li>Fullscreen</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <img src="../assets/Images/ScreenShots/EchoSystemsLab/GraphicsBrightnessPreview.jpg"
+                     alt="Screenshot showing the brightness slider and fullscreen overlay behavior adjusting the visual brightness of the menu.">
+
+                <div class="card-body">
+                    <h3>Brightness Overlay</h3>
+
+                    <p>
+                        Brightness is handled through a lightweight fullscreen overlay controller.
+                        This keeps the feature simple, visible in builds, and separate from deeper render pipeline tuning.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Brightness</li>
+                        <li>Overlay</li>
+                        <li>Player Comfort</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <img src="../assets/Images/ScreenShots/EchoSystemsLab/GraphicsUIScalePreview.jpg"
+                     alt="Before-and-after screenshot showing the UI Scale slider resizing the main menu, audio settings menu, graphics settings menu, and credits menu roots.">
+
+                <div class="card-body">
+                    <h3>UI Scale Preview</h3>
+
+                    <p>
+                        UI scale previews live while dragging the slider, but only becomes persistent after Apply.
+                        Back navigation can revert unapplied scale changes.
+                    </p>
+
+                    <ul class="pill-list">
+                        <li>Live Preview</li>
+                        <li>UI Scale</li>
+                        <li>Accessibility</li>
+                    </ul>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- ================================
+         CODE NOTES
+    ================================ -->
+    <section class="section alt">
+        <div class="section-head">
+            <h2>Code Notes</h2>
+            <p>
+                Key implementation details that make the system reusable and easier to maintain.
+            </p>
+        </div>
+
+        <article class="card" style="max-width:1100px;margin:0 auto;">
+            <div class="card-body">
+                <h3>Manager-owned persistence</h3>
+
+                <p>
+                    Graphics preferences are stored through PlayerPrefs instead of SaveManager because these values
+                    are user settings, not game progression.
+                </p>
+
+                <details>
+                    <summary>GraphicsSettingsManager persistence example</summary>
+
+<pre><code>private const string BrightnessKey = "EchoSystemsLab_Graphics_Brightness";
+private const string UiScaleKey = "EchoSystemsLab_Graphics_UiScale";
+
+public void SaveSettings()
+{
+    PlayerPrefs.SetInt(ResolutionWidthKey, resolutionWidth);
+    PlayerPrefs.SetInt(ResolutionHeightKey, resolutionHeight);
+    PlayerPrefs.SetInt(WindowedKey, windowed ? 1 : 0);
+    PlayerPrefs.SetInt(QualityLevelKey, qualityLevel);
+    PlayerPrefs.SetInt(VSyncKey, vSyncEnabled ? 1 : 0);
+    PlayerPrefs.SetInt(TargetFrameRateKey, targetFrameRate);
+    PlayerPrefs.SetFloat(BrightnessKey, brightness);
+    PlayerPrefs.SetFloat(UiScaleKey, uiScale);
+    PlayerPrefs.Save();
+}</code></pre>
+                </details>
+
+                <details>
+                    <summary>Script-driven main menu routing</summary>
+
+<pre><code>private void OpenGraphicsSettings()
+{
+    if (graphicsSettingsMenuUI != null)
+    {
+        graphicsSettingsMenuUI.OpenFrom(mainMenuPanel);
+        return;
+    }
+
+    Debug.LogWarning("MainMenuController has no GraphicsSettingsMenuUI assigned.");
+}</code></pre>
+                </details>
+
+                <details>
+                    <summary>Live UI scale preview</summary>
+
+<pre><code>private void HandleUiScaleChanged(float value)
+{
+    if (isSyncingControls)
+        return;
+
+    pendingUiScale = value;
+
+    if (uiScaleApplier != null)
+        uiScaleApplier.PreviewScale(pendingUiScale);
+
+    RefreshValueLabels();
+    SetStatus("Pending graphics changes.");
+}</code></pre>
+                </details>
+
+                <details>
+                    <summary>Brightness overlay approach</summary>
+
+<pre><code>if (brightness &lt; 1f)
+{
+    Color color = dimColor;
+    color.a = percent * maxDimAlpha;
+    overlayImage.color = color;
+}
+else
+{
+    Color brighten = brightenColor;
+    brighten.a = brightenPercent * maxBrightenAlpha;
+    overlayImage.color = brighten;
+}</code></pre>
+                </details>
+            </div>
+        </article>
+    </section>
+
+    <!-- ================================
+         RESULT
+    ================================ -->
+    <section class="section">
+        <div class="section-head">
+            <h2>Result</h2>
+            <p>
+                Milestone 5A adds a complete graphics settings layer to Echo Systems Lab’s frontend systems.
+            </p>
+        </div>
+
+        <article class="card" style="max-width:1100px;margin:0 auto;">
+            <div class="card-body">
+                <h3>What This Demonstrates</h3>
+
+                <ul>
+                    <li>Dedicated settings architecture split by category</li>
+                    <li>Runtime display option control using Unity APIs</li>
+                    <li>Persistent user preferences through PlayerPrefs</li>
+                    <li>Script-driven button wiring instead of manual Button OnClick setup</li>
+                    <li>Live UI scale preview with clean apply/revert behavior</li>
+                    <li>Brightness adjustment using a reusable overlay controller</li>
+                    <li>Portfolio-ready player-facing polish</li>
+                </ul>
+
+                <div class="card-actions">
+                    <a class="btn small" href="../tabs/systems.html">Back to Systems</a>
+                    <a class="btn ghost small" href="audio-subsystem.html">Audio Subsystem</a>
+                    <a class="btn ghost small" href="input-and-keybindings.html">Input & Keybindings</a>
+                </div>
+            </div>
+        </article>
+    </section>
+
+    <footer class="site-footer">
+        <p>&copy; <span id="year"></span> Jesse “Echo” Adams</p>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>
+<!-- systems/graphics-settings-menu.html END -->
